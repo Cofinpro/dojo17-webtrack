@@ -7,18 +7,18 @@
 
 # Installation
 
-`npm install -g @angular/cli`
-`npm install -g yarn`
-`yarn install`
+* `npm install -g @angular/cli`
+* `npm install -g yarn`
+* `yarn install`
 
-## Some Docs
+# Some Docs
 
 * Angular Cheat Sheet: https://angular.io/guide/cheatsheet
 * Tour of Heroes: https://angular.io/tutorial
 * CLI Documentation: https://github.com/angular/angular-cli/wiki
 * Angular blog: https://blog.angular.io//
 
-## Development
+# Development
 
 Run
 `ng serve`
