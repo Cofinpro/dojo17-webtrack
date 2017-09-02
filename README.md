@@ -29,11 +29,13 @@ The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 
-`ng generate component component-name``
+* `ng generate component component-name`
 
 -> to generate a new component.
 
-You can also use ```ng generate directive|pipe|service|class|guard|interface|enum|module```
+You can also use
+
+```ng generate directive|pipe|service|class|guard|interface|enum|module```
 
 ## Bootstrap 4
 
