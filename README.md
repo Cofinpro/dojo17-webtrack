@@ -11,6 +11,13 @@
 `npm install -g yarn`
 `yarn install`
 
+## Some Docs
+
+* Angular Cheat Sheet: https://angular.io/guide/cheatsheet
+* Tour of Heroes: https://angular.io/tutorial
+* CLI Documentation: https://github.com/angular/angular-cli/wiki
+* Angular blog: https://blog.angular.io//
+
 ## Development
 
 Run
