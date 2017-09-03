@@ -9,7 +9,7 @@
 * Version: 0.27.5
 
 # Installation
-Find the built in terminal under View --> Integrated Terminal, Toggle with <strg> + ö 
+* Find the built in terminal under View --> Integrated Terminal. Toggle with <strg> + ö 
 
 * `npm install -g @angular/cli`
 * `npm install -g yarn`
