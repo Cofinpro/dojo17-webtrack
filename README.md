@@ -3,7 +3,7 @@
 # Setup
 
 * Set up NodeJS: https://nodejs.org/en/download/package-manager/
-* Version: v8.4.0
+* Version: v6.11.2 LTS
 
 * Install yarn: https://yarnpkg.com/en/docs/install
 * Version: 0.27.5
