@@ -3,13 +3,17 @@
 # Setup
 
 * Set up NodeJS: https://nodejs.org/en/download/package-manager/
+* Version: v8.4.0
+
 * Install yarn: https://yarnpkg.com/en/docs/install
+* Version: 0.27.5
 
 # Installation
+Find the built in terminal under View --> Integrated Terminal, Toggle with <strg> + ö 
 
 * `npm install -g @angular/cli`
 * `npm install -g yarn`
-* `yarn install`
+* `ng`
 
 # Some Docs
 
