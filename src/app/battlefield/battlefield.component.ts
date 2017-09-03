@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-battlefield',
+  selector: 'battlefield',
   templateUrl: './battlefield.component.html',
   styleUrls: ['./battlefield.component.scss']
 })
