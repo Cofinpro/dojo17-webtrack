@@ -44,6 +44,8 @@ export class Game {
         this.playGroundConfugurator = new PlayGroundConfigurator(this.playGround, this.images);
         this.playGroundConfugurator.configure();
 
+        // this.placeBomb(20,20);
+
     };
 
     placeCockpit() {
@@ -71,7 +73,8 @@ export class Game {
 
     // FIXME:
     public placeBomb(x: number, y: number): void {
-       this.playGround.bombs.push(new Bomb(null, x, y, null, null));
+        this.playGround.createPicture(x, y,  this.images['bomb1']);
+       this.playGround.addBomb(new Bomb(null, x, y, null, null));
     }
 
     picked(pickItUps) {
