@@ -19,7 +19,7 @@ export class HeroAnimator {
 
 
     constructor(element: any, playGround: PlayGround){
-        this.stepWidth = 20;
+        this.stepWidth = 32;
 
         this.element = element;
         this.playGround = playGround;
@@ -33,7 +33,7 @@ export class HeroAnimator {
 
         this.currentImage = null;
 
-        this.element.setPosition(5, 5);
+        this.element.setPosition(32, 32);
 
         this.directions = [];
         this.images = [];

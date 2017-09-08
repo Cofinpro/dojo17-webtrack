@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable, Observer } from 'rxjs/Rx';
 import { Message } from '../models/message';
+import { State } from '../models/state';
 
 @Injectable()
 export class WebsocketService {
@@ -32,7 +33,8 @@ export class WebsocketService {
     }
 
     public getObservable(): Observable<Message> {
-        return this.socket;
+        return Observable.interval(1000).map(x => new Message(State.getMock(x), null));
+      //  return this.socket;
     }
 
     public sendMessage(message: Message) {

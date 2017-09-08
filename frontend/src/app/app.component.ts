@@ -10,7 +10,7 @@ import { WebsocketService } from './services/websocket.service';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    providers: [ WebsocketService ]
+    providers: [WebsocketService]
 })
 export class AppComponent implements OnInit {
     title = 'Cofinpro Bomberman';
@@ -24,25 +24,20 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.socketSubscription = this.websocketService
-                .getObservable()
-                .subscribe((message: any) => {
-            message = Message.factory(JSON.parse(message.data));
-            console.log(message.text);
-        });
-        this.launchCounter();
+        // this.launchCounter();
     }
-
-    private launchCounter() {
-      if (this.counterSubscription) {
-          this.counterSubscription.unsubscribe();
-      }
-      let counter = Observable.interval(1000);
-      this.counterSubscription = counter.subscribe(
-          num => {
-              this.sentMessage = new Message('Websocket Message '+ num);
-              this.websocketService.sendMessage(this.sentMessage);
-          });
-    }
+    /*
+        private launchCounter() {
+          if (this.counterSubscription) {
+              this.counterSubscription.unsubscribe();
+          }
+          let counter = Observable.interval(1000);
+          this.counterSubscription = counter.subscribe(
+              num => {
+                  this.sentMessage = new Message('Websocket Message '+ num);
+                  this.websocketService.sendMessage(this.sentMessage);
+              });
+        }
+        */
 
 }
