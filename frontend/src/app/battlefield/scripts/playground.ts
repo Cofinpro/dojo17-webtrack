@@ -1,5 +1,5 @@
 import { GEPicture } from "./gameelements/gepicture";
-import { GameNotification } from 'messages/gamenotification';
+import { GameNotification } from './messages/gamenotification';
 
 export class PlayGround {
     image: any;
