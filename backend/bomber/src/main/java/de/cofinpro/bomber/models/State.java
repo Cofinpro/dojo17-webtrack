@@ -1,12 +1,13 @@
 package de.cofinpro.bomber.models;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class State {
 
-    private List<Player> players;
-    private List<Bomb> bombs;
+    private List<Player> players = new ArrayList<>();
+    private List<Bomb> bombs = new ArrayList<>();
     private Date serverTime;
 
     public List<Player> getPlayers() {
