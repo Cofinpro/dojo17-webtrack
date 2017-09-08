@@ -15,7 +15,7 @@ export class Game {
     liveCount = 3;
     end = false;
     playGroundConfugurator = null;
-    playGround: PlayGround = null;
+    public playGround: PlayGround = null;
     startedAt = null;
     hero = null;
     animator = null;

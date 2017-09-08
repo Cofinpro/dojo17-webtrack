@@ -80,4 +80,11 @@ export class GameStart {
         return window.setTimeout(this.timeCount, 50, timeElement);
     }
 
+    getPlayGround() {
+        if (this.game && this.game.playGround) {
+            return this.game.playGround;
+        }
+        return null;
+    }
+
 }
