@@ -43,18 +43,6 @@ export class Game {
         this.playGroundConfugurator = new PlayGroundConfigurator(this.playGround, this.images);
         this.playGroundConfugurator.configure();
 
-        // var l = document.getElementById('lives');
-        // l.innerHTML = '';
-        // for (var i = 0; i < this.liveCount; i++) {
-        //     var im = new Image();
-        //     im.src = this.images['hero-right'].getImageSource();
-        //     im.height = 32;
-        //     im.width = 32;
-        //     l.appendChild(im);
-        // }
-
-        // this.placeHero();
-        //this.placeCockpit();
     };
 
     placeCockpit() {
