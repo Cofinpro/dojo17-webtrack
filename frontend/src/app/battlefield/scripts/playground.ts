@@ -1,5 +1,6 @@
 import { GEPicture } from "./gameelements/gepicture";
 import { GameNotification } from './messages/gamenotification';
+import {Bomb} from "../../models/bomb";
 
 export class PlayGround {
     image: any;
@@ -55,6 +56,10 @@ export class PlayGround {
         this.tag.style.width = width + 'px';
         this.tag.style.height = height + 'px';
 
+    }
+
+    public placeBomb(): Bomb {
+      return new Bomb(null, 5,5, null, null);
     }
 
     public setPositionStyle(positionStyle): void {
