@@ -1,10 +1,19 @@
 /**
- * Created by mhinz on 6/21/2016.
+ * Created by mhinz on 6/21/2017.
  */
-Direction = {
-    left: 'left',
-    right: 'right',
-    up: 'up',
-    down: 'down'
-};
+export class Direction {
+   
+    left: String;
+    right: String;
+    up: String;
+    down: String;
+   
+    constructor(){
+        this.left= 'left';
+        this.right= 'right';
+        this.up= 'up';
+        this.down= 'down';
+    }
+}
+
 
