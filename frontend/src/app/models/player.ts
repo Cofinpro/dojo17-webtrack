@@ -8,13 +8,13 @@
 export class Player {
 
 
-    id : String;
-    x:number;
-    y:number;
-    nickname:String;
+    id : string;
+    x: number;
+    y: number;
+    nickname: string;
 
 
-  constructor(id: String, x: number, y: number, nickname: String) {
+  constructor(id: string, x: number, y: number, nickname: string) {
     this.id = id;
     this.x = x;
     this.y = y;
