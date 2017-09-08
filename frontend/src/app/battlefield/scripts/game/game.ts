@@ -1,8 +1,12 @@
 import { PlayGround } from '../playground';
 import { PlayGroundConfigurator } from '../playgroundconfigurator';
 import { Direction } from '../move/direction';
+import { HeroAnimator } from '../move/heroanimator';
+import { ModalMessage } from '../messages/modalmessage';
 
 export class Game {
+
+    direction: Direction = new Direction();
 
     images = {};
     audios = {};
@@ -10,7 +14,7 @@ export class Game {
     liveCount = 3;
     end = false;
     playGroundConfugurator = null;
-    playGround = null;
+    playGround: PlayGround = null;
     startedAt = null;
     hero = null;
     animator = null;
@@ -61,7 +65,7 @@ export class Game {
         //cockpit.style.left = '750px';
     };
 
-    placeHero = () => {
+    placeHero() {
         this.playGround.removeGameElement(this.hero);
 
         var heroImages = {};
@@ -71,12 +75,12 @@ export class Game {
         heroImages['right'] = this.images['hero-right'];
 
         this.hero = this.playGround.createPicture(5, 5, heroImages['right']);
-        this.animator = new TagAnimator(this.hero, this.playGround);
+        this.animator = new HeroAnimator(this.hero, this.playGround);
         this.animator.setImages(heroImages);
         this.playGround.addTarget(this.hero);
     };
 
-    picked = (pickItUps) => {
+    picked(pickItUps) {
 
         if(pickItUps.length == 0)return;
 
@@ -108,7 +112,7 @@ export class Game {
 
     };
 
-    caught = (target) => {
+    caught(target: any):void {
 
         this.animator.stop();
 
@@ -133,55 +137,54 @@ export class Game {
         }
     };
 
-    setKeyDown = (keyCode) => {
+    setKeyDown(keyCode):void {
         if (!this.animator) return;
         this.animator.setKeyDown(keyCode);
     };
 
-    setKeyUp = (keyCode) => {
+    setKeyUp(keyCode) {
         if (!this.animator) return;
         this.animator.setKeyUp(keyCode);
     };
 
-    startGame = () => {
-        var that = this;
-        document.onkeydown = function(e){
-            let event = window.event ? window.event : e;
+    startGame(){
+        document.onkeydown = (e) => {
+            let event: any = window.event ? window.event : e;
             var keyCode = event.keyCode;
             var dir;
 
             switch(keyCode){
                 case 37:
-                    dir = Direction.left;
+                    dir = this.direction.left;
                     break;
                 case 39:
-                    dir = Direction.right;
+                    dir = this.direction.right;
                     break;
                 case 38:
-                    dir = Direction.up;
+                    dir = this.direction.up;
                     break;
                 case 40:
-                    dir = Direction.down;
+                    dir = this.direction.down;
                     break;
             }
             this.animator.addToActiveDirections(dir);
         };
-        document.onkeyup = function(e){
-            var event = window.event ? window.event : e;
+        document.onkeyup = (e) => {
+            var event: any = window.event ? window.event : e;
             var keyCode = event.keyCode;
             var dir;
             switch(keyCode){
                 case 37:
-                    dir = Direction.left;
+                    dir = this.direction.left;
                     break;
                 case 39:
-                    dir = Direction.right;
+                    dir = this.direction.right;
                     break;
                 case 38:
-                    dir = Direction.up;
+                    dir = this.direction.up;
                     break;
                 case 40:
-                    dir = Direction.down;
+                    dir = this.direction.down;
                     break;
             }
             this.animator.removeFromActiveDirections(dir);
@@ -204,7 +207,7 @@ export class Game {
         timeCount(document.getElementById('time'));
     };
 
-    resetGame = () => {
+    resetGame() {
         if (!this.end)this.shutDownGame();
         ModalMessage.clearAll();
         this.end = false;
@@ -226,7 +229,7 @@ export class Game {
         this.playGround.endPause();
     };
 
-    pauseGame = (milli=> s) {
+    pauseGame(millis) {
         this.playGround.pause();
         if (millis) {
             return setTimeout(this.resumeGame, millis);
