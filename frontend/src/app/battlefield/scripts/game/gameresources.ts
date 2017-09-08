@@ -51,7 +51,7 @@ export class GameResources {
         this.imagesLoading[this.imagesLoading.length] = key;
 
         const image = this.shapeDetector.detect(src, key, width, height).then( (result) => {
-            this.images[result.key] = new GameImage(result.image.src, result.width, result.height);
+            this.images[result.key] = new GameImage(result.image.src, width, height);
             this.imageLoaded(result.key, result.shapeData, result.canvas);
         });
 

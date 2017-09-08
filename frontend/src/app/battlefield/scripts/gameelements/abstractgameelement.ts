@@ -3,7 +3,7 @@ export class AbstractGameElement {
     public baseFormRect = 'RECT';
     public baseFormCircle = 'CIRCLE';
     public baseFormPicture = 'PICTURE';
-    
+
     proposedPosition = null;
     context: any;
     top: any;

@@ -71,7 +71,12 @@ export class PlayGround {
             return;
         }
 
+        for (let sprite of this.sprites) {
+            sprite.clear();
+            this.removeGameElement(sprite);
+        }
         this.sprites = [];
+
         for (let player of players) {
             this.createPicture(player.id, player.y * 32, player.x * 32, this.resources.images['hero-1-r']);
         }
@@ -132,7 +137,9 @@ export class PlayGround {
     public createPicture(id, elmTop, elmLeft, image, isObstacle?) {
         let ctx = isObstacle ? this.obstaclesContext : this.context;
         let pic = new GEPicture(id, elmTop, elmLeft, image, ctx);
-        this.sprites.push(pic);
+        if (!isObstacle) {
+            this.sprites.push(pic);
+        }
         return pic;
     };
 

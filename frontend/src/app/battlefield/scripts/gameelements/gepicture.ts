@@ -21,6 +21,7 @@ export class GEPicture extends AbstractGameElement {
 
         this.height = gameImage.height;
         this.width = gameImage.width;
+
         this.top = elmTop;
         this.left = elmLeft;
         this.right = this.left + this.width;
