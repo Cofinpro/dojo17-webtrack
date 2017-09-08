@@ -1,6 +1,6 @@
 import { WebsocketService } from '../services/websocket.service';
 import { Component, OnInit } from '@angular/core';
-import { GameStart } from './scripts/gamestart';
+import { Game } from './scripts/game/game';
 import { ShapeDetector } from './scripts/pixels/shapedetector';
 import { Subscription, Observer, Subject } from 'rxjs/Rx';
 import { Message } from '../models/message';
@@ -20,27 +20,14 @@ import { Message } from '../models/message';
 */
 export class BattlefieldComponent implements OnInit {
 
-    socketSubscription: Subscription;
-    public gameStart;
+    public game;
 
     constructor(private websocketService: WebsocketService) { }
 
     ngOnInit() {
         // start game
-        this.gameStart = new GameStart();
-        this.gameStart.timeCount();
-
-        this.socketSubscription = this.websocketService
-        .getObservable()
-        .subscribe((message: Message) => {
-            // console.log('got bombs from server', message.inMsg.bombs);
-            let playGround = this.gameStart.getPlayGround();
-            if (playGround) {
-                playGround.updateBombs(message.inMsg.bombs);
-            }
-        });
-
+        this.game = new Game(this.websocketService);
+        this.game.timeCount();
     }
-
 
 }
