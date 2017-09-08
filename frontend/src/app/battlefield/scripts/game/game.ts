@@ -1,4 +1,4 @@
-import { Playground } from '../playground';
+import { PlayGround } from '../playground';
 import { PlayGroundConfigurator } from '../playgroundconfigurator';
 import { Direction } from '../move/direction';
 

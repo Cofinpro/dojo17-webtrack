@@ -2,23 +2,23 @@
  * Created by mhinz on 5/13/2016.
  */
 
-function PlayGroundConfigurator(playGround, images) {
+export class PlayGroundConfigurator{
 
-    this.playGround = playGround;
-    this.images = images;
+    constructor(private playGround : any, private images : any){
+        //TODO Fix me
+        document.body.onkeydown = checkReturn;
+    }
 
-    document.body.onkeydown = checkReturn;
-
-    this.configure = function () {
+    configure() {
         this.addObstacles();
         this.addPickMeUps();
         this.addEnemies();
     };
 
-    this.addObstacles = function () {
-        var obstacle;
+    addObstacles() {
+        let obstacle;
 
-        var tree = this.images['tree'];
+        let tree = this.images['tree'];
 
         obstacle = this.playGround.createPicture(160,170, tree, true);
         this.playGround.addObstacle(obstacle);
@@ -47,9 +47,9 @@ function PlayGroundConfigurator(playGround, images) {
         obstacle = this.playGround.createPicture(120, 620, tree, true);
         this.playGround.addObstacle(obstacle);
 
-        var rock1 = this.images['rock1'];
-        var rock2 = this.images['rock2'];
-        var cactus1 = this.images['cactus1'];
+        let rock1 = this.images['rock1'];
+        let rock2 = this.images['rock2'];
+        let cactus1 = this.images['cactus1'];
 
         obstacle = this.playGround.createPicture(410, 550, rock1, true);
         this.playGround.addObstacle(obstacle);
@@ -74,9 +74,9 @@ function PlayGroundConfigurator(playGround, images) {
 
     };
 
-    this.addPickMeUps = function () {
-        var diamond = this.images['diamond'];
-        var pick;
+    addPickMeUps() {
+        let diamond = this.images['diamond'];
+        let pick;
 
         pick = this.playGround.createPicture(150, 300, diamond);
         this.playGround.addPickItUp(pick);
@@ -110,31 +110,8 @@ function PlayGroundConfigurator(playGround, images) {
         this.playGround.addPickItUp(pick);
         this.playGround.addObstacle(pick);
     };
-    this.addEnemies = function () {
 
-        var ball = this.images['ball1'];
-        var enemy;
-
-        enemy = this.playGround.createPicture(75, 5, ball);
-        this.playGround.addAutoMover(new AutonomousMover(enemy, this.playGround));
-        this.playGround.addObstacle(enemy);
-
-        enemy = this.playGround.createPicture(140, 85, ball);
-        this.playGround.addAutoMover(new AutonomousMover(enemy, this.playGround));
-        this.playGround.addObstacle(enemy);
-
-        enemy = this.playGround.createPicture(300, 400, ball);
-        this.playGround.addAutoMover(new AutonomousMover(enemy, this.playGround));
-        this.playGround.addObstacle(enemy);
-
-        enemy = this.playGround.createPicture(200, 550, ball);
-        this.playGround.addAutoMover(new AutonomousMover(enemy, this.playGround));
-        this.playGround.addObstacle(enemy);
-
-        enemy = this.playGround.createPicture(100, 500, ball);
-        this.playGround.addAutoMover(new AutonomousMover(enemy, this.playGround));
-        this.playGround.addObstacle(enemy);
-
+    addEnemies(){
+        let ball = this.images['ball1'];
     };
 }
-module.exports = PlayGroundConfigurator;
