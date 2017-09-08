@@ -54,7 +54,6 @@ export class PlayGround {
 
         this.tag.style.width = width + 'px';
         this.tag.style.height = height + 'px';
-        this.tag.style.border = 'solid rgba(0,0,0,0.5) 3px';
 
     }
 
