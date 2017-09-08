@@ -20,14 +20,22 @@ services:
                 constraints: [node.role == manager]
         networks:
             - bombernet
+    redis:
+        image: redis
+        deploy:
+            placement:
+                constraints: [node.role == manager]
+        networks:
+            - bombernet
     bomber:
-        image: bomber
+        image: de.cofinpro.dojo/bomber:1.0-SNAPSHOT
         deploy:
             replicas: 1
         ports:
-            - "3000:3000"
+            - "3000:8080"
         depends_on:
-            - "rabbit"
+            - rabbit
+            - redis
         networks:
             - bombernet
 networks:
