@@ -121,9 +121,6 @@ export class Game {
                 this.pauseGame(1000);
             }
         }
-        if (keyCode == 83) {
-            this.startGame();
-        }
         if(event.altKey & event.ctrlKey && keyCode == 71){
             this.playGround.shieldTarget(this.hero, -1);
         }
@@ -249,7 +246,7 @@ export class Game {
         this.animator.setKeyUp(keyCode);
     };
 
-    startGame(){
+    startGame() {
         document.onkeydown = (e) => {
             let event: any = window.event ? window.event : e;
             var keyCode = event.keyCode;
@@ -274,6 +271,7 @@ export class Game {
             }
             this.animator.addToActiveDirections(dir);
         };
+
         document.onkeyup = (e) => {
             var event: any = window.event ? window.event : e;
             var keyCode = event.keyCode;
