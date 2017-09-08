@@ -13,4 +13,10 @@ export class Player {
     y:number;
     nickname:String;
 
+
+  constructor(id: String, x: number, y: number) {
+    this.id = id;
+    this.x = x;
+    this.y = y;
+  }
 }
