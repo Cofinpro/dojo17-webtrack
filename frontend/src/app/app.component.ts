@@ -3,7 +3,6 @@ import { Subscription, Observer, Subject } from 'rxjs/Rx';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
-import { Message } from './models/message';
 import { WebsocketService } from './services/websocket.service';
 
 @Component({
@@ -14,11 +13,6 @@ import { WebsocketService } from './services/websocket.service';
 })
 export class AppComponent implements OnInit {
     title = 'Cofinpro Bomberman';
-
-    socket: Subject<Message>;
-    counterSubscription: Subscription;
-    socketSubscription: Subscription;
-    sentMessage: Message;
 
     constructor(private websocketService: WebsocketService) {
     }

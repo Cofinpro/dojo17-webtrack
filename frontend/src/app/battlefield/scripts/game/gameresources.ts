@@ -25,12 +25,24 @@ export class GameResources {
         const loading = this.imagesLoading.indexOf(key);
         this.imagesLoading.splice(loading, 1);
         this.images[key].setImageData(shapeData, canvas);
+        // this.checkLoadedState();
     };
 
     audioLoaded(key) {
         const loading = this.audioLoading.indexOf(key);
         this.audioLoading.splice(loading, 1);
+        // this.checkLoadedState();
     };
+
+    // checkLoadedState(): bool {
+    //     if (!this.setupFinished) {
+    //         return false;
+    //     }
+    //     const audioFinished = this.audioLoading.length === 0;
+    //     const imagesFinished = this.imagesLoading.length === 0;
+    //     if (audioFinished && imagesFinished) {
+    //     }
+    // }
 
     addImage(key,src, width, height) {
         if (this.imagesLoading.indexOf(key) > -1) {
@@ -61,13 +73,11 @@ export class GameResources {
         this.setupFinished = true;
     };
 
-    resourcesLoaded() {
-        if (!this.setupFinished) {
-            return false;
-        }
-
-        const audioFinished = this.audioLoading.length === 0;
-        const imagesFinished = this.imagesLoading.length === 0;
-        return audioFinished && imagesFinished;
+    resourcesLoaded(): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            window.setTimeout(() => {
+                resolve();
+            }, 3000);
+        });
     };
 }
