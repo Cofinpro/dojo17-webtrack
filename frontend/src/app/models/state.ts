@@ -8,7 +8,7 @@ export class State {
 
     static readonly mock: State = new State({ 
         players: [new Player({ id: "player-one", x: 1, y: 1, nickName: "GodPlayer" })],
-        bombs: [new Bomb("a-bomb", 4, 4, "player-one", new Date())], 
+        bombs: [new Bomb({ id: "a-bomb", x: 4, y: 4, userId: "player-one", detonateAt: new Date() })], 
         timestamp: new Date()
     });
 
@@ -22,7 +22,7 @@ export class State {
         let now: number = Date.now();
         return new State({ 
             players: [new Player({ id: "player-one", x: (x % 15) + 1, y: 1, nickName: "GodPlayer" })],
-            bombs: [new Bomb("a-bomb", 3, 3, "player-one", new Date(now + (5 - (x % 6)) * 1000))],
+            bombs: [new Bomb({ id: "a-bomb", x: 3, y: 3, userId: "player-one", detonateAt: new Date(now + (5 - (x % 6)) * 1000) })],
             timestamp: new Date(now)
         });
     }
