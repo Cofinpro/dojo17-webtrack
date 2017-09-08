@@ -15,7 +15,7 @@ export class Game {
     liveCount = 3;
     end = false;
     playGroundConfugurator = null;
-    playGround: PlayGround = null;
+    public playGround: PlayGround = null;
     startedAt = null;
     hero = null;
     animator = null;
@@ -44,8 +44,20 @@ export class Game {
         this.playGroundConfugurator = new PlayGroundConfigurator(this.playGround, this.images);
         this.playGroundConfugurator.configure();
 
-        // this.placeBomb(20,20);
+        this.placeBomb(4,4);
 
+        // var l = document.getElementById('lives');
+        // l.innerHTML = '';
+        // for (var i = 0; i < this.liveCount; i++) {
+        //     var im = new Image();
+        //     im.src = this.images['hero-right'].getImageSource();
+        //     im.height = 32;
+        //     im.width = 32;
+        //     l.appendChild(im);
+        // }
+
+        this.placeHero();
+        //this.placeCockpit();
     };
 
     placeCockpit() {
@@ -60,12 +72,12 @@ export class Game {
         this.playGround.removeGameElement(this.hero);
 
         var heroImages = {};
-        heroImages['up'] = this.images['hero-up'];
-        heroImages['down'] = this.images['hero-down'];
-        heroImages['left'] = this.images['hero-left'];
-        heroImages['right'] = this.images['hero-right'];
+        heroImages['up'] = this.images['hero-1-u'];
+        heroImages['down'] = this.images['hero-1-d'];
+        heroImages['left'] = this.images['hero-1-l'];
+        heroImages['right'] = this.images['hero-1-r'];
 
-        this.hero = this.playGround.createPicture(5, 5, heroImages['right']);
+        this.hero = this.playGround.createPicture(32, 32, heroImages['right']);
         this.animator = new HeroAnimator(this.hero, this.playGround);
         this.animator.setImages(heroImages);
         this.playGround.addTarget(this.hero);
@@ -73,7 +85,7 @@ export class Game {
 
     // FIXME:
     public placeBomb(x: number, y: number): void {
-        this.playGround.createPicture(x, y,  this.images['bomb1']);
+       this.playGround.createPicture(x*32, y*32,  this.images['bomb1']);
        this.playGround.addBomb(new Bomb(null, x, y, null, null));
     }
 

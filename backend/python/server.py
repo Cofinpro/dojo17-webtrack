@@ -3,6 +3,7 @@
 import asyncio
 import websockets
 import pika
+import threading
 
 async def handler(websocket, path):
     # TODO: Subscribe to an exchange thing, and send new state in callback
@@ -10,25 +11,30 @@ async def handler(websocket, path):
     try:
         channel = connection.channel()
 
-        asyncio.get_event_loop().run_until_complete(subscribe(channel))
+        print('Starting subscription')
+        subscriptionThread = threading.Thread(None, None, None, subscribe, channel)
+        subscriptionThread.start()
+        print('Continuing from subscription')
 
         alive = True
         while alive:
             # TODO: receive a JSON - what did he do
+            print('Waiting for info from socket')
             name = await websocket.recv()
 
-            # TODO: process changes
-            state = {alive: True}
+            # TODO: process changes, get state
 
-            alive = state.alive
+            # TODO: alive = state.alive
 
             # TODO: Publish new state
-            channel.basic_publish(exchange='bomber', routing_key='', body=state)
+            print('Publishing a new state')
+            channel.basic_publish(exchange='bomber', routing_key='', body="new state!")
     finally:
         connection.close()
 
-# Subscribe to the exchange thingy asynchonously
-async def subscribe(channel):
+# Subscribe to the exchange thingy (callback)
+def subscribe(channel):
+    print('Starting subscription')
     channel.exchange_declare(exchange='bomber', exchange_type='fanout')
 
     result = channel.queue_declare(exclusive=True)
@@ -39,11 +45,12 @@ async def subscribe(channel):
     channel.basic_consume(publish, queue=queue_name, no_ack=True)
 
     channel.start_consuming()
+    print('Ended subscription')
     
 
 # Callback for publishing exchange thing, send to socket
 def publish(ch, method, properties, body):
-    websocket.send("blabla")
+    websocket.send("we have another state")
 
 # main application
 

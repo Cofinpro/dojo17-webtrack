@@ -7,11 +7,19 @@ export class GameStart {
     constructor() {
         var resources = new GameResources();
 
+        // playground
         resources.addImage('burned-gras', '../../assets/images/bomberman/0.png', 32, 32);
         resources.addImage('gras', '../../assets/images/bomberman/1.png', 32, 32);
         resources.addImage('wall-light', '../../assets/images/bomberman/91.png', 32, 32);
         resources.addImage('wall-dark', '../../assets/images/bomberman/89.png', 32, 32);
         resources.addImage('box', '../../assets/images/bomberman/90.png', 32, 32);
+
+        // heros
+        resources.addImage('hero-1-d', '../../assets/images/hero/1/d-2.png', 32, 32);
+        resources.addImage('hero-1-r', '../../assets/images/hero/1/r-2.png', 32, 32);
+        resources.addImage('hero-1-l', '../../assets/images/hero/1/l-2.png', 32, 32);
+        resources.addImage('hero-1-u', '../../assets/images/hero/1/u-2.png', 32, 32);
+        
         resources.addImage('bomb3', '../../assets/images/bombs/3.png', 32, 32);
         resources.addImage('bomb2', '../../assets/images/bombs/2.png', 32, 32);
         resources.addImage('bomb1', '../../assets/images/bombs/1.png', 32, 32);
@@ -78,6 +86,13 @@ export class GameStart {
         }
 
         return window.setTimeout(this.timeCount, 50, timeElement);
+    }
+
+    getPlayGround() {
+        if (this.game && this.game.playGround) {
+            return this.game.playGround;
+        }
+        return null;
     }
 
 }

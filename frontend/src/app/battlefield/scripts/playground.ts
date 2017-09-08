@@ -59,6 +59,11 @@ export class PlayGround {
 
     }
 
+    public updateBombs(bombs: Bomb[]) {
+        this.bombs = bombs;
+        console.log('playground has bombs: ', bombs);
+    }
+
     public setPositionStyle(positionStyle): void {
         this.tag.style.position = positionStyle;
     };

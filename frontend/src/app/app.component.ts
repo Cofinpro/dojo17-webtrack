@@ -24,11 +24,6 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.socketSubscription = this.websocketService
-            .getObservable()
-            .subscribe((message: Message) => {
-                console.log(message.inMsg);
-            });
         // this.launchCounter();
     }
     /*
