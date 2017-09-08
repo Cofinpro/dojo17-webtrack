@@ -14,7 +14,7 @@ export class Game {
 
     liveCount = 3;
     end = false;
-    playGroundConfugurator = null;
+    playGroundConfigurator = null;
     public playGround: PlayGround = null;
     startedAt = null;
     hero = null;
@@ -41,8 +41,8 @@ export class Game {
         this.playGround.setPickItUpCallBack(this.picked);
         this.playGround.setTargetCaughtCallBack(this.caught);
 
-        this.playGroundConfugurator = new PlayGroundConfigurator(this.playGround, this.images);
-        this.playGroundConfugurator.configure();
+        this.playGroundConfigurator = new PlayGroundConfigurator(this.playGround, this.images);
+        this.playGroundConfigurator.configure();
 
         this.placeBomb(4,4);
 
