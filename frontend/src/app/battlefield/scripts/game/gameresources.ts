@@ -1,4 +1,6 @@
 import { ShapeDetector } from '../pixels/shapedetector';
+import { GameImage } from './gameimage';
+
 /**
  * Created by mhinz on 5/24/2016.
  */
