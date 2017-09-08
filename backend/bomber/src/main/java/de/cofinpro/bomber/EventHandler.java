@@ -1,8 +1,8 @@
 package de.cofinpro.bomber;
 
-import de.cofinpro.bomber.api.Bomb;
-import de.cofinpro.bomber.api.Player;
-import de.cofinpro.bomber.api.State;
+import de.cofinpro.bomber.models.Bomb;
+import de.cofinpro.bomber.models.Player;
+import de.cofinpro.bomber.models.State;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
