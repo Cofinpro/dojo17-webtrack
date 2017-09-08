@@ -28,10 +28,11 @@ public class GameLogic {
 
     private final TaskScheduler scheduler = new ThreadPoolTaskScheduler();
 
-    @Autowired
     private SimpMessagingTemplate template;
 
-    public GameLogic() {
+    @Autowired
+    public GameLogic(SimpMessagingTemplate template) {
+        this.template = template;
         this.currentState = new State();
     }
 

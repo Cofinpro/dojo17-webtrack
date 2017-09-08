@@ -11,8 +11,12 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class EventHandler {
 
+    private final GameLogic gameLogic;
+
     @Autowired
-    private GameLogic gameLogic;
+    public EventHandler(GameLogic gameLogic) {
+        this.gameLogic = gameLogic;
+    }
 
     @MessageMapping("/player")
     @SendTo("/topic/state")
