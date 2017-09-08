@@ -22,7 +22,6 @@ export class GameResources {
     }
 
     imageLoaded(key, shapeData, canvas) {
-        debugger;
         const loading = this.imagesLoading.indexOf(key);
         this.imagesLoading.splice(loading, 1);
         this.images[key].setImageData(shapeData, canvas);
@@ -40,8 +39,8 @@ export class GameResources {
         this.imagesLoading[this.imagesLoading.length] = key;
 
         const image = this.shapeDetector.detect(src, key, width, height).then( (result) => {
-            // this.imageLoaded
             this.images[result.key] = new GameImage(result.image.src, result.width, result.height);
+            this.imageLoaded(result.key, result.shapeData, result.canvas);
         });
 
     };

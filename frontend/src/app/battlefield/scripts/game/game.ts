@@ -25,15 +25,15 @@ export class Game {
     constructor (resources) {
         this.images = resources.images;
         this.audios = resources.audios;
-        this.counterTag = document.getElementById('picks');
-        this.livesTag = document.getElementById('lives');
+        // this.counterTag = document.getElementById('picks');
+        // this.livesTag = document.getElementById('lives');
     }
 
-    setUpPlayGround = () => {
+    setUpPlayGround() {
 
-        var playGroundElement = document.getElementById('play-ground');
+        var playGroundElement = document.getElementById('playground');
         playGroundElement.innerHTML = '';
-        this.counterTag.innerHTML = '';
+        // this.counterTag.innerHTML = '';
 
         this.playGround = new PlayGround(playGroundElement, 600, 800);
 
@@ -43,21 +43,21 @@ export class Game {
         this.playGroundConfugurator = new PlayGroundConfigurator(this.playGround, this.images);
         this.playGroundConfugurator.configure();
 
-        var l = document.getElementById('lives');
-        l.innerHTML = '';
-        for (var i = 0; i < this.liveCount; i++) {
-            var im = new Image();
-            im.src = this.images['hero-right'].getImageSource();
-            im.height = 32;
-            im.width = 32;
-            l.appendChild(im);
-        }
+        // var l = document.getElementById('lives');
+        // l.innerHTML = '';
+        // for (var i = 0; i < this.liveCount; i++) {
+        //     var im = new Image();
+        //     im.src = this.images['hero-right'].getImageSource();
+        //     im.height = 32;
+        //     im.width = 32;
+        //     l.appendChild(im);
+        // }
 
-        this.placeHero();
+        // this.placeHero();
         //this.placeCockpit();
     };
 
-    placeCockpit = () => {
+    placeCockpit() {
         //var cockpit = document.getElementById('game-cockpit');
         ////cockpit.innerHTML = '';
         //cockpit.style.position = 'absolute';
@@ -213,7 +213,7 @@ export class Game {
         this.startGame();
     };
 
-    shutDownGame = () => {
+    shutDownGame() {
         this.end = true;
         this.audios['loop'].load();
         this.playGround.stopMovers();
@@ -223,7 +223,7 @@ export class Game {
         this.animator = null;
     };
 
-    resumeGame = () => {
+    resumeGame() {
         this.playGround.endPause();
     };
 
@@ -234,7 +234,7 @@ export class Game {
         }
     };
 
-    isPaused = () => {
+    isPaused() {
         return this.playGround.isPaused();
     };
 

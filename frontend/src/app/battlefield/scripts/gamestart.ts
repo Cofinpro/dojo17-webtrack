@@ -27,7 +27,6 @@ export class GameStart {
         }
         this.game = new Game(resources);
         this.game.setUpPlayGround();
-        //game.startGame();
 
         document.getElementById('time').innerHTML = '00:00:00';
         this.timeCount(document.getElementById('time'));
