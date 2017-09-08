@@ -21,6 +21,8 @@ export class PlayGround {
     canvas: any;
     obstaclesCanvas: any;
     bombs: Bomb[] = [];
+    sprites: any[] = [];
+    resources;
 
     constructor(tag, height, width) {
         this.obstacles = [];
@@ -60,6 +62,17 @@ export class PlayGround {
     }
 
     public updateBombs(bombs: Bomb[]) {
+        // TODO: createPicture für neue Bombs
+        // TODO: changePicture für Bombs (animation)
+        // TODO: removePicture für Bombs die nicht mehr existieren
+        if (!this.resources) {
+            return;
+        }
+
+        this.sprites = [];
+        for (let bomb of bombs) {
+            this.createPicture(bomb.id, bomb.y * 32, bomb.x * 32, this.resources.images['bomb3']);
+        }
         this.bombs = bombs;
         console.log('playground has bombs: ', bombs);
     }
@@ -110,9 +123,11 @@ export class PlayGround {
     //     return new GECircle(elmHeight, elmWidth, elmTop, elmLeft, color, ctx);
     // };
 
-    public createPicture(elmTop, elmLeft, image, isObstacle?) {
+    public createPicture(id, elmTop, elmLeft, image, isObstacle?) {
         let ctx = isObstacle ? this.obstaclesContext : this.context;
-        return new GEPicture(elmTop, elmLeft, image, ctx);
+        let pic = new GEPicture(id, elmTop, elmLeft, image, ctx);
+        this.sprites.push(pic);
+        return pic;
     };
 
     public setPickItUpCallBack(callBack): void {

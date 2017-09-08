@@ -21,16 +21,16 @@ export class PlayGroundConfigurator {
         for (var y = 0; y < 17; y++) {
             for (var x = 0; x < 17; x++) {
                 if (x == 0 && y == 0 || x == 16 && y == 0) {
-                    obstacle = this.playGround.createPicture(y*32 , x*32, wallLight, true);
+                    obstacle = this.playGround.createPicture(null, y*32 , x*32, wallLight, true);
                     this.playGround.addObstacle(obstacle);
                 } else if(y == 0 || y == 16) {
-                    obstacle = this.playGround.createPicture(y*32 , x*32, wallDark, true);
+                    obstacle = this.playGround.createPicture(null, y*32 , x*32, wallDark, true);
                     this.playGround.addObstacle(obstacle);
                 } else if(x == 0 || x == 16) {
-                    obstacle = this.playGround.createPicture(y*32 , x*32, wallLight, true);
+                    obstacle = this.playGround.createPicture(null, y*32 , x*32, wallLight, true);
                     this.playGround.addObstacle(obstacle);
                 } else if(x % 2 == 0 && y % 2 == 0) {
-                    obstacle = this.playGround.createPicture(y*32 , x*32, wallLight, true);
+                    obstacle = this.playGround.createPicture(null, y*32 , x*32, wallLight, true);
                     this.playGround.addObstacle(obstacle);
                 }
             }
