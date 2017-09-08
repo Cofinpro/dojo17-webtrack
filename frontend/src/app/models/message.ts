@@ -1,11 +1,6 @@
+import { State } from './state';
+
 export class Message {
-
-    constructor(public text: string) {
+    constructor(public inMsg: State, public outMsg: any) {
     }
-
-    static factory(raw: any): Message {
-        const message: Message = new Message(raw.text);
-        return message;
-    }
-
 }
