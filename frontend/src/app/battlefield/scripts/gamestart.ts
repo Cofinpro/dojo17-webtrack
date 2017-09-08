@@ -13,7 +13,6 @@ export class GameStart {
         resources.addImage('wall-light', '../../assets/images/bomberman/91.png', 32, 32);
         resources.addImage('wall-dark', '../../assets/images/bomberman/89.png', 32, 32);
         resources.addImage('box', '../../assets/images/bomberman/90.png', 32, 32);
-<<<<<<< HEAD
 
         // heros
         resources.addImage('hero-1-d', '../../assets/images/hero/1/d-2.png', 32, 32);
@@ -21,12 +20,10 @@ export class GameStart {
         resources.addImage('hero-1-l', '../../assets/images/hero/1/l-2.png', 32, 32);
         resources.addImage('hero-1-u', '../../assets/images/hero/1/u-2.png', 32, 32);
         
-=======
         resources.addImage('bomb3', '../../assets/images/bombs/3.png', 32, 32);
         resources.addImage('bomb2', '../../assets/images/bombs/2.png', 32, 32);
         resources.addImage('bomb1', '../../assets/images/bombs/1.png', 32, 32);
         resources.addImage('bomb0', '../../assets/images/bombs/0.png', 32, 32);
->>>>>>> 00a0d0370e4577d694b466e4e63ec93f85ee4ac6
         resources.startLoading();
         this.checkResources(resources);
 
