@@ -5,9 +5,6 @@ import { ShapeDetector } from './scripts/pixels/shapedetector';
 import { Subscription, Observer, Subject } from 'rxjs/Rx';
 import { Message } from '../models/message';
 
-// import * as PlayGround from 'scripts/playground.js';
-// import * as PlayGroundConfigurater from 'scripts/playgroundconfigurator.js';
-
 @Component({
     selector: 'battlefield',
     templateUrl: './battlefield.component.html',

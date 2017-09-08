@@ -1,6 +1,5 @@
 import { WebsocketService } from '../../../services/websocket.service';
 import { PlayGround } from '../playground';
-import { PlayGroundConfigurator } from '../playgroundconfigurator';
 import { Direction } from '../move/direction';
 import { HeroAnimator } from '../move/heroanimator';
 import { ModalMessage } from '../messages/modalmessage';
@@ -31,7 +30,6 @@ export class Game {
 
     liveCount = 3;
     end = false;
-    playGroundConfugurator = null;
     startedAt = null;
     hero = null;
     animator = null;
