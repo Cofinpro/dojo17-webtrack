@@ -6,27 +6,24 @@ import { GameResources } from './scripts/game/gameresources';
 // import * as PlayGroundConfigurater from 'scripts/playgroundconfigurator.js';
 
 @Component({
-  selector: 'battlefield',
-  templateUrl: './battlefield.component.html',
-  styleUrls: ['./battlefield.component.scss']
+    selector: 'battlefield',
+    templateUrl: './battlefield.component.html',
+    styleUrls: ['./battlefield.component.scss']
 })
 
 
 /**
- * The battlefields holds the 2D game logic
- */
+* The battlefields holds the 2D game logic
+*/
 export class BattlefieldComponent implements OnInit {
 
-  constructor() { }
+    constructor() { }
 
-  ngOnInit() {
-    var resources = new GameResources();
+    ngOnInit() {
+        var resources = new GameResources();
 
-
-
-    var t = new Test();
-    t.setup();
-  }
+        // init game
+    }
 
 
 }
