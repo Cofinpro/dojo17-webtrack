@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ShapeDetector } from './scripts/pixels/shapedetector.js';
-import { GameResources } from './scripts/game/gameresources.js';
+import { ShapeDetector } from './scripts/pixels/shapedetector';
+import { GameResources } from './scripts/game/gameresources';
 
 // import * as PlayGround from 'scripts/playground.js';
 // import * as PlayGroundConfigurater from 'scripts/playgroundconfigurator.js';
