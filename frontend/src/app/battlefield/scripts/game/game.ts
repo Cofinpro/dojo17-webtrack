@@ -298,7 +298,7 @@ export class Game {
         this.audios['loop'].play();
 
         this.animator.start();
-        this.playGround.startMovers();
+        // this.playGround.startMovers();
         //this.playGround.shieldTarget(this.hero, 2000);
         this.startedAt = null;
         this.end = false;
