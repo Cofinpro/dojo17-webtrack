@@ -77,7 +77,7 @@ export class AbstractGameElement {
                 if (move.horizontal > 0) {
                     hrzOverlap = this.right - overlapped[i].left;
                     for (j = 0; j < hrzCorrection.lines; j++) {
-                        buffer = this.getRight(hrzCorrection.thisStart + j) + move.horizontal;
+                        // buffer = this.getRight(hrzCorrection.thisStart + j) + move.horizontal;
                         buffer2 = overlapped[i].getLeft(hrzCorrection.otherStart + j);
                         if (buffer > buffer2) {
                             returned.hrzCollission = true;
@@ -90,7 +90,7 @@ export class AbstractGameElement {
                 if (move.horizontal < 0) {
                     hrzOverlap = this.left - overlapped[i].right;
                     for (j = 0; j < hrzCorrection.lines; j++) {
-                        buffer = this.getLeft(hrzCorrection.thisStart + j) + move.horizontal;
+                        // buffer = this.getLeft(hrzCorrection.thisStart + j) + move.horizontal;
                         buffer2 = overlapped[i].getRight(hrzCorrection.otherStart + j);
                         if (buffer < buffer2) {
                             returned.hrzCollission = true;
