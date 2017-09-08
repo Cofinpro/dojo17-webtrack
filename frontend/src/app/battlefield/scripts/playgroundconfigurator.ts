@@ -4,18 +4,10 @@
 
 export class PlayGroundConfigurator{
 
-
-
     constructor(private playGround : any, private images : any){
         //TODO Fix me
         document.body.onkeydown = checkReturn;
-
-        }
-        
-   
-
-        
-    
+    }
 
     configure() {
         this.addObstacles();
@@ -118,30 +110,8 @@ export class PlayGroundConfigurator{
         this.playGround.addPickItUp(pick);
         this.playGround.addObstacle(pick);
     };
+
     addEnemies(){
-
         let ball = this.images['ball1'];
-        let enemy;
-
-        enemy = this.playGround.createPicture(75, 5, ball);
-        this.playGround.addAutoMover(new AutonomousMover(enemy, this.playGround));
-        this.playGround.addObstacle(enemy);
-
-        enemy = this.playGround.createPicture(140, 85, ball);
-        this.playGround.addAutoMover(new AutonomousMover(enemy, this.playGround));
-        this.playGround.addObstacle(enemy);
-
-        enemy = this.playGround.createPicture(300, 400, ball);
-        this.playGround.addAutoMover(new AutonomousMover(enemy, this.playGround));
-        this.playGround.addObstacle(enemy);
-
-        enemy = this.playGround.createPicture(200, 550, ball);
-        this.playGround.addAutoMover(new AutonomousMover(enemy, this.playGround));
-        this.playGround.addObstacle(enemy);
-
-        enemy = this.playGround.createPicture(100, 500, ball);
-        this.playGround.addAutoMover(new AutonomousMover(enemy, this.playGround));
-        this.playGround.addObstacle(enemy);
-
     };
 }
