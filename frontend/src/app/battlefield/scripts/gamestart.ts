@@ -16,6 +16,12 @@ export class GameStart {
         resources.startLoading();
         this.checkResources(resources);
 
+        // key event init
+        document.body.onkeydown = this.checkReturn;
+
+        document.getElementById('time').innerHTML = '00:00:00';
+        this.timeCount(document.getElementById('time'));
+
     }
 
     checkResources(resources) {

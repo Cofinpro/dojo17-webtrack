@@ -203,8 +203,6 @@ export class Game {
         //this.playGround.shieldTarget(this.hero, 2000);
         this.startedAt = null;
         this.end = false;
-        document.getElementById('time').innerHTML = '00:00:00';
-        timeCount(document.getElementById('time'));
     };
 
     resetGame() {

@@ -5,8 +5,6 @@
 export class PlayGroundConfigurator {
 
     constructor(private playGround: any, private images: any){
-        //TODO Fix me
-        document.body.onkeydown = checkReturn;
     }
 
     configure() {
