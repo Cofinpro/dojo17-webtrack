@@ -104,7 +104,7 @@ export class PlayGround {
     //     return new GECircle(elmHeight, elmWidth, elmTop, elmLeft, color, ctx);
     // };
 
-    public createPicture(elmTop, elmLeft, image, isObstacle) {
+    public createPicture(elmTop, elmLeft, image, isObstacle?) {
         let ctx = isObstacle ? this.obstaclesContext : this.context;
         return new GEPicture(elmTop, elmLeft, image, ctx);
     };

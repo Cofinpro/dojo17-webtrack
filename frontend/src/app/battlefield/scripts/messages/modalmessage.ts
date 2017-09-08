@@ -12,7 +12,7 @@ export class ModalMessage {
     message;
     playGround;
     tag;
-    messages = [];
+    static messages = [];
 
     constructor(displayMillis, displayStyle, message, playGround) {
 
@@ -21,14 +21,15 @@ export class ModalMessage {
         this.message = message;
         this.playGround = playGround;
         this.tag = null;
+        ModalMessage.messages.push(this);
     }
 
     show() {
         this.playGround.pause();
-        const count = this.messages.length;
+        const count = ModalMessage.messages.length;
         this.tag = document.createElement('p');
 
-        this.messages[count] = this.tag;
+        ModalMessage.messages[count] = this.tag;
         var pgPosition = this.playGround.getPosition();
 
         var top = (this.playGround.height / 2) + 'px';
@@ -68,11 +69,11 @@ export class ModalMessage {
         }
     };
 
-    clearAll() {
-        for (var i = 0; i < this.messages.length; i++) {
-            var tag = this.messages[i];
+    static clearAll() {
+        for (var i = 0; i < ModalMessage.messages.length; i++) {
+            var tag = ModalMessage.messages[i];
             tag.parentNode.removeChild(tag);
         }
-        this.messages = [];
+        ModalMessage.messages = [];
     };
 }
