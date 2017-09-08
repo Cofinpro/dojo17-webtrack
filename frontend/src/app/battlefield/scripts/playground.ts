@@ -58,8 +58,8 @@ export class PlayGround {
 
     }
 
-    public layBomb(): Bomb {
-      return new Bomb('killerqueen', 5,5,'superme', null);
+    public placeBomb(): Bomb {
+      return new Bomb(null, 5,5, null, null);
     }
 
     public setPositionStyle(positionStyle): void {
