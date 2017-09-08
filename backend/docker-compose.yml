@@ -1,0 +1,32 @@
+version: "3"
+services:
+    visualizer:
+        image: dockersamples/visualizer:stable
+        ports:
+            - "3001:8080"
+        volumes:
+            - "/var/run/docker.sock:/var/run/docker.sock"
+        deploy:
+            placement:
+                constraints: [node.role == manager]
+        networks:
+            - bombernet
+    rabbit:
+        image: rabbitmq:management
+        ports:
+            - "3002:15672"
+        deploy:
+            placement:
+                constraints: [node.role == manager]
+        networks:
+            - bombernet
+    bomber:
+        image: bomber
+        ports:
+            - "3000:3000"
+        depends_on:
+            - "rabbit"
+        networks:
+            - bombernet
+networks:
+    bombernet:
