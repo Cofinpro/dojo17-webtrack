@@ -20,7 +20,7 @@ export class PlayGround {
     paused: any;
     canvas: any;
     obstaclesCanvas: any;
-    bombs: Bomb[];
+    bombs: Bomb[] = [];
 
     constructor(tag, height, width) {
         this.obstacles = [];
