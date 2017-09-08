@@ -114,10 +114,12 @@ export class HeroAnimator {
 
     draw(moveBy: any): void {
 
-    let rightPressed = this.directions.indexOf(Direction.right) > -1;
-    let leftPressed = this.directions.indexOf(Direction.left) > -1;
-    let upPressed = this.directions.indexOf(Direction.up) > -1;
-    let downPressed = this.directions.indexOf(Direction.down) > -1;
+    const direction = new Direction();
+
+    let rightPressed = this.directions.indexOf(direction.right) > -1;
+    let leftPressed = this.directions.indexOf(direction.left) > -1;
+    let upPressed = this.directions.indexOf(direction.up) > -1;
+    let downPressed = this.directions.indexOf(direction.down) > -1;
 
     let move = {horizontal: 0, vertical:0};
     if (leftPressed && !rightPressed) move.horizontal = moveBy * -1;
