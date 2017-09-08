@@ -12,7 +12,7 @@ export class Game {
     images = {};
     audios = {};
 
-    liveCount = 3;
+    lifeCount = 3;
     end = false;
     playGroundConfigurator = null;
     public playGround: PlayGround = null;
@@ -21,13 +21,13 @@ export class Game {
     animator = null;
 
     counterTag;
-    livesTag;
+    lifesTag;
 
     constructor (resources) {
         this.images = resources.images;
         this.audios = resources.audios;
         // this.counterTag = document.getElementById('picks');
-        // this.livesTag = document.getElementById('lives');
+        // this.lifesTag = document.getElementById('lives');
     }
 
     setUpPlayGround() {
@@ -48,7 +48,7 @@ export class Game {
 
         // var l = document.getElementById('lives');
         // l.innerHTML = '';
-        // for (var i = 0; i < this.liveCount; i++) {
+        // for (var i = 0; i < this.lifeCount; i++) {
         //     var im = new Image();
         //     im.src = this.images['hero-right'].getImageSource();
         //     im.height = 32;
@@ -125,8 +125,8 @@ export class Game {
 
         this.animator.stop();
 
-        var current = this.livesTag.childElementCount;
-        this.livesTag.removeChild(this.livesTag.firstElementChild);
+        var current = this.lifesTag.childElementCount;
+        this.lifesTag.removeChild(this.lifesTag.firstElementChild);
         var next = current - 1;
         if (next <= 0) {
             new ModalMessage(-1, ModalMessage.BadNews, 'Lost!!', this.playGround).show();
