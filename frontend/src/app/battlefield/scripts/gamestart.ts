@@ -7,31 +7,30 @@ export class GameStart {
     constructor() {
         var resources = new GameResources();
 
-        resources.addImage('burned-gras', './images/bomberman/0.png',32,32);
-        resources.addImage('gras', './images/bomberman/1.png',32,32);
-        resources.addImage('wall-light', './images/bomberman/91.png',32,32);
-        resources.addImage('wall-dark', './images/bomberman/89.png',32,32);
-        resources.addImage('box', './images/bomberman/90.png',32,32);
+        resources.addImage('burned-gras', '../../assets/images/bomberman/0.png',32,32);
+        resources.addImage('gras', '../../assets/images/bomberman/1.png',32,32);
+        resources.addImage('wall-light', '../../assets/images/bomberman/91.png',32,32);
+        resources.addImage('wall-dark', '../../assets/images/bomberman/89.png',32,32);
+        resources.addImage('box', '../../assets/images/bomberman/90.png',32,32);
 
         resources.startLoading();
         this.checkResources(resources);
 
         // key event init
         document.body.onkeydown = this.checkReturn;
-
-        document.getElementById('time').innerHTML = '00:00:00';
-        this.timeCount(document.getElementById('time'));
-
     }
 
     checkResources(resources) {
         console.log('called');
         if(!resources.resourcesLoaded()){
-            return setTimeout(this.checkResources, 500,resources);
+            return setTimeout(this.checkResources, 500, resources);
         }
         this.game = new Game(resources);
         this.game.setUpPlayGround();
         //game.startGame();
+
+        document.getElementById('time').innerHTML = '00:00:00';
+        this.timeCount(document.getElementById('time'));
     }
 
     checkReturn(e) {

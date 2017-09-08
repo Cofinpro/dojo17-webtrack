@@ -9,53 +9,60 @@ export class GameResources {
     images = {};
     audios = {};
 
-    imagesLoading = [];
-    audioLoading = [];
+    imagesLoading;
+    audioLoading;
+    shapeDetector;
+    setupFinished;
 
-    shapeDetector = new ShapeDetector(20);
+    constructor() {
+        this.imagesLoading = [];
+        this.audioLoading = [];
+        this.shapeDetector = new ShapeDetector(20);
+        this.setupFinished = false;
+    }
 
-    setupFinished = false;
-
-    imageLoaded = function(key, shapeData, canvas) {
+    imageLoaded(key, shapeData, canvas) {
+        debugger;
         const loading = this.imagesLoading.indexOf(key);
-        this.imagesLoading.splice(loading,1);
+        this.imagesLoading.splice(loading, 1);
         this.images[key].setImageData(shapeData, canvas);
     };
 
-    audioLoaded = function(key) {
+    audioLoaded(key) {
         const loading = this.audioLoading.indexOf(key);
         this.audioLoading.splice(loading, 1);
     };
 
-    addImage = function(key,src, width, height) {
+    addImage(key,src, width, height) {
         if (this.imagesLoading.indexOf(key) > -1) {
             return;
         }
         this.imagesLoading[this.imagesLoading.length] = key;
 
-        const image = this.shapeDetector.detect(src, key, this.imageLoaded, width, height);
+        const image = this.shapeDetector.detect(src, key, width, height).then( (result) => {
+            // this.imageLoaded
+            this.images[result.key] = new GameImage(result.image.src, result.width, result.height);
+        });
 
-        this.images[key] = new GameImage(src, width, height);
     };
 
-    addAudio = function(key, src) {
+    addAudio(key, src) {
         if (this.audioLoading.indexOf(key) > -1) {
             return;
         }
         this.audioLoading[this.audioLoading.length] = key;
 
-        const audio = new Audio();
+        let audio = new Audio();
         this.audios[key] = audio;
-
-        audio.onload = this.audioLoaded(key);
+        audio.onload = this.audioLoaded;
         audio.src = src;
     };
 
-    startLoading = function() {
+    startLoading() {
         this.setupFinished = true;
     };
 
-    resourcesLoaded = function(){
+    resourcesLoaded() {
         if (!this.setupFinished) {
             return false;
         }

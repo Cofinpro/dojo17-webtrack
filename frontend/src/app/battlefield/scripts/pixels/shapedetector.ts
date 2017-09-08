@@ -12,22 +12,25 @@ export class ShapeDetector {
         }
     }
 
-    detect(src: any, key: any, callBack: () => any, width: number, height: number) {
-        const image = new Image();
-        image.onload = () => {
-            if (!width) {
-                width = image.width;
-            }
-            if (!height) {
-                height = image.height;
-            }
-            this.doDetect(image, key, callBack, width, height);
-        };
-        image.src = src;
-        return src;
+    detect(src: any, key: any, callBack: () => any, width: number, height: number): Promise<any> {
+        let promise = new Promise((resolve, reject) => {
+            const image = new Image();
+            image.src = src;
+
+            image.onload = () => {
+                if (!width) {
+                    width = image.width;
+                }
+                if (!height) {
+                    height = image.height;
+                }
+                resolve(this.doDetect(image, key, width, height));
+            };
+        });
+        return promise;
     };
 
-    doDetect(image: any, key: any, callBack: (key, shapeData, canvas) => any, width: number, height: number) {
+    doDetect(image: any, key: any, width: number, height: number) {
         const canvas = document.createElement('canvas');
 
         canvas.width = width;
@@ -50,7 +53,7 @@ export class ShapeDetector {
                 }
             }
         }
-        callBack(key, shapeData, canvas);
+        return {image, key, shapeData, canvas};
     }
 
     scanLine(data: any): any[] {
