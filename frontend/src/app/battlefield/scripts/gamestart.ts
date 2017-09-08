@@ -12,10 +12,10 @@ export class GameStart {
         resources.addImage('wall-light', '../../assets/images/bomberman/91.png', 32, 32);
         resources.addImage('wall-dark', '../../assets/images/bomberman/89.png', 32, 32);
         resources.addImage('box', '../../assets/images/bomberman/90.png', 32, 32);
-        resources.addImage('bomb', '../../assets/images/bomb/3.png', 32, 32);
-        resources.addImage('bomb', '../../assets/images/bomb/2.png', 32, 32);
-        resources.addImage('bomb', '../../assets/images/bomb/1.png', 32, 32);
-        resources.addImage('bomb', '../../assets/images/bomb/0.png', 32, 32);
+        resources.addImage('bomb3', '../../assets/images/bomb/3.png', 32, 32);
+        resources.addImage('bomb2', '../../assets/images/bomb/2.png', 32, 32);
+        resources.addImage('bomb1', '../../assets/images/bomb/1.png', 32, 32);
+        resources.addImage('bomb0', '../../assets/images/bomb/0.png', 32, 32);
         resources.startLoading();
         this.checkResources(resources);
 
