@@ -33,7 +33,7 @@ export class BattlefieldComponent implements OnInit {
         this.socketSubscription = this.websocketService
         .getObservable()
         .subscribe((message: Message) => {
-            console.log('got bombs from server', message.inMsg.bombs);
+            // console.log('got bombs from server', message.inMsg.bombs);
             let playGround = this.gameStart.getPlayGround();
             if (playGround) {
                 playGround.updateBombs(message.inMsg.bombs);
