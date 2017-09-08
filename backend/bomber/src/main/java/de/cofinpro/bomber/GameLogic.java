@@ -22,7 +22,7 @@ public class GameLogic {
 
     private static final int BOMB_TIMEOUT_SECONDS = 10;
 
-    private static final int BOMB_RADIUS = 1;
+    private static final int BOMB_RADIUS = 8;
 
     private State currentState;
 
