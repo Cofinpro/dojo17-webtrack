@@ -149,7 +149,7 @@ export class Game {
     }
 
     startTimer(): void {
-      let timer = TimerObservable.create(0, 1);
+      let timer = TimerObservable.create(0, 10);
       this.timerSubscription = timer.subscribe(t => {
        let minutes = Math.floor(t/6000) % 60;
        let seconds = Math.floor(t/100) % 60;
