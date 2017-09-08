@@ -1,42 +1,54 @@
-function AbstractGameElement() {
+export class AbstractGameElement {
 
-    this.proposedPosition = null;
+    public baseFormRect = 'RECT';
+    public baseFormCircle = 'CIRCLE';
+    public baseFormPicture = 'PICTURE';
+    
+    proposedPosition = null;
+    context: any;
+    top: any;
+    left;
+    right;
+    bottom;
+    color;
+    width;
+    height;
 
-    this.placeTag = function () {
+    placeTag() : void {
 
         //this.context.beginPath();
         this.context.fillStyle = this.color;
         this.context.fillRect(this.left, this.top, this.width, this.height);
         //this.context.closePath();
         this.context.fill();
-    };
+    }
 
-    this.setPosition = function (top, left) {
-        this.clear();
-        this.top = top;
-        this.left = left;
-        this.right = this.left + this.width;
-        this.bottom = this.top + this.height;
+    setPosition(top, left) : void {
+       this.clear();
+       this.top = top;
+       this.left = left;
+       this.right = this.left + this.width;
+       this.bottom = this.top + this.height;
 
         this.placeTag();
-    };
+    }
 
-    this.setBackgroundColor = function (color) {
+    setBackgroundColor(color) : void  {
         this.color = color;
         this.clear();
         this.placeTag();
-    };
+    }
 
-    this.clear = function () {
+    clear() : void {
         this.context.clearRect(this.left, this.top, this.width, this.height);
-    };
+    }
 
-    this.collisionCorrection = function (obstacles, move) {
+    collisionCorrection(obstacles, move) : any {
 
         var hrzTarget = this.left + move.horizontal;
         var vrtTarget = this.top + move.vertical;
 
-        var returned = {left: hrzTarget, top: vrtTarget};
+        var returned = {left: hrzTarget, top: vrtTarget, hrzCollission : false, vrtCollission : false };
 
         var overlapped = this.getOverlappedElements(obstacles, hrzTarget, vrtTarget);
 
@@ -51,8 +63,6 @@ function AbstractGameElement() {
         var buffer2;
         var hrzMinResult;
         var vrtMinResult;
-        //FIXME remove console log
-        console.log('start');
         for (i = 0; i < overlapped.length; i++) {
             var hrzCorrection = this.checkHrz(move, overlapped[i]);
             var vrtCorrection = this.checkVrt(move, overlapped[i]);
@@ -75,16 +85,6 @@ function AbstractGameElement() {
                         }
 
                     }
-                    //
-                    //if (hrzOverlap >= 0) {
-                    //    shapeResult = this.shapeData.collisionCorrection(overlapped[i].shapeData, hrzCorrection, Direction.right);
-                    //    pixelsToMove = shapeResult.line - hrzOverlap;
-                    //    if (pixelsToMove < move.horizontal) {
-                    //        if (!hrzMinResult || pixelsToMove < hrzMinResult) {
-                    //            hrzMinResult = pixelsToMove;
-                    //        }
-                    //    }
-                    //}
                 }
 
                 if (move.horizontal < 0) {
@@ -98,15 +98,6 @@ function AbstractGameElement() {
                         }
 
                     }
-                    //if(hrzOverlap <= 0){
-                    //    shapeResult = this.shapeData.collisionCorrection(overlapped[i].shapeData, hrzCorrection, Direction.left);
-                    //    pixelsToMove = (shapeResult.line * -1) - hrzOverlap;
-                    //    if (pixelsToMove > move.horizontal) {
-                    //        if (!hrzMinResult || pixelsToMove > hrzMinResult) {
-                    //            hrzMinResult = pixelsToMove;
-                    //        }
-                    //    }
-                    //}
                 }
             }
 
@@ -115,7 +106,7 @@ function AbstractGameElement() {
                 if (move.vertical > 0) {
                     vrtOverlap = this.bottom - overlapped[i].top;
                     for (j = 0; j < vrtCorrection.lines; j++) {
-                        buffer = this.getBottom(vrtCorrection.thisStart + j) + move.vertical;
+                        // buffer = this.getBottom(vrtCorrection.thisStart + j) + move.vertical;
                         buffer2 = overlapped[i].getTop(vrtCorrection.otherStart + j);
                         //FIXME remove console log
                         console.log('buffer :: ' + j + ' ... ' + buffer + ' --> buffer2 :: ' + buffer2);
@@ -130,21 +121,12 @@ function AbstractGameElement() {
                         }
                     }
 
-                    //if (vrtOverlap >= 0) {
-                    //    shapeResult = this.shapeData.collisionCorrection(overlapped[i].shapeData, vrtCorrection, Direction.down);
-                    //    pixelsToMove = shapeResult.line - vrtOverlap;
-                    //    if (pixelsToMove < move.vertical && pixelsToMove >=0) {
-                    //        if (!vrtMinResult || pixelsToMove < vrtMinResult) {
-                    //            vrtMinResult = pixelsToMove;
-                    //        }
-                    //    }
-                    //}
                 }
 
                 if (move.vertical < 0) {
                     vrtOverlap = this.top - overlapped[i].bottom;
                     for (j = 0; j < vrtCorrection.lines; j++) {
-                        buffer = this.getTop(vrtCorrection.thisStart + j) + move.vertical;
+                        // buffer = this.getTop(vrtCorrection.thisStart + j) + move.vertical;
                         buffer2 = overlapped[i].getTop(vrtCorrection.otherStart + j);
 
 
@@ -154,37 +136,13 @@ function AbstractGameElement() {
                         }
 
                     }
-                    //if (vrtOverlap <= 0) {
-                    //    shapeResult = this.shapeData.collisionCorrection(overlapped[i].shapeData, vrtCorrection, Direction.up);
-                    //    pixelsToMove = (shapeResult.line * -1) - vrtOverlap;
-                    //    if (pixelsToMove > move.vertical && pixelsToMove <= 0) {
-                    //        if (!vrtMinResult || pixelsToMove > vrtMinResult) {
-                    //            vrtMinResult = pixelsToMove;
-                    //        }
-                    //    }
-                    //}
                 }
             }
         }
-        //if (vrtMinResult || vrtMinResult == 0) {
-        //    returned.vrtCollission = true;
-        //    if (move.vertical < 0 && vrtMinResult <= 0)returned.top = this.top + vrtMinResult;
-        //    if (move.vertical > 0 && vrtMinResult >= 0)returned.top = this.top + vrtMinResult;
-        //
-        //}
-        //if (hrzMinResult || hrzMinResult == 0) {
-        //    returned.hrzCollission = true;
-        //    if (move.horizontal < 0 && hrzMinResult <= 0)returned.left = this.left + hrzMinResult;
-        //    if (move.horizontal > 0 && hrzMinResult >= 0)returned.left = this.left + hrzMinResult;
-        //}
-        //FIXME remove console log
-        console.log('stop');
-        //FIXME remove console log
-        console.log(returned);
-        return returned;
+      return returned;
     };
 
-    this.correctBoxedBased = function (move, overlapped, returned) {
+    correctBoxedBased(move, overlapped, returned) : any {
         var i;
         for (i = 0; i < overlapped.length; i++) {
             var hrzCorrection = this.checkHrz(move, overlapped[i]);
@@ -203,7 +161,7 @@ function AbstractGameElement() {
 
     };
 
-    this.checkHrz = function (move, element) {
+    checkHrz(move, element) : any {
 
         if (move.horizontal == 0) return false;
 
@@ -228,7 +186,7 @@ function AbstractGameElement() {
         dif = element.bottom - this.top;
         return {thisStart: 0, otherStart: element.height - dif, lines: dif};
     };
-    this.checkVrt = function (move, element) {
+    checkVrt(move, element) : any {
 
         if (move.vertical == 0) return false;
 
@@ -253,7 +211,7 @@ function AbstractGameElement() {
         dif = element.right - this.left;
         return {thisStart: 0, otherStart: element.width - dif, lines: dif};
     };
-    this.getBoxHrzPosition = function (move, element) {
+    getBoxHrzPosition(move, element) : any {
         if (move.horizontal < 0 && element.right >= this.left + move.horizontal) {
             return element.right;
         }
@@ -261,7 +219,7 @@ function AbstractGameElement() {
             return element.left - this.width;
         }
     };
-    this.getBoxVrtPosition = function (move, element) {
+    getBoxVrtPosition(move, element) : any {
         if (move.vertical < 0 && element.bottom >= this.top + move.vertical) {
             return element.bottom;
         }
@@ -270,7 +228,7 @@ function AbstractGameElement() {
         }
     };
 
-    this.getOverlappedElements = function (elements, hrzTarget, vrtTarget) {
+    getOverlappedElements(elements, hrzTarget, vrtTarget) : any {
 
         var vrtBottom = vrtTarget + this.height;
         var hrzRight = hrzTarget + this.width;
@@ -290,14 +248,11 @@ function AbstractGameElement() {
             overlapped.push(elements[i]);
         }
         return overlapped;
-    };
+    }
 
 
     //FIXME check inheritance of AbstractGameElement
-    this.checkPixels = function () {
-    };
+    checkPixels() {
+    }
 }
 
-AbstractGameElement.baseFormRect = 'RECT';
-AbstractGameElement.baseFormCircle = 'CIRCLE';
-AbstractGameElement.baseFormPicture = 'PICTURE';
