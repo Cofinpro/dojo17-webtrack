@@ -1,6 +1,7 @@
 import { GEPicture } from "./gameelements/gepicture";
 import { GameNotification } from './messages/gamenotification';
 import {Bomb} from "../../models/bomb";
+import {Player} from "../../models/player";
 
 export class PlayGround {
     image: any;
@@ -21,6 +22,7 @@ export class PlayGround {
     canvas: any;
     obstaclesCanvas: any;
     bombs: Bomb[] = [];
+    players: Player[] = [];
     sprites: any[] = [];
     resources;
 
@@ -61,7 +63,7 @@ export class PlayGround {
 
     }
 
-    public updateBombs(bombs: Bomb[]) {
+    public updateBombsAndPlayers(bombs: Bomb[], players: Player[]) {
         // TODO: createPicture für neue Bombs
         // TODO: changePicture für Bombs (animation)
         // TODO: removePicture für Bombs die nicht mehr existieren
@@ -70,6 +72,10 @@ export class PlayGround {
         }
 
         this.sprites = [];
+        for (let player of players) {
+            this.createPicture(player.id, player.y * 32, player.x * 32, this.resources.images['hero-1-r']);
+        }
+
         for (let bomb of bombs) {
             this.createPicture(bomb.id, bomb.y * 32, bomb.x * 32, this.resources.images['bomb3']);
         }
