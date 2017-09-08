@@ -11,5 +11,6 @@ export class Player {
     id : String;
     x:number;
     y:number;
+    nickname:String;
 
 }
