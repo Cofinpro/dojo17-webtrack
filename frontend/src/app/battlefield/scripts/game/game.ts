@@ -53,7 +53,7 @@ export class Game {
         //     l.appendChild(im);
         // }
 
-        // this.placeHero();
+        this.placeHero();
         //this.placeCockpit();
     };
 
@@ -69,14 +69,14 @@ export class Game {
         this.playGround.removeGameElement(this.hero);
 
         var heroImages = {};
-        heroImages['up'] = this.images['hero-up'];
-        heroImages['down'] = this.images['hero-down'];
-        heroImages['left'] = this.images['hero-left'];
-        heroImages['right'] = this.images['hero-right'];
+        heroImages['up'] = this.images['hero-1-u'];
+        heroImages['down'] = this.images['hero-1-d'];
+        heroImages['left'] = this.images['hero-1-l'];
+        heroImages['right'] = this.images['hero-1-r'];
 
-        this.hero = this.playGround.createPicture(5, 5, heroImages['right']);
-        this.animator = new HeroAnimator(this.hero, this.playGround);
-        this.animator.setImages(heroImages);
+        this.hero = this.playGround.createPicture(32, 32, heroImages['right']);
+        //this.animator = new HeroAnimator(this.hero, this.playGround);
+        //this.animator.setImages(heroImages);
         this.playGround.addTarget(this.hero);
     };
 
