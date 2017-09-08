@@ -24,7 +24,7 @@ export class BattlefieldComponent implements OnInit {
     ngOnInit() {
         // start game
         this.game = new Game(this.websocketService);
-        this.game.timeCount();
+        this.game.startTimer();
     }
 
 }
