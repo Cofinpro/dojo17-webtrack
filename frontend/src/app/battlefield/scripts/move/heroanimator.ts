@@ -1,5 +1,5 @@
-import {Playground} from '../playground'; 
-import {Direction} from './direction'; 
+import { PlayGround } from '../playground';
+import { Direction } from './direction';
 /**
  * Created by mhinz on 5/12/2017.
  */
@@ -10,7 +10,7 @@ export class HeroAnimator {
     paused: boolean;
     animate: boolean;
     element: any;
-    playGround: Playground;
+    playGround: PlayGround;
     rightBorder: number;
     bottomBorder: number;
     currentImage: any;
@@ -18,7 +18,7 @@ export class HeroAnimator {
     images: any;
 
 
-    constructor(element: any, playGround: Playground){
+    constructor(element: any, playGround: PlayGround){
         this.stepWidth = 20;
 
         this.element = element;
@@ -43,7 +43,7 @@ export class HeroAnimator {
         if (this.lastAnimationFrameTime == 0){
             return 1;
         }
-        
+
         let dif = now - this.lastAnimationFrameTime;
         let fps = Math.ceil(1000 / dif);
 
@@ -66,7 +66,7 @@ export class HeroAnimator {
 
         if (!this.animate){
             return;
-        }  
+        }
 
         let paused = this.paused || this.playGround.isPaused();
         if (!paused) {
@@ -80,7 +80,7 @@ export class HeroAnimator {
     };
 
     addToActiveDirections(direction: Direction) {
-        
+
         let index = this.directions.indexOf(direction);
         //the key is already handled --> nothing to do
         if (index > -1) return;
