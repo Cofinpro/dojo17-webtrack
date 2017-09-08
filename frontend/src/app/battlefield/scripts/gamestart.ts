@@ -7,11 +7,11 @@ export class GameStart {
     constructor() {
         var resources = new GameResources();
 
-        resources.addImage('burned-gras', '../../assets/images/bomberman/0.png',32,32);
-        resources.addImage('gras', '../../assets/images/bomberman/1.png',32,32);
-        resources.addImage('wall-light', '../../assets/images/bomberman/91.png',32,32);
-        resources.addImage('wall-dark', '../../assets/images/bomberman/89.png',32,32);
-        resources.addImage('box', '../../assets/images/bomberman/90.png',32,32);
+        resources.addImage('burned-gras', '../../assets/images/bomberman/0.png', 32, 32);
+        resources.addImage('gras', '../../assets/images/bomberman/1.png', 32, 32);
+        resources.addImage('wall-light', '../../assets/images/bomberman/91.png', 32, 32);
+        resources.addImage('wall-dark', '../../assets/images/bomberman/89.png', 32, 32);
+        resources.addImage('box', '../../assets/images/bomberman/90.png', 32, 32);
 
         resources.startLoading();
         this.checkResources(resources);
@@ -27,9 +27,6 @@ export class GameStart {
         }
         this.game = new Game(resources);
         this.game.setUpPlayGround();
-
-        document.getElementById('time').innerHTML = '00:00:00';
-        this.timeCount(document.getElementById('time'));
     }
 
     checkReturn(e) {
@@ -53,22 +50,31 @@ export class GameStart {
         }
     }
 
-    timeCount(element) {
+    // FIXME: not working right now
+    timeCount() {
+        let timeElement = document.getElementById('time');
+        timeElement.innerHTML = '00:00:00'
 
-        if (this.game.end)return;
+        if (this.game && this.game.end) {
+            return;
+        }
 
-        if (!this.game.startedAt) {
+        if (this.game && !this.game.startedAt) {
             this.game.startedAt = Date.now();
         }
-        var elapsed = Date.now() - this.game.startedAt;
-        var centies = Math.ceil(elapsed / 10);
-        var minutes = Math.floor(centies / 6000);
-        var rest = centies % 6000;
-        var secs = Math.floor(rest / 100);
-        rest = rest % 100;
 
-        element.innerHTML = ('00' + minutes).slice(-2) + ':' + ('00' + secs).slice(-2) + ':' + ('00' + rest).slice(-2);
-        return window.setTimeout(this.timeCount, 50, element);
+        if (this.game) {
+            var elapsed = Date.now() - this.game.startedAt;
+            var centies = Math.ceil(elapsed / 10);
+            var minutes = Math.floor(centies / 6000);
+            var rest = centies % 6000;
+            var secs = Math.floor(rest / 100);
+            rest = rest % 100;
+
+            timeElement.innerHTML = ('00' + minutes).slice(-2) + ':' + ('00' + secs).slice(-2) + ':' + ('00' + rest).slice(-2);
+        }
+
+        return window.setTimeout(this.timeCount, 50, timeElement);
     }
 
 }

@@ -12,7 +12,7 @@ export class ShapeDetector {
         }
     }
 
-    detect(src: any, key: any, callBack: () => any, width: number, height: number): Promise<any> {
+    detect(src: any, key: any, width: number, height: number): Promise<any> {
         let promise = new Promise((resolve, reject) => {
             const image = new Image();
             image.src = src;
