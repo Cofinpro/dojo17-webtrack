@@ -44,7 +44,6 @@ export class Game {
         this.playGroundConfugurator = new PlayGroundConfigurator(this.playGround, this.images);
         this.playGroundConfugurator.configure();
 
-        this.placeBomb(4,4);
 
         // var l = document.getElementById('lives');
         // l.innerHTML = '';
@@ -57,7 +56,10 @@ export class Game {
         // }
 
         this.placeHero();
+        this.placeBomb(4,4);
+        this.placeBomb(7,7);
         //this.placeCockpit();
+        this.startGame();
     };
 
     placeCockpit() {
@@ -206,12 +208,12 @@ export class Game {
             this.resetGame();
             return;
         }
-        this.audios['loop'].loop = true;
-        this.audios['loop'].volume = 0.8;
-        this.audios['loop'].play();
+        // this.audios['loop'].loop = true;
+        // this.audios['loop'].volume = 0.8;
+        // this.audios['loop'].play();
 
         this.animator.start();
-        this.playGround.startMovers();
+        // this.playGround.startMovers();
         //this.playGround.shieldTarget(this.hero, 2000);
         this.startedAt = null;
         this.end = false;
