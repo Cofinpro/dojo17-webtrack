@@ -1,3 +1,5 @@
+import {GEPicture} from "./gameelements/gepicture";
+
 export class PlayGround {
   image: any;
   targetCaughtCallBack: any;
