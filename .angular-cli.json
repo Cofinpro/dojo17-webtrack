@@ -21,7 +21,13 @@
       "styles": [
         "styles.scss"
       ],
-      "scripts": [],
+      "scripts": [
+        "scripts/testa.js"
+        ,"scripts/pixels/shapedetector.js"
+        ,"scripts/test.js"
+        ,"scripts/game/gameresources.js"
+        ,"scripts/game/gameimage.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
