@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
 import { WebsocketService } from './services/websocket.service';
+import { State } from './models/state';
+import { Player } from './models/player';
 
 @Component({
     selector: 'app-root',
@@ -18,20 +20,15 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        // this.launchCounter();
+        const player: Player = new Player({ id: "12", x: 0, y: 0, nickName: "Der Player" });
+        this.websocketService.connect().then(() => {
+            this.websocketService.sendPlayer(player);
+            //this.websocketService.unsubscribe();
+
+           // this.websocketService.disconnect();
+        })
+
     }
-    /*
-        private launchCounter() {
-          if (this.counterSubscription) {
-              this.counterSubscription.unsubscribe();
-          }
-          let counter = Observable.interval(1000);
-          this.counterSubscription = counter.subscribe(
-              num => {
-                  this.sentMessage = new Message('Websocket Message '+ num);
-                  this.websocketService.sendMessage(this.sentMessage);
-              });
-        }
-        */
+
 
 }

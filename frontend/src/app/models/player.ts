@@ -6,18 +6,15 @@
  *
  */
 export class Player {
+  id: string;
+  x: number;
+  y: number;
+  nickName: string;
 
-
-    id : string;
-    x: number;
-    y: number;
-    nickname: string;
-
-
-  constructor(id: string, x: number, y: number, nickname: string) {
-    this.id = id;
-    this.x = x;
-    this.y = y;
-    this.nickname = nickname;
+  constructor(obj = {} as Player) {
+    this.id = obj.id;
+    this.x = obj.x;
+    this.y = obj.y;
+    this.nickName = obj.nickName;
   }
 }

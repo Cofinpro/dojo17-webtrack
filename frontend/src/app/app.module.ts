@@ -5,6 +5,9 @@ import { AppComponent } from './app.component';
 import { BattlefieldComponent } from './battlefield/battlefield.component';
 import { WebsocketService } from './services/websocket.service';
 
+import { StompService } from 'ng2-stomp-service';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -13,7 +16,7 @@ import { WebsocketService } from './services/websocket.service';
   imports: [
     BrowserModule
   ],
-  providers: [],
+  providers: [StompService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
