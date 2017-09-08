@@ -1,5 +1,6 @@
 package de.cofinpro.bomber.models;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,7 +9,7 @@ public class State {
 
     private List<Player> players = new ArrayList<>();
     private List<Bomb> bombs = new ArrayList<>();
-    private Date serverTime;
+    private LocalDateTime serverTime;
 
     public List<Player> getPlayers() {
         return players;
@@ -26,11 +27,11 @@ public class State {
         this.bombs = bombs;
     }
 
-    public Date getServerTime() {
+    public LocalDateTime getServerTime() {
         return serverTime;
     }
 
-    public void setServerTime(Date serverTime) {
+    public void setServerTime(LocalDateTime serverTime) {
         this.serverTime = serverTime;
     }
 }

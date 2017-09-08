@@ -1,6 +1,6 @@
 package de.cofinpro.bomber.models;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Bomb {
 
@@ -8,7 +8,7 @@ public class Bomb {
     private String userId;
     private int x;
     private int y;
-    private Date detonateAt;
+    private LocalDateTime detonateAt;
 
     public String getId() {
         return id;
@@ -42,11 +42,11 @@ public class Bomb {
         this.y = y;
     }
 
-    public Date getDetonateAt() {
+    public LocalDateTime getDetonateAt() {
         return detonateAt;
     }
 
-    public void setDetonateAt(Date detonateAt) {
+    public void setDetonateAt(LocalDateTime detonateAt) {
         this.detonateAt = detonateAt;
     }
 }
