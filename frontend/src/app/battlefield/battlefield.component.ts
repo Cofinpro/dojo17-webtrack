@@ -21,7 +21,7 @@ export class BattlefieldComponent implements OnInit {
 
     ngOnInit() {
         let game = new GameStart();
-
+        game.timeCount();
     }
 
 
