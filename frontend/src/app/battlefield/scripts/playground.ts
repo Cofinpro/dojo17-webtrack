@@ -20,6 +20,7 @@ export class PlayGround {
     paused: any;
     canvas: any;
     obstaclesCanvas: any;
+    bombs: Bomb[];
 
     constructor(tag, height, width) {
         this.obstacles = [];
@@ -56,10 +57,6 @@ export class PlayGround {
         this.tag.style.width = width + 'px';
         this.tag.style.height = height + 'px';
 
-    }
-
-    public placeBomb(): Bomb {
-      return new Bomb(null, 5,5, null, null);
     }
 
     public setPositionStyle(positionStyle): void {
