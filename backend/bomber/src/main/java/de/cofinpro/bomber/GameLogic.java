@@ -3,6 +3,8 @@ package de.cofinpro.bomber;
 import de.cofinpro.bomber.models.Bomb;
 import de.cofinpro.bomber.models.Player;
 import de.cofinpro.bomber.models.State;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.ApplicationScope;
 
@@ -18,6 +20,7 @@ public class GameLogic {
 
     private State currentState;
     private final int bombTimeout = 10 * 1000;
+    private final TaskScheduler scheduler = new ThreadPoolTaskScheduler();
 
     public GameLogic() {
         this.currentState = new State();
@@ -47,13 +50,13 @@ public class GameLogic {
         this.currentState.getBombs().add(bomb);
 
         final String bombId = bomb.getId();
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
+
+        scheduler.scheduleWithFixedDelay(new TimerTask() {
             @Override
             public void run() {
                 explodeBomb(bombId);
             }
-        }, bombTimeout, 0);
+        }, bombTimeout);
 
         return this.currentState;
     }
