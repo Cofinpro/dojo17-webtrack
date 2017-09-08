@@ -7,14 +7,20 @@
  */
 export class Bomb {
 
-  private id: string;
-  private x: number;
-  private y: number;
-  private userId: string;
-  private detonateAt: Date;
+  id: string;
+  x: number;
+  y: number;
+  userId: string;
+  detonateAt: Date;
 
-  constructor(){
-
+  constructor(id: string, x: number, y:number, userId: string, detonateAt: Date){
+    this.id = id;
+    this.x = x;
+    this.y = y;
+    this.userId = userId;
+    this.detonateAt = detonateAt;
   }
+
+
 
 }
