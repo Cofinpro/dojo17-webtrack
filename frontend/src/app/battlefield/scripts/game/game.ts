@@ -3,6 +3,7 @@ import { PlayGroundConfigurator } from '../playgroundconfigurator';
 import { Direction } from '../move/direction';
 import { HeroAnimator } from '../move/heroanimator';
 import { ModalMessage } from '../messages/modalmessage';
+import {Bomb} from "../../../models/bomb";
 
 export class Game {
 
@@ -67,6 +68,11 @@ export class Game {
         this.animator.setImages(heroImages);
         this.playGround.addTarget(this.hero);
     };
+
+    // FIXME:
+    public placeBomb(x: number, y: number): void {
+       this.playGround.bombs.push(new Bomb(null, x, y, null, null));
+    }
 
     picked(pickItUps) {
 
@@ -153,6 +159,9 @@ export class Game {
                     break;
                 case 40:
                     dir = this.direction.down;
+                    break;
+                case 32:
+                    this.placeBomb(5,5);
                     break;
             }
             this.animator.addToActiveDirections(dir);

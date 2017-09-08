@@ -1,5 +1,6 @@
 import { GEPicture } from "./gameelements/gepicture";
 import { GameNotification } from './messages/gamenotification';
+import {Bomb} from "../../models/bomb";
 
 export class PlayGround {
     image: any;
@@ -19,6 +20,7 @@ export class PlayGround {
     paused: any;
     canvas: any;
     obstaclesCanvas: any;
+    bombs: Bomb[];
 
     constructor(tag, height, width) {
         this.obstacles = [];
