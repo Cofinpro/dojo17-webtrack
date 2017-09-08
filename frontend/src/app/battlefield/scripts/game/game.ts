@@ -46,16 +46,23 @@ export class Game {
         this.resources.addImage('wall-dark', '../../assets/images/bomberman/89.png', 32, 32);
         this.resources.addImage('box', '../../assets/images/bomberman/90.png', 32, 32);
 
-        // heros
+        // heroes
         this.resources.addImage('hero-1-d', '../../assets/images/hero/1/d-2.png', 32, 32);
         this.resources.addImage('hero-1-r', '../../assets/images/hero/1/r-2.png', 32, 32);
         this.resources.addImage('hero-1-l', '../../assets/images/hero/1/l-2.png', 32, 32);
         this.resources.addImage('hero-1-u', '../../assets/images/hero/1/u-2.png', 32, 32);
 
+        // bombs
+        this.resources.addImage('bomb5', '../../assets/images/bombs/5.png', 32, 32);
+        this.resources.addImage('bomb4', '../../assets/images/bombs/4.png', 32, 32);
         this.resources.addImage('bomb3', '../../assets/images/bombs/3.png', 32, 32);
         this.resources.addImage('bomb2', '../../assets/images/bombs/2.png', 32, 32);
         this.resources.addImage('bomb1', '../../assets/images/bombs/1.png', 32, 32);
         this.resources.addImage('bomb0', '../../assets/images/bombs/0.png', 32, 32);
+
+        // explosion
+        this.resources.addImage('explosion1', '../../assets/images/explosion/0.png', 32, 32);
+
         this.resources.startLoading();
 
         this.checkResources(this.resources);
@@ -82,7 +89,7 @@ export class Game {
         console.log('called');
         resources.resourcesLoaded().then( () => {
 
-            console.log("promised sonsumed");
+            console.log("promised consumed");
             var playGroundElement = document.getElementById('playground');
             playGroundElement.innerHTML = '';
             // this.counterTag.innerHTML = '';
