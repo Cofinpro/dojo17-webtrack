@@ -3,13 +3,14 @@ package de.cofinpro.bomber;
 import de.cofinpro.bomber.models.Bomb;
 import de.cofinpro.bomber.models.Player;
 import de.cofinpro.bomber.models.State;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.ApplicationScope;
 
 import java.util.List;
-import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -18,20 +19,17 @@ import java.util.stream.Collectors;
 @Component
 public class GameLogic {
 
+    private static final int BOMB_TIMEOUT = 10 * 1000;
+
     private State currentState;
-    private final int bombTimeout = 10 * 1000;
+
     private final TaskScheduler scheduler = new ThreadPoolTaskScheduler();
+
+    @Autowired
+    private SimpMessagingTemplate template;
 
     public GameLogic() {
         this.currentState = new State();
-    }
-
-    public GameLogic(State state) {
-        if (state == null) {
-            state = new State();
-        }
-
-        this.currentState = state;
     }
 
     public synchronized State addOrMovePlayer(Player player) {
@@ -56,17 +54,20 @@ public class GameLogic {
             public void run() {
                 explodeBomb(bombId);
             }
-        }, bombTimeout);
+        }, BOMB_TIMEOUT);
 
         return this.currentState;
     }
 
-    public synchronized State explodeBomb(String bombId) {
+    private synchronized void explodeBomb(String bombId) {
         Bomb explodedBomb = getExplodedBomb(bombId);
+        if (explodedBomb == null) {
+            return;
+        }
         this.currentState.getBombs().remove(explodedBomb);
         this.currentState.setPlayers(killPlayers(explodedBomb));
 
-        return this.currentState;
+        this.template.convertAndSend("/topic/state", this.currentState);
     }
 
     private List<Player> killPlayers(Bomb bomb) {
@@ -79,6 +80,7 @@ public class GameLogic {
         return this.currentState.getBombs().stream()
                 .filter(b -> b.getId().equals(bombId))
                 .findFirst()
-                .get();
+                .orElse(null);
     }
+
 }
