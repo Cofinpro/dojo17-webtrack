@@ -12,4 +12,10 @@ export class Player {
     x:number;
     y:number;
 
+
+  constructor(id: String, x: number, y: number) {
+    this.id = id;
+    this.x = x;
+    this.y = y;
+  }
 }
