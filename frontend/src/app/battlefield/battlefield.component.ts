@@ -1,14 +1,13 @@
 import { WebsocketService } from '../services/websocket.service';
 import { Component, OnInit } from '@angular/core';
+
 import { Game } from './scripts/game/game';
-import { ShapeDetector } from './scripts/pixels/shapedetector';
-import { Subscription, Observer, Subject } from 'rxjs/Rx';
-import { Message } from '../models/message';
 
 @Component({
     selector: 'battlefield',
     templateUrl: './battlefield.component.html',
-    styleUrls: ['./battlefield.component.scss']
+    styleUrls: ['./battlefield.component.scss'],
+    providers: [WebsocketService]
 })
 
 
@@ -17,7 +16,7 @@ import { Message } from '../models/message';
 */
 export class BattlefieldComponent implements OnInit {
 
-    public game;
+    public game: Game;
 
     constructor(private websocketService: WebsocketService) { }
 
