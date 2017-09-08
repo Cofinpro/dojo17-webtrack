@@ -3,6 +3,7 @@ import { PlayGroundConfigurator } from '../playgroundconfigurator';
 import { Direction } from '../move/direction';
 import { HeroAnimator } from '../move/heroanimator';
 import { ModalMessage } from '../messages/modalmessage';
+import {Bomb} from "../../../models/bomb";
 
 export class Game {
 
@@ -14,7 +15,7 @@ export class Game {
     liveCount = 3;
     end = false;
     playGroundConfugurator = null;
-    playGround: PlayGround = null;
+    public playGround: PlayGround = null;
     startedAt = null;
     hero = null;
     animator = null;
@@ -53,7 +54,7 @@ export class Game {
         //     l.appendChild(im);
         // }
 
-        // this.placeHero();
+        this.placeHero();
         //this.placeCockpit();
     };
 
@@ -69,16 +70,21 @@ export class Game {
         this.playGround.removeGameElement(this.hero);
 
         var heroImages = {};
-        heroImages['up'] = this.images['hero-up'];
-        heroImages['down'] = this.images['hero-down'];
-        heroImages['left'] = this.images['hero-left'];
-        heroImages['right'] = this.images['hero-right'];
+        heroImages['up'] = this.images['hero-1-u'];
+        heroImages['down'] = this.images['hero-1-d'];
+        heroImages['left'] = this.images['hero-1-l'];
+        heroImages['right'] = this.images['hero-1-r'];
 
-        this.hero = this.playGround.createPicture(5, 5, heroImages['right']);
+        this.hero = this.playGround.createPicture(32, 32, heroImages['right']);
         this.animator = new HeroAnimator(this.hero, this.playGround);
         this.animator.setImages(heroImages);
         this.playGround.addTarget(this.hero);
     };
+
+    // FIXME:
+    public placeBomb(x: number, y: number): void {
+       this.playGround.bombs.push(new Bomb(null, x, y, null, null));
+    }
 
     picked(pickItUps) {
 
@@ -165,6 +171,9 @@ export class Game {
                     break;
                 case 40:
                     dir = this.direction.down;
+                    break;
+                case 32:
+                    this.placeBomb(5,5);
                     break;
             }
             this.animator.addToActiveDirections(dir);
