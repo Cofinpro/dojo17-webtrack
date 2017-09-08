@@ -35,7 +35,7 @@ export class Game {
         playGroundElement.innerHTML = '';
         // this.counterTag.innerHTML = '';
 
-        this.playGround = new PlayGround(playGroundElement, 600, 800);
+        this.playGround = new PlayGround(playGroundElement, 544, 544);
 
         this.playGround.setPickItUpCallBack(this.picked);
         this.playGround.setTargetCaughtCallBack(this.caught);

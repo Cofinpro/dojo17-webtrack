@@ -11,11 +11,13 @@ export class Player {
     id : String;
     x:number;
     y:number;
+    nickname:String;
 
 
-  constructor(id: String, x: number, y: number) {
+  constructor(id: String, x: number, y: number, nickname: String) {
     this.id = id;
     this.x = x;
     this.y = y;
+    this.nickname = nickname;
   }
 }
