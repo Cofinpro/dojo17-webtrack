@@ -15,9 +15,9 @@ export class State {
   }
 
   static getMock(x: number): State {
-    let now :number = Date.now();
-    return new State([new Player("player-one", x % 15, 0, "GodPlayer")],
-      [new Bomb("a-bomb", 4, 4, "player-one", new Date(now+5000))], new Date(now));
+    let now: number = Date.now();
+        return new State([new Player("player-one", x % 15, 0, "GodPlayer")],
+      [new Bomb("a-bomb", 4, 4, "player-one", new Date(now+(5-(x%6))*1000))], new Date(now));
   }
 
 
