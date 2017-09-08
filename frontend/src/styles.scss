@@ -1,7 +1,31 @@
 /* Import bootstrap grid only */
 @import "~bootstrap/scss/bootstrap-grid";
 
+// Google Fonts
+@import url(http://fonts.googleapis.com/css?family=Monoton);
+
+// Font Variables
+$monoton: 'Monoton', cursive;
 
 body {
-    color: white;
+    color: #fff;
+    background-color: #000;
+}
+
+#playground {
+    background: url("./assets/images/bomberman/1.png") repeat green;
+}
+
+.well {
+    background-color: #333;
+    border: 3px solid lighten(#ccc, 20%);
+    border-radius: 3px;
+    padding: 8px;
+    margin: 10px 0;
+    text-align: center;
+}
+
+#time, #score {
+    font-size: 2rem;
+    font-family: $monoton;
 }
