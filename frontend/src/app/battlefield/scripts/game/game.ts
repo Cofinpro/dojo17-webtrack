@@ -8,11 +8,14 @@ import { Bomb } from "../../../models/bomb";
 import { Message } from '../../../models/message';
 import { Subscription, Observer, Subject } from 'rxjs/Rx';
 import { GameResources } from './gameresources';
+import {TimerObservable} from "rxjs/observable/TimerObservable";
+
 
 export class Game {
 
     public game;
     public socketSubscription: Subscription;
+    public timerSubscription: Subscription;
     public playGround: PlayGround = null;
     public resources;
     public sprites = [];
@@ -91,7 +94,7 @@ export class Game {
         resources.resourcesLoaded().then( () => {
 
             console.log("promised consumed");
-            var playGroundElement = document.getElementById('playground');
+            let playGroundElement = document.getElementById('playground');
             playGroundElement.innerHTML = '';
             // this.counterTag.innerHTML = '';
 
@@ -131,8 +134,8 @@ export class Game {
     }
 
     checkReturn(e) {
-        var event = window.event ? window.event : e;
-        var keyCode = event.keyCode;
+        let event = window.event ? window.event : e;
+        let keyCode = event.keyCode;
         if (keyCode == 80) {
             if (this.isPaused()) {
                 this.resumeGame();
@@ -145,33 +148,23 @@ export class Game {
         }
     }
 
-    // FIXME: not working right now
-    timeCount() {
+    startTimer(): void {
+      let timer = TimerObservable.create(0, 1);
+      this.timerSubscription = timer.subscribe(t => {
+       let minutes = Math.floor(t/6000) % 60;
+       let seconds = Math.floor(t/100) % 60;
+       let rest = t;
+
+
         let timeElement = document.getElementById('time');
-        timeElement.innerHTML = '00:00:00'
+        timeElement.innerHTML = ('00' + minutes).slice(-2) + ':' + ('00' + seconds).slice(-2) ;//+ ':' +  ('00' +
+        // rest).slice(-2);
 
-        if (this.end) {
-            return;
-        }
-
-        if (!this.startedAt) {
-            this.startedAt = Date.now();
-        }
-
-        var elapsed = Date.now() - this.startedAt;
-        var centies = Math.ceil(elapsed / 10);
-        var minutes = Math.floor(centies / 6000);
-        var rest = centies % 6000;
-        var secs = Math.floor(rest / 100);
-        rest = rest % 100;
-
-        timeElement.innerHTML = ('00' + minutes).slice(-2) + ':' + ('00' + secs).slice(-2) + ':' + ('00' + rest).slice(-2);
-
-        return window.setTimeout(this.timeCount, 50, timeElement);
+      });
     }
 
     placeCockpit() {
-        //var cockpit = document.getElementById('game-cockpit');
+        //let cockpit = document.getElementById('game-cockpit');
         ////cockpit.innerHTML = '';
         //cockpit.style.position = 'absolute';
         //cockpit.style.top = '700px';
@@ -181,7 +174,7 @@ export class Game {
     placeHero() {
         this.playGround.removeGameElement(this.hero);
 
-        var heroImages = {};
+        let heroImages = {};
         heroImages['up'] = this.images['hero-1-u'];
         heroImages['down'] = this.images['hero-1-d'];
         heroImages['left'] = this.images['hero-1-l'];
@@ -203,17 +196,17 @@ export class Game {
 
         if(pickItUps.length == 0)return;
 
-        var i;
+        let i;
         for(i = 0; i < pickItUps.length; i++){
-            var pickItUp = pickItUps[i];
-            var top = pickItUp.top;
-            var left = pickItUp.left;
+            let pickItUp = pickItUps[i];
+            let top = pickItUp.top;
+            let left = pickItUp.left;
 
             this.playGround.removeGameElement(pickItUp);
 
-            var finished = this.playGround.getPickItUps().length == 0;
+            let finished = this.playGround.getPickItUps().length == 0;
 
-            var im = new Image();
+            let im = new Image();
             im.src = this.images['diamond'].getImageSource();
             this.counterTag.appendChild(im);
 
@@ -235,9 +228,9 @@ export class Game {
 
         this.animator.stop();
 
-        var current = this.livesTag.childElementCount;
+        let current = this.livesTag.childElementCount;
         this.livesTag.removeChild(this.livesTag.firstElementChild);
-        var next = current - 1;
+        let next = current - 1;
         if (next <= 0) {
             new ModalMessage(-1, ModalMessage.BadNews, 'Lost!!', this.playGround).show();
             this.audios['lost'].volume = 0.2;
@@ -269,8 +262,8 @@ export class Game {
     startGame() {
         document.onkeydown = (e) => {
             let event: any = window.event ? window.event : e;
-            var keyCode = event.keyCode;
-            var dir;
+            let keyCode = event.keyCode;
+            let dir;
 
             switch(keyCode){
                 case 37:
@@ -292,9 +285,9 @@ export class Game {
         };
 
         document.onkeyup = (e) => {
-            var event: any = window.event ? window.event : e;
-            var keyCode = event.keyCode;
-            var dir;
+            let event: any = window.event ? window.event : e;
+            let keyCode = event.keyCode;
+            let dir;
             switch(keyCode){
                 case 37:
                     dir = this.direction.left;
