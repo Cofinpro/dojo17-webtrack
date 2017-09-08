@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GameStart } from './scripts/gamestart';
 import { ShapeDetector } from './scripts/pixels/shapedetector';
 import { GameResources } from './scripts/game/gameresources';
 
@@ -20,9 +21,8 @@ export class BattlefieldComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
-        var resources = new GameResources();
+        let game = new GameStart();
 
-        // init game
     }
 
 
