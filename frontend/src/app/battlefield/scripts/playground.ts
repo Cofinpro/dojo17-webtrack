@@ -94,15 +94,15 @@ export class PlayGround {
         return this.tag.style.backgroundColor;
     };
 
-    public createRectAngle(elmHeight, elmWidth, elmTop, elmLeft, color, isObstacle) {
-        let ctx = isObstacle ? this.obstaclesContext : this.context;
-        return new GERectangle(elmHeight, elmWidth, elmTop, elmLeft, color, ctx);
-    };
-
-    public createCircle(elmHeight, elmWidth, elmTop, elmLeft, color, isObstacle) {
-        let ctx = isObstacle ? this.obstaclesContext : this.context;
-        return new GECircle(elmHeight, elmWidth, elmTop, elmLeft, color, ctx);
-    };
+    // public createRectAngle(elmHeight, elmWidth, elmTop, elmLeft, color, isObstacle) {
+    //     let ctx = isObstacle ? this.obstaclesContext : this.context;
+    //     return new GERectangle(elmHeight, elmWidth, elmTop, elmLeft, color, ctx);
+    // };
+    //
+    // public createCircle(elmHeight, elmWidth, elmTop, elmLeft, color, isObstacle) {
+    //     let ctx = isObstacle ? this.obstaclesContext : this.context;
+    //     return new GECircle(elmHeight, elmWidth, elmTop, elmLeft, color, ctx);
+    // };
 
     public createPicture(elmTop, elmLeft, image, isObstacle) {
         let ctx = isObstacle ? this.obstaclesContext : this.context;
