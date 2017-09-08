@@ -159,6 +159,16 @@ export class PlayGround {
             this.obstacles.splice(index, 1);
         }
     };
+    public addBomb(bomb): void {
+        this.bombs[this.bombs.length] = bomb;
+    };
+
+    public removeBomb(bomb): void {
+        let index = this.bombs.indexOf(bomb);
+        if (index > -1) {
+            this.bombs.splice(index, 1);
+        }
+    };
 
     public checkObstacle(element, move) {
         return element.collisionCorrection(this.obstacles, move);
