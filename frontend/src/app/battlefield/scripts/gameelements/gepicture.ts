@@ -1,6 +1,7 @@
 import { AbstractGameElement } from './abstractgameelement';
 
 export class GEPicture extends AbstractGameElement {
+    id;
     context;
     gameImage;
     height;
@@ -11,9 +12,10 @@ export class GEPicture extends AbstractGameElement {
     bottom;
     shapeData;
 
-    constructor(elmTop, elmLeft, gameImage, context) {
+    constructor(id, elmTop, elmLeft, gameImage, context) {
         super();
 
+        this.id = id;
         this.context = context;
         this.gameImage = gameImage;
 

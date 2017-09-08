@@ -15,6 +15,7 @@ export class Game {
     public socketSubscription: Subscription;
     public playGround: PlayGround = null;
     public resources;
+    public sprites = [];
 
     direction: Direction = new Direction();
 
@@ -70,12 +71,13 @@ export class Game {
         // this.livesTag = document.getElementById('lives');
         this.socketSubscription = this.websocketService.getObservable().subscribe((message: Message) => {
             console.log('got server message:', message.inMsg.bombs);
-            if (this.playGround) {
+            if (this.playGround && this.playGround.resources) {
                 console.log("playground defined");
                 this.playGround.updateBombs(message.inMsg.bombs);
                 // this.playGround.updatePlayer(message.inMsg.players);
             }
         });
+
     }
 
     checkResources(resources) {
@@ -88,24 +90,35 @@ export class Game {
             // this.counterTag.innerHTML = '';
 
             this.playGround = new PlayGround(playGroundElement, 544, 544);
+            this.playGround.resources = this.resources;
 
             this.playGround.setPickItUpCallBack(this.picked);
             this.playGround.setTargetCaughtCallBack(this.caught);
 
-            this.playGroundConfugurator = new PlayGroundConfigurator(this.playGround, this.images);
-            this.playGroundConfugurator.configure();
+            var wallDark = this.images['wall-dark'];
+            var wallLight = this.images['wall-light'];
+            let obstacle;
 
-            // var l = document.getElementById('lives');
-            // l.innerHTML = '';
-            // for (var i = 0; i < this.liveCount; i++) {
-            //     var im = new Image();
-            //     im.src = this.images['hero-right'].getImageSource();
-            //     im.height = 32;
-            //     im.width = 32;
-            //     l.appendChild(im);
-            // }
+            for (var y = 0; y < 17; y++) {
+                for (var x = 0; x < 17; x++) {
+                    if (x == 0 && y == 0 || x == 16 && y == 0) {
+                        obstacle = this.playGround.createPicture(null, y*32 , x*32, wallLight, true);
+                        this.playGround.addObstacle(obstacle);
+                    } else if(y == 0 || y == 16) {
+                        obstacle = this.playGround.createPicture(null, y*32 , x*32, wallDark, true);
+                        this.playGround.addObstacle(obstacle);
+                    } else if(x == 0 || x == 16) {
+                        obstacle = this.playGround.createPicture(null, y*32 , x*32, wallLight, true);
+                        this.playGround.addObstacle(obstacle);
+                    } else if(x % 2 == 0 && y % 2 == 0) {
+                        obstacle = this.playGround.createPicture(null, y*32 , x*32, wallLight, true);
+                        this.playGround.addObstacle(obstacle);
+                    }
+                }
+            }
 
             this.placeHero();
+
             //this.placeCockpit();
         });
 
@@ -168,16 +181,17 @@ export class Game {
         heroImages['left'] = this.images['hero-1-l'];
         heroImages['right'] = this.images['hero-1-r'];
 
-        this.hero = this.playGround.createPicture(32, 32, heroImages['right']);
+        this.hero = this.playGround.createPicture(null, 32, 32, heroImages['right']);
         this.animator = new HeroAnimator(this.hero, this.playGround);
         this.animator.setImages(heroImages);
         this.playGround.addTarget(this.hero);
     };
 
     // FIXME:
-    public placeBomb(x: number, y: number): void {
-       this.playGround.bombs.push(new Bomb(null, x, y, null, null));
-    }
+    // public placeBomb(x: number, y: number): void {
+    //     this.sprites.push(this.playGround.createPicture(y * 32, x * 32, this.images['bomb3']));
+    //    this.playGround.bombs.push(new Bomb(null, x, y, null, null));
+    // }
 
     picked(pickItUps) {
 
@@ -266,7 +280,6 @@ export class Game {
                     dir = this.direction.down;
                     break;
                 case 32:
-                    this.placeBomb(5,5);
                     break;
             }
             this.animator.addToActiveDirections(dir);
