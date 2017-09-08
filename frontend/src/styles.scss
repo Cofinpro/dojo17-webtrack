@@ -12,8 +12,11 @@ body {
     background-color: #000;
 }
 
-#playground {
+.playground-background {
     background: url("./assets/images/bomberman/1.png") repeat green;
+    padding: 16px;
+    margin-top: 16px;
+    text-align: center;
 }
 
 .well {
