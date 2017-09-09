@@ -14,8 +14,7 @@ export class State {
     timestamp: Date;
     exploded : Position[];
 
-
-
+    static readonly map: Stone[] = State.createStoneRow(0, 16, 1);
 
     constructor(obj = {} as State) {
         this.players = obj.players;
@@ -26,21 +25,35 @@ export class State {
         this.sizeX = obj.sizeX;
         this.sizeY = obj.sizeY;
         this.exploded = obj.exploded;
+    }
 
-
+    static createStoneRow(rowIndex: number, width: number, step: number): Stone[]{
+      let row : Stone[] = [];
+      for(var i=0; i<width; i+=step){
+        row.push(new Stone({x: i, y: rowIndex}));
+      }
+      return row;
+    }
+    static createExplodedRow(rowIndex: number, width: number, step: number): Stone[]{
+      let row : Position[] = [];
+      for(var i=0; i<width; i+=step){
+        row.push(new Position({x: i, y: rowIndex}));
+      }
+      return row;
     }
 
     static getMock(x: number): State {
         let now: number = Date.now();
+
         return new State({
             players: [new Player({ id: "player-one", x: (x % 15) + 1, y: 1, nickName: "GodPlayer" })],
             bombs: [new Bomb({ id: "a-bomb", x: 3, y: 3, userId: "player-one", detonateAt: new Date(now + (5 - (x % 6)) * 1000) })],
             sizeX : 2,
             sizeY : 3,
-            fixStones: [],
-            weakStones: [new Stone({x : 2, y: 1})],
+            fixStones: State.createStoneRow(0, 16, 1),
+            weakStones: [new Stone({x : 2, y: 3})],
             timestamp: new Date(now),
-            exploded : []
+            exploded : State.createExplodedRow(5, 16, 1)
         });
     }
 
