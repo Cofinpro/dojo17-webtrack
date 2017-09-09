@@ -18,7 +18,7 @@ export class Bomb {
     this.x = obj.x;
     this.y = obj.y;
     this.userId = obj.userId;
-    this.detonateAt = obj.detonateAt;
+    this.detonateAt = obj.detonateAt ? new Date(obj.detonateAt) : null;
   }
 
 

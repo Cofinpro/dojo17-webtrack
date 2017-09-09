@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable, Observer } from 'rxjs/Rx';
+import 'rxjs/add/operator/map';
 import { Message, State, Player, Bomb } from '../models';
 import { StompService } from 'ng2-stomp-service';
 import { OnDestroy } from '@angular/core';
@@ -69,7 +70,7 @@ export class WebsocketService implements OnDestroy{
     }
 
     public getState(): Observable<State> {
-        return this.subject.asObservable();
+        return this.subject.asObservable().map((state) => new State(state));
     }
 
     public getMockState(): Observable<State> {
@@ -83,7 +84,7 @@ export class WebsocketService implements OnDestroy{
             console.log('Connection closed')
         })
     }
-    
+
     public ngOnDestroy(){
         this.disconnect();
     }

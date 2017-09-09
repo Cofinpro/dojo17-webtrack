@@ -289,6 +289,15 @@ export class Game {
                 case 40:
                     posUpdated = this.movePlayerDown()
                     break;
+                case 32:
+                    const bomb = new Bomb({
+                        id: null,
+                        x: this.player.x,
+                        y: this.player.y,
+                        userId: this.player.id,
+                        detonateAt: null
+                    });
+                    this.websocketService.sendBomb(bomb);
             }
             if(posUpdated)
             {
