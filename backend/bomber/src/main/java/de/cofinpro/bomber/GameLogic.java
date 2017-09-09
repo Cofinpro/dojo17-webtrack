@@ -276,17 +276,24 @@ public class GameLogic {
 
     private void recursiveExplodeBomb(Bomb explodedBomb, MapObjects objects, Set<Position> blownPositions) {
         // remove bomb from state and map
-        this.currentState.getBombs().remove(explodedBomb);
+        boolean found = this.currentState.getBombs().remove(explodedBomb);
+        if (!found) {
+            return;   // Already removed in another iteration
+        }
         objects.getBombs().remove(explodedBomb.getPosition());  // may remove more than one: they both exploded, makes no difference
 
         // determine exploded positions
         addBlownPositions(explodedBomb, objects, blownPositions);
 
         // Explode next bombs - weak stones will still stop them (objects map not changed)
-        objects.getBombs().entrySet().stream()
+        // Don't stream them - the recursive function may change things
+        Set<Bomb> toExplode = objects.getBombs().entrySet().stream()
                 .filter(e -> blownPositions.contains(e.getKey()))
                 .flatMap(e -> e.getValue().stream())
-                .forEach(b -> recursiveExplodeBomb(b, objects, blownPositions));
+                .collect(Collectors.toCollection(HashSet::new));
+        for (Bomb exploding : toExplode) {
+            recursiveExplodeBomb(exploding, objects, blownPositions);
+        }
     }
 
     private void addBlownPositions(Bomb explodedBomb, MapObjects objects, Set<Position> result) {
