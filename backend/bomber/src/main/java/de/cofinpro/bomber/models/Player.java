@@ -10,6 +10,7 @@ public class Player implements Positionable {
     private int y;
     private int blastRadius;
     private int bombCount;
+    private long score;
 
     public String getId() {
         return id;
@@ -67,6 +68,14 @@ public class Player implements Positionable {
         this.bombCount = bombCount;
     }
 
+    public long getScore() {
+        return score;
+    }
+
+    public void setScore(long score) {
+        this.score = score;
+    }
+
     public void increaseBlastRadius() {
         blastRadius++;
     }
@@ -84,6 +93,7 @@ public class Player implements Positionable {
                 ", y=" + y +
                 ", blastRadius=" + blastRadius +
                 ", bombCount=" + bombCount +
+                ", score=" + score +
                 '}';
     }
 }
