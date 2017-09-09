@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
 import { Game } from '../battlefield/scripts/game/game';
 import { WebsocketService } from '../services/websocket.service';
 import { PlayerDataService } from '../services/player-data.service';
+import { Player } from '../models';
 
 @Injectable()
 export class GameService {
@@ -31,6 +33,13 @@ export class GameService {
             return true;
         }
         return this.game && this.game.isGameLoaded();
+    }
+
+    public getPlayers(): Observable<Player[]> {
+        if (this.game) {
+            return Observable.of(this.game.getPlayers());
+        }
+        return Observable.of([]);
     }
 
 }
