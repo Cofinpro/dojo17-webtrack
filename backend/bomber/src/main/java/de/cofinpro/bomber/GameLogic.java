@@ -27,6 +27,10 @@ public class GameLogic {
 
     private static final int BOMB_TIMEOUT_SECONDS = 6;
 
+    private static final int DEFAULT_BLAST_RADIUS = 4;
+
+    private static final int DEFAULT_BOMB_COUNT = 3;
+
     private State currentState;
 
     private final CopyOnWriteArrayList<MapDefinition> mapDefinitions = new CopyOnWriteArrayList<>();
@@ -120,6 +124,8 @@ public class GameLogic {
         player.setNickName(newPlayer.getNickName());
         player.setX(newPosition.getX());
         player.setY(newPosition.getY());
+        player.setBlastRadius(DEFAULT_BLAST_RADIUS);
+        player.setBombCount(DEFAULT_BOMB_COUNT);
         this.currentState.getPlayers().add(player);
 
         this.currentState.setServerTime(System.currentTimeMillis());
@@ -171,6 +177,7 @@ public class GameLogic {
         return this.currentState;
     }
 
+    @Deprecated
     synchronized State addOrMovePlayer(Player player) {
         System.out.println("Adding or Moving Player: " + player);
         this.currentState.setExploded(null);
@@ -202,13 +209,38 @@ public class GameLogic {
         return this.currentState;
     }
 
-    synchronized State addBomb(Bomb bomb) {
-        System.out.println("Adding a bomb: " + bomb);
+    synchronized State addBomb(String playerId) {
+        System.out.println("Adding a bomb for player: " + playerId);
         this.currentState.setExploded(null);
+
+        Player player = this.currentState.getPlayers().stream()
+                .filter(p -> p.getId().equals(playerId))
+                .findFirst()
+                .orElse(null);
+
+        if (player == null) {
+            System.out.println("Tried to add a bomb for invalid user");
+            return null;
+        }
+
+        // Check if the user already has too many bombs
+        int bombs = (int)this.currentState.getBombs().stream()
+                .filter(b -> b.getUserId().equals(playerId))
+                .count();
+
+        if (bombs >= player.getBombCount()) {
+            System.out.println("Player has too many bombs, cant add new");
+            return null;
+        }
 
         final String bombId = UUID.randomUUID().toString();
 
+        Bomb bomb = new Bomb();
         bomb.setId(bombId);
+        bomb.setUserId(player.getId());
+        bomb.setBlastRadius(player.getBlastRadius());
+        bomb.setX(player.getX());
+        bomb.setY(player.getY());
         bomb.setDetonateAt(System.currentTimeMillis() + (BOMB_TIMEOUT_SECONDS * 1000));
 
         this.currentState.getBombs().add(bomb);

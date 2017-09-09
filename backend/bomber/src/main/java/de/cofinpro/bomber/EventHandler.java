@@ -36,8 +36,8 @@ public class EventHandler {
 
     @MessageMapping("/bomb")
     @SendTo("/topic/state")
-    public State newBomb(Bomb bomb) throws Exception {
-        return gameLogic.addBomb(bomb);
+    public State newBomb(String playerId) throws Exception {
+        return gameLogic.addBomb(playerId);
     }
 
 }

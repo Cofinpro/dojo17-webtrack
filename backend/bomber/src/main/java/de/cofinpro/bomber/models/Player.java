@@ -9,6 +9,7 @@ public class Player implements Positionable {
     private int x;
     private int y;
     private int blastRadius;
+    private int bombCount;
 
     public String getId() {
         return id;
@@ -58,6 +59,14 @@ public class Player implements Positionable {
         return blastRadius;
     }
 
+    public int getBombCount() {
+        return bombCount;
+    }
+
+    public void setBombCount(int bombCount) {
+        this.bombCount = bombCount;
+    }
+
     @Override
     public String toString() {
         return "Player{" +
@@ -66,6 +75,7 @@ public class Player implements Positionable {
                 ", x=" + x +
                 ", y=" + y +
                 ", blastRadius=" + blastRadius +
+                ", bombCount=" + bombCount +
                 '}';
     }
 }
