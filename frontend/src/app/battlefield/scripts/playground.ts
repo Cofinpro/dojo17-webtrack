@@ -1,5 +1,5 @@
 import { GEPicture } from "./gameelements/gepicture";
-import { State, Bomb, Player, Stone, Position, NewPlayer } from "../../models";
+import { State, Bomb, Player, Stone, Position, NewPlayer, BombCountPowerup, BlastRadiusPowerup } from "../../models";
 
 
 export class PlayGround {
@@ -94,6 +94,10 @@ export class PlayGround {
 
         this.updateWeakStones(state.weakStones);
 
+        this.updateBlastRadiusPowerups(state.blastRadiusPowerups);
+
+        this.updateBombCountPowerups(state.bombCountPowerups);
+
         this.updateBombs(state.bombs, state.serverTime);
 
         this.updateExploded(state.exploded);
@@ -123,6 +127,18 @@ export class PlayGround {
     private updateWeakStones(stones: Stone[]) {
         for (const stone of stones) {
             this.createPicture('weakStone-id', stone.y * 32, stone.x * 32, this.resources.images['box']);
+        }
+    }
+
+    private updateBombCountPowerups(powerups: BombCountPowerup[]) {
+        for (const powerup of powerups) {
+            this.createPicture('bombCoundPowerup-id', powerup.y * 32, powerup.x * 32, this.resources.images['powerupBlue']);
+        }
+    }
+
+    private updateBlastRadiusPowerups(powerups: BlastRadiusPowerup[]) {
+        for (const powerup of powerups) {
+            this.createPicture('blastRadiusPowerup-id', powerup.y * 32, powerup.x * 32, this.resources.images['powerupRed']);
         }
     }
 

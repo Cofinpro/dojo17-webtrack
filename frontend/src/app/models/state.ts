@@ -2,6 +2,8 @@ import { Position } from './position';
 import { Bomb } from "./bomb";
 import { Player } from "./player";
 import { Stone } from "./stone";
+import { BombCountPowerup } from "./bombCountPowerup";
+import { BlastRadiusPowerup } from "./blastRadiusPowerup";
 
 
 export class State {
@@ -11,6 +13,8 @@ export class State {
     bombs: Bomb[];
     fixStones: Stone[];
     weakStones: Stone[];
+    bombCountPowerups: BombCountPowerup[];
+    blastRadiusPowerups: BlastRadiusPowerup[];
     serverTime: number;
     exploded : Position[];
 
@@ -21,6 +25,8 @@ export class State {
         this.bombs = obj.bombs.map((bomb => new Bomb(bomb)));
         this.fixStones = obj.fixStones;
         this.weakStones = obj.weakStones;
+        this.bombCountPowerups = obj.bombCountPowerups;
+        this.blastRadiusPowerups = obj.blastRadiusPowerups;
         this.serverTime = obj.serverTime;
         this.sizeX = obj.sizeX;
         this.sizeY = obj.sizeY;
