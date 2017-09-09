@@ -176,7 +176,7 @@ export class Game {
         heroImages['right'] = this.images['hero-1-r'];
 
         this.hero = this.playGround.createPicture(null, 32, 32, heroImages['right']);
-        this.animator = new HeroAnimator(this.hero, this.playGround);
+        this.animator = new HeroAnimator(this.hero, this.playGround, this.websocketService);
         this.animator.setImages(heroImages);
         this.playGround.addTarget(this.hero);
     };

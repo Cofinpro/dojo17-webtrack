@@ -1,5 +1,6 @@
 import { PlayGround } from '../playground';
 import { Direction } from './direction';
+import { WebsocketService } from '../../../services/websocket.service';
 /**
  * Created by mhinz on 5/12/2017.
  */
@@ -18,7 +19,7 @@ export class HeroAnimator {
     images: any;
 
 
-    constructor(element: any, playGround: PlayGround){
+    constructor(element: any, playGround: PlayGround, private websocketService: WebsocketService){
         this.stepWidth = 32;
 
         this.element = element;
