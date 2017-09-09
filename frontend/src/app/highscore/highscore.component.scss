@@ -2,6 +2,8 @@
     border: 3px solid lighten(#ccc, 20%);
     border-radius: 3px;
     font-size: 1.2rem;
+    max-height: 250px;
+    overflow-y: scroll;
   }
 
   .list-header {
