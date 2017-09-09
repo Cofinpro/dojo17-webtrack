@@ -12,7 +12,7 @@ services:
         networks:
             - bombernet
     rabbit:
-        image: rabbitmq:management
+        image: rabbit
         ports:
             - "3002:15672"
         deploy:

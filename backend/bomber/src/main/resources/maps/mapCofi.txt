@@ -1,0 +1,20 @@
+19x19
+xxxxxxxxxxxxxxxxxxx
+x                 x
+x x x x x x x x x x
+xooo ooo ooo o    x
+xox xoxoxox xox x x
+xo   o o ooo o    x
+xox xoxoxox xox x x
+xooo ooo o   o    x
+x x x x x x x x x x
+xo   o ooo ooo ooox
+xoo xoxoxoxoxoxoxox
+xo o o ooo oo  o ox
+xox ooxox xoxoxoxox
+xo   o o   o o ooox
+x x x x x x x x x x
+x                 x
+x x x x x x x x x x
+x                 x
+xxxxxxxxxxxxxxxxxxx

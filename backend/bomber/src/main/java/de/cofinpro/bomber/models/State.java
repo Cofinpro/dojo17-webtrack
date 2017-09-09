@@ -1,6 +1,5 @@
 package de.cofinpro.bomber.models;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -14,7 +13,7 @@ public class State {
     private List<Stone> fixStones = new ArrayList<>();
     private List<Stone> weakStones = new ArrayList<>();
     private List<Position> exploded = new ArrayList<>();
-    private LocalDateTime serverTime;
+    private Long serverTime;
 
     public int getSizeX() {
         return sizeX;
@@ -87,11 +86,11 @@ public class State {
         }
     }
 
-    public LocalDateTime getServerTime() {
+    public Long getServerTime() {
         return serverTime;
     }
 
-    public void setServerTime(LocalDateTime serverTime) {
+    public void setServerTime(Long serverTime) {
         this.serverTime = serverTime;
     }
 

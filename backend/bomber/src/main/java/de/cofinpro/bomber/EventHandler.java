@@ -1,8 +1,6 @@
 package de.cofinpro.bomber;
 
-import de.cofinpro.bomber.models.Bomb;
-import de.cofinpro.bomber.models.Player;
-import de.cofinpro.bomber.models.State;
+import de.cofinpro.bomber.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -24,10 +22,22 @@ public class EventHandler {
         return gameLogic.addOrMovePlayer(player);
     }
 
+    @MessageMapping("/register")
+    @SendTo("/topic/state")
+    public State register(NewPlayer newPlayer) throws Exception {
+        return gameLogic.addPlayer(newPlayer);
+    }
+
+    @MessageMapping("/move")
+    @SendTo("/topic/state")
+    public State movePlayer(Movement movement) throws Exception {
+        return gameLogic.movePlayer(movement);
+    }
+
     @MessageMapping("/bomb")
     @SendTo("/topic/state")
-    public State newBomb(Bomb bomb) throws Exception {
-        return gameLogic.addBomb(bomb);
+    public State newBomb(String playerId) throws Exception {
+        return gameLogic.addBomb(playerId);
     }
 
 }

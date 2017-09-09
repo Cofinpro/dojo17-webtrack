@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable, Observer } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
-import { Message, State, Player, Bomb } from '../models';
+import { Message, State, Player, Bomb, Movement, NewPlayer } from '../models';
 import { StompService } from 'ng2-stomp-service';
 import { OnDestroy } from '@angular/core';
 
@@ -34,18 +34,22 @@ export class WebsocketService implements OnDestroy{
         });
     }
 
-    public sendPlayer(player: Player): void {
-        if (!player.id) {
-            player.id = this.generateUUID();
+    public registerPlayer(player: NewPlayer): void {
+        if (!player.uuid) {
+            player.uuid = this.generateUUID();
         }
-        this.send('/app/player', player);
+        this.send('/app/register', player);
     }
 
-    public sendBomb(bomb: Bomb): void {
-        this.send('/app/bomb', bomb);
+    public sendMovement(movement: Movement): void {
+        this.send('/app/move', movement);
     }
 
-    private send(topic: string, obj: Player | Bomb) {
+    public sendBomb(playerId: string): void {
+        this.send('/app/bomb', playerId);
+    }
+
+    private send(topic: string, obj: NewPlayer | string | Movement) {
         if (this.connected) {
             console.log('Sending object', obj);
             this.stomp.send(topic, obj);
@@ -71,10 +75,6 @@ export class WebsocketService implements OnDestroy{
 
     public getState(): Observable<State> {
         return this.subject.asObservable().map((state) => new State(state));
-    }
-
-    public getMockState(): Observable<State> {
-        return Observable.interval(200).map(x => State.getMock(x));
     }
     
     public disconnect() {

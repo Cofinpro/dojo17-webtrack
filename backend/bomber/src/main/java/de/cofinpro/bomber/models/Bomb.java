@@ -2,15 +2,15 @@ package de.cofinpro.bomber.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.time.LocalDateTime;
-
 public class Bomb implements Positionable {
 
     private String id;
     private String userId;
     private int x;
     private int y;
-    private LocalDateTime detonateAt;
+    private Long detonateAt;
+    private int blastRadius;
+    
 
     public String getId() {
         return id;
@@ -46,11 +46,11 @@ public class Bomb implements Positionable {
         this.y = y;
     }
 
-    public LocalDateTime getDetonateAt() {
+    public Long getDetonateAt() {
         return detonateAt;
     }
 
-    public void setDetonateAt(LocalDateTime detonateAt) {
+    public void setDetonateAt(Long detonateAt) {
         this.detonateAt = detonateAt;
     }
 
@@ -58,6 +58,14 @@ public class Bomb implements Positionable {
     @JsonIgnore
     public Position getPosition() {
         return new Position(x, y);
+    }
+
+    public void setBlastRadius(int blastRadius) {
+        this.blastRadius = blastRadius;
+    }
+
+    public int getBlastRadius () {
+        return blastRadius;
     }
 
     @Override
@@ -68,6 +76,7 @@ public class Bomb implements Positionable {
                 ", x=" + x +
                 ", y=" + y +
                 ", detonateAt=" + detonateAt +
+                ", blastRadius=" + blastRadius +
                 '}';
     }
 }

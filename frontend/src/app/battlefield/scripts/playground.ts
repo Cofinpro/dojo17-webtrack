@@ -1,6 +1,6 @@
 import { GEPicture } from "./gameelements/gepicture";
 import { GameNotification } from './messages/gamenotification';
-import { State, Bomb, Player, Stone, Position} from "../../models";
+import { State, Bomb, Player, Stone, Position, NewPlayer } from "../../models";
 
 
 export class PlayGround {
@@ -22,9 +22,9 @@ export class PlayGround {
     canvas: any;
     obstaclesCanvas: any;
     bombs: Bomb[] = [];
-    localPlayer: Player;
-    localPlayerDied: boolean;
+    ownPlayerDied: boolean;
     players: Player[] = [];
+    ownPlayer: NewPlayer;
     playersLastRound: Player[] = [];
     playersLastDirection: any[] = [];
     sprites: GEPicture[] = [];
@@ -38,7 +38,7 @@ export class PlayGround {
         this.targets = [];
         this.movers = [];
         this.protectedAreas = [];
-        this.localPlayerDied = false;
+        this.ownPlayerDied = false;
 
         this.pickItUpCallBack = null;
         this.tragetCallBack = null;
@@ -68,6 +68,10 @@ export class PlayGround {
         this.tag.style.width = width + 'px';
         this.tag.style.height = height + 'px';
 
+    }
+
+    public setPlayer(player: NewPlayer) {
+        this.ownPlayer = player;
     }
 
     public updateState(state: State) {
@@ -153,19 +157,29 @@ export class PlayGround {
                     // no movement
                     direction = this.playersLastDirection[player.id];
                 }
-                this.createPicture(player.id, player.y * 32, player.x * 32, this.resources.images['hero-1-' + direction]);
+                const playerImageId = (this.ownPlayer.uuid === player.id ? 1 : this.getOpponentImageId(player.id));
+                this.createPicture(
+                    player.id,
+                    player.y * 32,
+                    player.x * 32,
+                    this.resources.images['hero-' + playerImageId + '-' + direction]
+                );
             }
             this.playersLastDirection[player.id] = direction;
         }
         this.playersLastRound = players;
         // still alive or died?
-        if (this.localPlayer && !players.find((player) => player.id === this.localPlayer.id)) {
-            this.localPlayerDied = true;
+        if (this.ownPlayer && !players.find((player) => player.id === this.ownPlayer.id)) {
+            this.ownPlayerDied = true;
         }
     }
 
     public isGameOver(): boolean {
-        return this.localPlayerDied;
+        return this.ownPlayerDied;
+    }
+
+    private getOpponentImageId(id) {
+        return (id.charCodeAt(0) + id.charCodeAt(1)) % 7 + 2;
     }
 
     private updateBombs(bombs: Bomb[]) {
