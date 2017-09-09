@@ -28,36 +28,19 @@ export class State {
     }
 
     static createStoneRow(rowIndex: number, width: number, step: number): Stone[]{
-      let row : Stone[] = [];
-      for(var i=0; i<width; i+=step){
-        row.push(new Stone({x: i, y: rowIndex}));
-      }
-      return row;
+        let row : Stone[] = [];
+        for(var i=0; i<width; i+=step){
+            row.push(new Stone({x: i, y: rowIndex}));
+        }
+        return row;
     }
+    
     static createExplodedRow(rowIndex: number, width: number, step: number): Stone[]{
-      let row : Position[] = [];
-      for(var i=0; i<width; i+=step){
-        row.push(new Position({x: i, y: rowIndex}));
-      }
-      return row;
-    }
-
-    static getMock(x: number): State {
-        let now: number = Date.now();
-        let playerX : number[] = [5,6,7,7,7,6,5,5]; 
-        let playerY : number[] = [1,1,1,2,3,3,3,2];
-
-
-        return new State({
-            players: [new Player({ id: "player-one", x: (playerX[x % 8]), y: playerY[x % 8], nickName: "GodPlayer" })],
-            bombs: [new Bomb({ id: "a-bomb", x: 3, y: 3, userId: "player-one", detonateAt: new Date(now + (5 - (x % 6)) * 1000) })],
-            sizeX : 2,
-            sizeY : 3,
-            fixStones: State.createStoneRow(0, 16, 1),
-            weakStones: [new Stone({x : 2, y: 3})],
-            timestamp: new Date(now),
-            exploded : State.createExplodedRow(5, 16, 1)
-        });
+        let row : Position[] = [];
+        for(var i=0; i<width; i+=step){
+            row.push(new Position({x: i, y: rowIndex}));
+        }
+        return row;
     }
 
 }

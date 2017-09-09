@@ -76,10 +76,6 @@ export class WebsocketService implements OnDestroy{
     public getState(): Observable<State> {
         return this.subject.asObservable().map((state) => new State(state));
     }
-
-    public getMockState(): Observable<State> {
-        return Observable.interval(200).map(x => State.getMock(x));
-    }
     
     public disconnect() {
         //disconnect
