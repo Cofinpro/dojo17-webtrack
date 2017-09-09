@@ -22,7 +22,7 @@ services:
     web:
         image: bomberweb
         ports:
-            - "80:80"
+            - "3100:80"
         networks:
             - bombernet
 networks:
