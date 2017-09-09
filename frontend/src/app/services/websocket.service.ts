@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable, Observer } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
-import { Message, State, Player, Bomb, NewPlayer, Movement } from '../models';
+import { Message, State, Player, Bomb, Movement, NewPlayer } from '../models';
 import { StompService } from 'ng2-stomp-service';
 import { OnDestroy } from '@angular/core';
 
@@ -35,8 +35,8 @@ export class WebsocketService implements OnDestroy{
     }
 
     public registerPlayer(player: NewPlayer): void {
-        if (!player.id) {
-            player.id = this.generateUUID();
+        if (!player.uuid) {
+            player.uuid = this.generateUUID();
         }
         this.send('/register', player);
     }
@@ -45,11 +45,11 @@ export class WebsocketService implements OnDestroy{
         this.send('/move', movement);
     }
 
-    public sendBomb(bomb: Bomb): void {
-        this.send('/app/bomb', bomb);
+    public sendBomb(playerId: string): void {
+        this.send('/app/bomb', playerId);
     }
 
-    private send(topic: string, obj: Player | Bomb) {
+    private send(topic: string, obj: NewPlayer | string | Movement) {
         if (this.connected) {
             console.log('Sending object', obj);
             this.stomp.send(topic, obj);
