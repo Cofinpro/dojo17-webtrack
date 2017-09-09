@@ -34,6 +34,12 @@ body {
     color: #ffffff;
 }
 
+#userName {
+    font-family: $monoton;
+    font-size: 1.5rem;
+    margin-top: 8px;
+}
+
 .btn-default {
     border: 3px solid lighten(#ccc, 20%);
     background-color: #333;
