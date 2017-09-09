@@ -129,7 +129,7 @@ export class Game {
             playGroundElement.innerHTML = '';
             // this.counterTag.innerHTML = '';
 
-            this.playGround = new PlayGround(playGroundElement, 544, 544, this.playerDataService);
+            this.playGround = new PlayGround(playGroundElement, 480, 928, this.playerDataService);
             this.playGround.resources = this.resources;
 
             this.placeHero(this.playerDataService.getPlayerName());

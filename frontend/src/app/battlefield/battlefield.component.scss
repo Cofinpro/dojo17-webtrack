@@ -1,3 +1,5 @@
+
+
 .is-loading {
     background-color: rgba(0, 0, 0, 0.8);
 }
@@ -23,4 +25,10 @@
     background-color: rgba(0, 0, 0, 0.2);
     justify-content: flex-start;
     align-items: center;
+}
+
+#playground {
+    width: 928px;
+    height: 480px;
+    margin: 0 auto;
 }
