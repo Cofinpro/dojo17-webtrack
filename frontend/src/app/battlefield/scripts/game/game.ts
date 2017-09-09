@@ -94,6 +94,10 @@ export class Game {
         // explosions
         this.resources.addImage('explosionFullCenter', '../../assets/images/explosion/explosionFullCenter.png', 32, 32);
 
+        // powerups
+        this.resources.addImage('powerupBlue', '../../assets/images/powerups/powerupBlue.png', 32, 32);
+        this.resources.addImage('powerupRed', '../../assets/images/powerups/powerupRed.png', 32, 32);
+
         this.resources.startLoading();
 
         this.checkResources(this.resources);
