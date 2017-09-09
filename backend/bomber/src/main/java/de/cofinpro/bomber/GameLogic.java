@@ -6,7 +6,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.ApplicationScope;
@@ -37,12 +36,16 @@ public class GameLogic {
 
     private final CopyOnWriteArrayList<MapDefinition> mapDefinitions = new CopyOnWriteArrayList<>();
 
-    private final TaskScheduler scheduler = new ThreadPoolTaskScheduler();
+    private final ThreadPoolTaskScheduler scheduler;
 
     private SimpMessagingTemplate template;
 
     @Autowired
     public GameLogic(SimpMessagingTemplate template) {
+        this.scheduler = new ThreadPoolTaskScheduler();
+        this.scheduler.setPoolSize(4);
+        this.scheduler.initialize();
+
         this.template = template;
         try {
             initializeMaps();
@@ -205,14 +208,14 @@ public class GameLogic {
         return this.currentState;
     }
 
-    synchronized State addBomb(String playerId) {
+    synchronized State addBomb(NewBomb newBomb) {
         // TODO Reset timer for player
 
-        System.out.println("Adding a bomb for player: " + playerId);
+        System.out.println("Adding a bomb: " + newBomb);
         this.currentState.setExploded(null);
 
         Player player = this.currentState.getPlayers().stream()
-                .filter(p -> p.getId().equals(playerId))
+                .filter(p -> p.getId().equals(newBomb.getPlayerId()))
                 .findFirst()
                 .orElse(null);
 
@@ -223,7 +226,7 @@ public class GameLogic {
 
         // Check if the user already has too many bombs
         int bombs = (int)this.currentState.getBombs().stream()
-                .filter(b -> b.getUserId().equals(playerId))
+                .filter(b -> b.getUserId().equals(newBomb.getPlayerId()))
                 .count();
 
         if (bombs >= player.getBombCount()) {

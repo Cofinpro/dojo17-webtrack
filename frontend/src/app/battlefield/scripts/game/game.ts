@@ -3,7 +3,7 @@ import { PlayGround } from '../playground';
 import { Direction } from '../move/direction';
 import { HeroAnimator } from '../move/heroanimator';
 import { ModalMessage } from '../messages/modalmessage';
-import { Bomb, NewPlayer, Player, State, Movement } from "../../../models";
+import { Bomb, NewPlayer, Player, State, Movement, NewBomb } from "../../../models";
 import { Subscription, Observer, Subject } from 'rxjs/Rx';
 import { GameResources } from './gameresources';
 import {TimerObservable} from "rxjs/observable/TimerObservable";
@@ -185,9 +185,6 @@ export class Game {
         this.playGround.setPlayer(this.player);
 
         this.websocketService.registerPlayer(this.player);
-        //this.animator = new HeroAnimator(this.hero, this.playGround, this.websocketService, this.player);
-       // this.animator.setImages(heroImages);
-        //this.playGround.addTarget(this.hero);
         this.startGame();
     }
 
@@ -311,7 +308,7 @@ export class Game {
                     movement.direction = 'D';
                     break;
                 case 32:
-                    this.websocketService.sendBomb(this.player.id);
+                    this.websocketService.sendBomb(new NewBomb({ playerId: this.player.id }));
                     break;
             }
             if (movement.direction) {

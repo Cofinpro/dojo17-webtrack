@@ -1,6 +1,7 @@
 package de.cofinpro.bomber;
 
 import de.cofinpro.bomber.models.Movement;
+import de.cofinpro.bomber.models.NewBomb;
 import de.cofinpro.bomber.models.NewPlayer;
 import de.cofinpro.bomber.models.State;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,8 @@ public class EventHandler {
 
     @MessageMapping("/bomb")
     @SendTo("/topic/state")
-    public State newBomb(String playerId) throws Exception {
-        return gameLogic.addBomb(playerId);
+    public State newBomb(NewBomb bomb) throws Exception {
+        return gameLogic.addBomb(bomb);
     }
 
 }
