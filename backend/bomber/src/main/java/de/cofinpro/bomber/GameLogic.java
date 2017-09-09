@@ -6,7 +6,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.ApplicationScope;
@@ -37,12 +36,16 @@ public class GameLogic {
 
     private final CopyOnWriteArrayList<MapDefinition> mapDefinitions = new CopyOnWriteArrayList<>();
 
-    private final TaskScheduler scheduler = new ThreadPoolTaskScheduler();
+    private final ThreadPoolTaskScheduler scheduler;
 
     private SimpMessagingTemplate template;
 
     @Autowired
     public GameLogic(SimpMessagingTemplate template) {
+        this.scheduler = new ThreadPoolTaskScheduler();
+        this.scheduler.setPoolSize(4);
+        this.scheduler.initialize();
+
         this.template = template;
         try {
             initializeMaps();
@@ -221,12 +224,12 @@ public class GameLogic {
 
         this.currentState.getBombs().add(bomb);
 
-        scheduler.scheduleWithFixedDelay(new TimerTask() {
+        scheduler.schedule(new TimerTask() {
             @Override
             public void run() {
                 explodeBomb(bombId);
             }
-        }, BOMB_TIMEOUT_SECONDS * 1000);
+        }, new Date(System.currentTimeMillis() + (BOMB_TIMEOUT_SECONDS * 1000)));
 
         this.currentState.setServerTime(System.currentTimeMillis());
         return this.currentState;
@@ -287,6 +290,9 @@ public class GameLogic {
     }
 
     private void addBlownPositions(Bomb explodedBomb, MapObjects objects, Set<Position> result) {
+        // Add the bomb's position
+        result.add(explodedBomb.getPosition());
+
         // Process UP
         int curX = explodedBomb.getX();
         int curY = explodedBomb.getY();

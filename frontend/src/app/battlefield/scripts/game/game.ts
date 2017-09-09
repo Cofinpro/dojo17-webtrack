@@ -183,9 +183,6 @@ export class Game {
         this.playGround.setPlayer(this.player);
 
         this.websocketService.registerPlayer(this.player);
-        //this.animator = new HeroAnimator(this.hero, this.playGround, this.websocketService, this.player);
-       // this.animator.setImages(heroImages);
-        //this.playGround.addTarget(this.hero);
         this.startGame();
     }
 
@@ -265,6 +262,9 @@ export class Game {
             show: null,
             end: null
         }).show();
+        this.end = true;
+        document.onkeydown = null;
+        document.onkeyup = null;
     }
 
     resumeGame() {
