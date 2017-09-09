@@ -31,6 +31,8 @@ public class GameLogic {
 
     private static final int DEFAULT_BOMB_COUNT = 3;
 
+    private static final int INACTIVITY_TIMEOUT_SECONDS = 20;
+
     private State currentState;
 
     private final CopyOnWriteArrayList<MapDefinition> mapDefinitions = new CopyOnWriteArrayList<>();
@@ -112,7 +114,7 @@ public class GameLogic {
                     .orElse(null);
         }
 
-        if (existing == null) {
+        if (existing != null) {
             System.out.println("Hacker tried to log again");
             return null;  // No change
         }
