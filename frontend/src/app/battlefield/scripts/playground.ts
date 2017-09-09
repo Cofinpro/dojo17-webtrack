@@ -1,6 +1,6 @@
 import { GEPicture } from "./gameelements/gepicture";
 import { GameNotification } from './messages/gamenotification';
-import { State, Bomb, Player, Stone, Position} from "../../models";
+import { State, Bomb, Player, Stone, Position, NewPlayer } from "../../models";
 
 
 export class PlayGround {
@@ -23,7 +23,7 @@ export class PlayGround {
     obstaclesCanvas: any;
     bombs: Bomb[] = [];
     players: Player[] = [];
-    ownPlayer: Player;
+    ownPlayer: NewPlayer;
     playersLastRound: Player[] = [];
     playersLastDirection: any[] = [];
     sprites: GEPicture[] = [];
@@ -66,7 +66,7 @@ export class PlayGround {
 
     }
 
-    public setPlayer(player: Player) {
+    public setPlayer(player: NewPlayer) {
         this.ownPlayer = player;
     }
 
@@ -143,7 +143,7 @@ export class PlayGround {
                     // no movement
                     direction = this.playersLastDirection[player.id];
                 }
-                const playerImageId = (this.ownPlayer.id === player.id ? 1 : this.getOpponentImageId(player.id));
+                const playerImageId = (this.ownPlayer.uuid === player.id ? 1 : this.getOpponentImageId(player.id));
                 this.createPicture(
                     player.id,
                     player.y * 32,

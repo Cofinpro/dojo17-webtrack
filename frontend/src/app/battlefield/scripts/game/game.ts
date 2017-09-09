@@ -3,7 +3,7 @@ import { PlayGround } from '../playground';
 import { Direction } from '../move/direction';
 import { HeroAnimator } from '../move/heroanimator';
 import { ModalMessage } from '../messages/modalmessage';
-import { Bomb, Player, State } from "../../../models";
+import { Bomb, NewPlayer, Player, State, Movement } from "../../../models";
 import { Subscription, Observer, Subject } from 'rxjs/Rx';
 import { GameResources } from './gameresources';
 import {TimerObservable} from "rxjs/observable/TimerObservable";
@@ -36,7 +36,7 @@ export class Game {
     counterTag;
     livesTag;
 
-    player: Player;
+    player: NewPlayer;
 
     constructor(private websocketService: WebsocketService, private playerDataService: PlayerDataService) {
 
@@ -203,8 +203,8 @@ export class Game {
 
         this.hero = this.playGround.createPicture(null, 32, 32, heroImages['right']);
 */
-        this.player  = new Player({id: null, x:0, y:0, nickName: this.playerDataService.getPlayerName(), blastRadius:4});
-        this.playGround.setPlayer(this.player);
+        this.player  = new NewPlayer({ uuid: null, nickName: 'Player 1' });
+        this.websocketService.registerPlayer(this.player);
         //this.animator = new HeroAnimator(this.hero, this.playGround, this.websocketService, this.player);
        // this.animator.setImages(heroImages);
         //this.playGround.addTarget(this.hero);
@@ -306,83 +306,33 @@ export class Game {
             let keyCode = event.keyCode;
             let dir;
             let posUpdated = false;
+            const movement: Movement = new Movement({ playerId: this.player.uuid });
             switch(keyCode){
                 case 37:
-                    posUpdated = this.movePlayerLeft();
+                    movement.direction = 'L';
                     break;
                 case 39:
-                    posUpdated = this.movePlayerRight();
+                    movement.direction = 'R';
                     break;
                 case 38:
-                    posUpdated = this.movePlayerUp();
+                    movement.direction = 'U';
                     break;
                 case 40:
-                    posUpdated = this.movePlayerDown()
+                    movement.direction = 'D';
                     break;
                 case 32:
-                    const bomb = new Bomb({
-                        id: null,
-                        x: this.player.x,
-                        y: this.player.y,
-                        userId: this.player.id,
-                        detonateAt: null,
-                        blastRadius: this.player.blastRadius
-                    });
-                    this.websocketService.sendBomb(bomb);
+                    this.websocketService.sendBomb(this.player.uuid);
+                    break;
             }
-            if(posUpdated)
-            {
-                this.websocketService.sendPlayer(this.player);
+            if (movement.direction) {
+                this.websocketService.sendMovement(movement);
             }
-         //   this.animator.removeFromActiveDirections(dir);
         };
 
-      //  this.audios['loop'].loop = true;
-    // this.audios['loop'].volume = 0.8;
-    //    this.audios['loop'].play();
-
-      //  this.animator.start();
-        // this.playGround.startMovers();
-        //this.playGround.shieldTarget(this.hero, 2000);
         this.startedAt = null;
         this.end = false;
     };
 
-    movePlayerLeft(){
-        if(this.player.x>1)
-        {
-            this.player.x--;
-            return true;
-        }
-        return false;
-    }
-
-    movePlayerRight(){
-        if(this.player.x<13)
-        {
-            this.player.x++;
-            return true;
-        }
-        return false;
-    }
-
-    movePlayerDown(){
-        if(this.player.y<13)
-        {
-            this.player.y++;
-            return true;
-        }
-        return false;
-    }
-
-    movePlayerUp(){
-        if(this.player.y>1)
-        {
-            this.player.y--;
-            return true;
-        }
-        return false;
-    }
     shutDownGame() {
         this.end = true;
         this.audios['loop'].load();

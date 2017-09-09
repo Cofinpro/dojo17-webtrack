@@ -7,12 +7,16 @@
  */
 export class Bomb {
 
-  id: string;
-  x: number;
-  y: number;
+  id?: string;
+  x?: number;
+  y?: number;
   userId: string;
+<<<<<<< HEAD
+  detonateAt?: Date;
+=======
   detonateAt: Date;
   blastRadius: number;
+>>>>>>> a821d8dfca2a727c077caee4045c7a8be682e4c1
 
   constructor(obj = {} as Bomb) {
     this.id = obj.id;
