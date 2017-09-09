@@ -99,7 +99,7 @@ export class PlayGround {
 
     private updateExploded(positions: Position[]){
         for(const position of positions){
-          this.createPicture("some", position.y*32, position.x*32, this.resources.images[''])
+          this.createPicture("some", position.y*32, position.x*32, this.resources.images['explosion1'])
         }
       }
 
