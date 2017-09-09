@@ -52,8 +52,7 @@ export class WebsocketService implements OnDestroy{
     }
 
     private generateUUID(): string {
-        return `${this.s4()}${this.s4()}-${this.s4()}-${this.s4()}
-                -${this.s4()}-${this.s4()}${this.s4()}${this.s4()}`;
+        return `${this.s4()}${this.s4()}-${this.s4()}-${this.s4()}-${this.s4()}-${this.s4()}${this.s4()}${this.s4()}`;
     }
 
     private s4(): string {
