@@ -23,12 +23,13 @@ export class PlayGround {
     obstaclesCanvas: any;
     bombs: Bomb[] = [];
     players: Player[] = [];
+    ownPlayer: Player;
     playersLastRound: Player[] = [];
     playersLastDirection: any[] = [];
     sprites: any[] = [];
     resources;
 
-    constructor(tag, height, width) {
+    constructor(tag, height, width, player) {
         this.obstacles = [];
         this.pickItUps = [];
         this.targets = [];
@@ -42,6 +43,8 @@ export class PlayGround {
         this.height = height;
         this.tag = tag;
         this.paused = false;
+
+        this.ownPlayer = player;
 
         this.canvas = document.createElement('canvas');
         this.obstaclesCanvas = document.createElement('canvas');
@@ -138,11 +141,21 @@ export class PlayGround {
                     // no movement
                     direction = this.playersLastDirection[player.id];
                 }
-                this.createPicture(player.id, player.y * 32, player.x * 32, this.resources.images['hero-1-' + direction]);
+                const playerImageId = (this.ownPlayer.id === player.id ? 1 : this.getOpponentImageId(player.id));
+                this.createPicture(
+                    player.id,
+                    player.y * 32,
+                    player.x * 32,
+                    this.resources.images['hero-' + playerImageId + '-' + direction]
+                );
             }
             this.playersLastDirection[player.id] = direction;
         }
         this.playersLastRound = players;
+    }
+
+    private getOpponentImageId(id) {
+        return 2;
     }
 
     private updateBombs(bombs: Bomb[]) {
