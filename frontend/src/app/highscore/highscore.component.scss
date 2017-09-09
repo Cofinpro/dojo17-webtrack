@@ -1,9 +1,18 @@
 .list {
-    display: flex;
-    flex-direction: column;
-}
-
-.list-element {
+    border: 2px solid lighten(#ccc, 20%);
+    border-radius: 3px;
+    font-size: 1.2rem;
+  }
+  
+  .list-element {
+    padding: 8px;
+    border-bottom: 1px solid lighten(#ccc, 20%);
     display: flex;
     flex-direction: row;
-}
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .list-element:last-child {
+    border: none;
+  }
