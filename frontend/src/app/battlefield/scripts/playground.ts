@@ -1,5 +1,5 @@
 import { GEPicture } from "./gameelements/gepicture";
-import { State, Bomb, Player, Stone, Position, NewPlayer, BombCountPowerup, BlastRadiusPowerup } from "../../models";
+import { State, Bomb, Player, Stone, Bush, Position, NewPlayer, BombCountPowerup, BlastRadiusPowerup } from "../../models";
 import {PlayerDataService} from "../../services/player-data.service";
 
 export class PlayGround {
@@ -104,6 +104,7 @@ export class PlayGround {
 
         this.updatePlayers(state.players);
 
+        this.updateFoliage(state.foliage);
     }
 
     private clearSprites(): void {
@@ -127,6 +128,12 @@ export class PlayGround {
     private updateWeakStones(stones: Stone[]) {
         for (const stone of stones) {
             this.createPicture('weakStone-id', stone.y * 32, stone.x * 32, this.resources.images['box']);
+        }
+    }
+
+    private updateFoliage(foliage: Bush[]) {
+        for (const bush of foliage) {
+            this.createPicture('bush-id', bush.y * 32, bush.x * 32, this.resources.images['bush']);
         }
     }
 
