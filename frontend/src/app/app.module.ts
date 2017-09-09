@@ -8,6 +8,7 @@ import { WebsocketService } from './services/websocket.service';
 import { GamestartComponent } from './gamestart/gamestart.component';
 import { FormsModule } from "@angular/forms";
 import { HighscoreComponent } from './highscore/highscore.component';
+import { AvatarComponent } from './avatar/avatar.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { HighscoreComponent } from './highscore/highscore.component';
     AppComponent,
     BattlefieldComponent,
     GamestartComponent,
-    HighscoreComponent
+    HighscoreComponent,
+    AvatarComponent
   ],
   imports: [
     BrowserModule, FormsModule
