@@ -1,3 +1,5 @@
+import { HighscoreComponent } from '../highscore/highscore.component';
+import { Subject, Subscription } from 'rxjs/Rx';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
@@ -10,6 +12,8 @@ import { Player } from '../models';
 export class GameService {
 
     private game: Game;
+    private highScoreSubject: Subject<Player[]> = new Subject<Player[]>();
+    private stateSubscription: Subscription;
 
     constructor(private websocketService: WebsocketService, private playerDataService: PlayerDataService) { }
 
@@ -17,10 +21,15 @@ export class GameService {
         // start game
         this.game = new Game(this.websocketService, this.playerDataService);
         this.game.startTimer();
+
+        this.stateSubscription = this.websocketService.getState().subscribe( (state) => {
+            this.highScoreSubject.next(state.players);
+        });
     }
 
     public destroy(): void {
         this.game.socketSubscription.unsubscribe();
+        this.stateSubscription.unsubscribe();
         this.websocketService.disconnect();
     }
 
@@ -36,10 +45,7 @@ export class GameService {
     }
 
     public getPlayers(): Observable<Player[]> {
-        if (this.game) {
-            return Observable.of(this.game.getPlayers());
-        }
-        return Observable.of([]);
+        return this.highScoreSubject.asObservable();
     }
 
 }

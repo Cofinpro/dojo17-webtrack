@@ -1,3 +1,4 @@
+import { GameService } from '../../../services/game.service';
 import { WebsocketService } from '../../../services/websocket.service';
 import { PlayGround } from '../playground';
 import { Direction } from '../move/direction';

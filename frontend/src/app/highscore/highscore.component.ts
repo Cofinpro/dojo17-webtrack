@@ -14,7 +14,10 @@ export class HighscoreComponent implements OnInit {
   constructor(private gameService: GameService) { }
 
   ngOnInit() {
-    this.gameService.getPlayers().subscribe( (players) => this.players = players);
+    this.gameService.getPlayers().subscribe( (players) => {
+      console.log("got players", players);
+      this.players = players;
+    });
   }
 
 }
