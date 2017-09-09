@@ -143,7 +143,7 @@ export class PlayGround {
                     // no movement
                     direction = this.playersLastDirection[player.id];
                 }
-                const playerImageId = (this.ownPlayer.uuid === player.id ? 1 : this.getOpponentImageId(player.id));
+                const playerImageId = (this.ownPlayer.id === player.id ? 1 : this.getOpponentImageId(player.id));
                 this.createPicture(
                     player.id,
                     player.y * 32,
