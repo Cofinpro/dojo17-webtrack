@@ -77,7 +77,6 @@ export class Game {
         this.socketSubscription = this.websocketService.getMockState().subscribe((state: State) => {
             console.log('got server message:', state.bombs);
             if (this.playGround && this.playGround.resources) {
-                console.log("playground defined");
                 this.playGround.updateState(state);
             }
         });
@@ -88,8 +87,9 @@ export class Game {
         console.log('called');
         resources.resourcesLoaded().then( () => {
 
-            console.log("promised consumed");
-            let playGroundElement = document.getElementById('playground');
+            console.log('Game has successfully loaded!');
+
+            const playGroundElement = document.getElementById('playground');
             playGroundElement.innerHTML = '';
             // this.counterTag.innerHTML = '';
 
@@ -99,31 +99,28 @@ export class Game {
             this.playGround.setPickItUpCallBack(this.picked);
             this.playGround.setTargetCaughtCallBack(this.caught);
 
-            var wallDark = this.images['wall-dark'];
-            var wallLight = this.images['wall-light'];
+            const wallDark = this.images['wall-dark'];
+            const wallLight = this.images['wall-light'];
             let obstacle;
 
-            for (var y = 0; y < 17; y++) {
-                for (var x = 0; x < 17; x++) {
-                    if (x == 0 && y == 0 || x == 16 && y == 0) {
-                        obstacle = this.playGround.createPicture(null, y*32 , x*32, wallLight, true);
+            for (let y = 0; y < 17; y++) {
+                for (let x = 0; x < 17; x++) {
+                    if (x === 0 && y === 0 || x === 16 && y === 0) {
+                        obstacle = this.playGround.createPicture(null, y * 32 , x * 32, wallLight, true);
                         this.playGround.addObstacle(obstacle);
-                    } else if(y == 0 || y == 16) {
-                        obstacle = this.playGround.createPicture(null, y*32 , x*32, wallDark, true);
+                    } else if (y === 0 || y === 16) {
+                        obstacle = this.playGround.createPicture(null, y * 32 , x * 32, wallDark, true);
                         this.playGround.addObstacle(obstacle);
-                    } else if(x == 0 || x == 16) {
-                        obstacle = this.playGround.createPicture(null, y*32 , x*32, wallLight, true);
+                    } else if (x === 0 || x === 16) {
+                        obstacle = this.playGround.createPicture(null, y * 32 , x * 32, wallLight, true);
                         this.playGround.addObstacle(obstacle);
-                    } else if(x % 2 == 0 && y % 2 == 0) {
-                        obstacle = this.playGround.createPicture(null, y*32 , x*32, wallLight, true);
+                    } else if (x % 2 === 0 && y % 2 === 0) {
+                        obstacle = this.playGround.createPicture(null, y * 32 , x * 32, wallLight, true);
                         this.playGround.addObstacle(obstacle);
                     }
                 }
             }
-
             this.placeHero();
-
-            //this.placeCockpit();
         });
 
     }
