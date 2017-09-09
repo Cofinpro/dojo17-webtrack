@@ -1,0 +1,42 @@
+version: "3"
+services:
+    visualizer:
+        image: dockersamples/visualizer:stable
+        ports:
+            - "3001:8080"
+        volumes:
+            - "/var/run/docker.sock:/var/run/docker.sock"
+        deploy:
+            placement:
+                constraints: [node.role == manager]
+        networks:
+            - bombernet
+    rabbit:
+        image: rabbitmq:management
+        ports:
+            - "3002:15672"
+        deploy:
+            placement:
+                constraints: [node.role == manager]
+        networks:
+            - bombernet
+    redis:
+        image: redis
+        deploy:
+            placement:
+                constraints: [node.role == manager]
+        networks:
+            - bombernet
+    bomber:
+        image: de.cofinpro.dojo/bomberscale:1.0-SNAPSHOT
+        deploy:
+            replicas: 4
+        ports:
+            - "3000:8080"
+        depends_on:
+            - rabbit
+            - redis
+        networks:
+            - bombernet
+networks:
+    bombernet:

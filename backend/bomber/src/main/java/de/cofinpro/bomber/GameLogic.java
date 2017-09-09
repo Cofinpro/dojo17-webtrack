@@ -84,7 +84,7 @@ public class GameLogic {
         }
     }
 
-    private synchronized void resetState() throws IOException {
+    private synchronized void resetState() {
         this.currentState = new State();
         MapDefinition definition = mapDefinitions.get(ThreadLocalRandom.current().nextInt(0, mapDefinitions.size()));
         this.currentState.setSizeX(definition.getSizeX());
@@ -97,12 +97,26 @@ public class GameLogic {
     synchronized State addOrMovePlayer(Player player) {
         this.currentState.setExploded(null);
 
-        this.currentState.getPlayers().stream()
-                .filter(p -> p.getId().equals(player.getId()))
-                .findFirst()
-                .ifPresent(p -> this.currentState.getPlayers().remove(p));
+        Player existing;
+        if (this.currentState.getPlayers().isEmpty()) {
+            resetState();
+            existing = null;
+        } else {
+            existing = this.currentState.getPlayers().stream()
+                    .filter(p -> p.getId().equals(player.getId()))
+                    .findFirst()
+                    .orElse(null);
+        }
 
-        this.currentState.getPlayers().add(player);
+        if (existing != null) {
+            existing.setX(player.getX());
+            existing.setY(player.getY());
+        } else {
+            Position newPosition = randomValidPosition();
+            player.setX(newPosition.getX());
+            player.setY(newPosition.getY());
+            this.currentState.getPlayers().add(player);
+        }
 
         this.currentState.setServerTime(LocalDateTime.now());
         return this.currentState;
@@ -253,6 +267,22 @@ public class GameLogic {
                 break;  // this explodes, but stops it here (don't go further)
             }
         }
+    }
+
+    private Position randomValidPosition() {
+        MapObjects objects = new MapObjects(this.currentState);
+
+        Position result;
+        boolean invalid;
+        do {
+            result = new Position(
+                    ThreadLocalRandom.current().nextInt(0, this.currentState.getSizeX()),
+                    ThreadLocalRandom.current().nextInt(0, this.currentState.getSizeY()));
+
+            invalid = objects.getWeakStones().containsKey(result) || objects.getFixStones().containsKey(result);
+        } while (invalid);
+
+        return result;
     }
 
 }

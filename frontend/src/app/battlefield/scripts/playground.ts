@@ -64,25 +64,32 @@ export class PlayGround {
     }
 
     public updateBombsAndPlayers(bombs: Bomb[], players: Player[]) {
-        // TODO: createPicture für neue Bombs
-        // TODO: changePicture für Bombs (animation)
         // TODO: removePicture für Bombs die nicht mehr existieren
         if (!this.resources) {
             return;
         }
 
-        for (let sprite of this.sprites) {
+        for (const sprite of this.sprites) {
             sprite.clear();
             this.removeGameElement(sprite);
         }
         this.sprites = [];
 
-        for (let player of players) {
+        for (const player of players) {
             this.createPicture(player.id, player.y * 32, player.x * 32, this.resources.images['hero-1-r']);
         }
 
-        for (let bomb of bombs) {
-            this.createPicture(bomb.id, bomb.y * 32, bomb.x * 32, this.resources.images['bomb3']);
+        const now = new Date();
+        for (const bomb of bombs) {
+            // display correct sprite for bomb according to detonation time
+            const timeUntilExplosion = bomb.detonateAt.getTime() - now.getTime();
+            let bombSpriteIndex = '';
+            if (timeUntilExplosion > 0) {
+                bombSpriteIndex = 'bomb' + Math.max(0, Math.round(timeUntilExplosion / 1000));
+            } else {
+                bombSpriteIndex = 'explosion1';
+            }
+            this.createPicture(bomb.id, bomb.y * 32, bomb.x * 32, this.resources.images[bombSpriteIndex]);
         }
         this.bombs = bombs;
         console.log('playground has bombs: ', bombs);
