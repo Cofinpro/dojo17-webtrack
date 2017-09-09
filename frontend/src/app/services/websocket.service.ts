@@ -19,7 +19,7 @@ export class WebsocketService implements OnDestroy{
         //configuration
         this.stomp.configure({
             host: 'http://192.168.75.47:3000',
-            debug: true,
+            debug: false,
             queue: { 'init': false }
         });
 

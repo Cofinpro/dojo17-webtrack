@@ -246,12 +246,12 @@ public class GameLogic {
 
         this.currentState.getBombs().add(bomb);
 
-        scheduler.scheduleWithFixedDelay(new TimerTask() {
+        scheduler.schedule(new TimerTask() {
             @Override
             public void run() {
                 explodeBomb(bombId);
             }
-        }, BOMB_TIMEOUT_SECONDS * 1000);
+        }, new Date(System.currentTimeMillis() + (BOMB_TIMEOUT_SECONDS * 1000)));
 
         this.currentState.setServerTime(System.currentTimeMillis());
         return this.currentState;
@@ -312,6 +312,9 @@ public class GameLogic {
     }
 
     private void addBlownPositions(Bomb explodedBomb, MapObjects objects, Set<Position> result) {
+        // Add the bomb's position
+        result.add(explodedBomb.getPosition());
+
         // Process UP
         int curX = explodedBomb.getX();
         int curY = explodedBomb.getY();
