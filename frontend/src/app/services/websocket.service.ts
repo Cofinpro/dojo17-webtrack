@@ -60,7 +60,7 @@ export class WebsocketService implements OnDestroy{
     }
 
     public getMockState(): Observable<State> {
-        return Observable.interval(100).map(x => State.getMock(x));
+        return Observable.interval(200).map(x => State.getMock(x));
     }
 
     public unsubscribe() {
