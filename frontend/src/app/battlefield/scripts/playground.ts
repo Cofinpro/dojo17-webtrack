@@ -1,7 +1,7 @@
 import { GEPicture } from "./gameelements/gepicture";
 import { GameNotification } from './messages/gamenotification';
-import {Bomb} from "../../models/bomb";
-import {Player} from "../../models/player";
+import { State, Bomb, Player, Stone, Position} from "../../models";
+
 
 export class PlayGround {
     image: any;
@@ -23,6 +23,8 @@ export class PlayGround {
     obstaclesCanvas: any;
     bombs: Bomb[] = [];
     players: Player[] = [];
+    playersLastRound: Player[] = [];
+    playersLastDirection: any[] = [];
     sprites: any[] = [];
     resources;
 
@@ -63,22 +65,75 @@ export class PlayGround {
 
     }
 
-    public updateBombsAndPlayers(bombs: Bomb[], players: Player[]) {
+    public updateState(state: State) {
         // TODO: removePicture für Bombs die nicht mehr existieren
         if (!this.resources) {
             return;
         }
 
+        this.clearSprites();
+
+        this.updateWeakStones(state.weakStones);
+
+        this.updatePlayers(state.players);
+
+        this.updateBombs(state.bombs);
+
+    }
+
+    private clearSprites(): void {
         for (const sprite of this.sprites) {
             sprite.clear();
             this.removeGameElement(sprite);
         }
         this.sprites = [];
+    }
 
-        for (const player of players) {
-            this.createPicture(player.id, player.y * 32, player.x * 32, this.resources.images['hero-1-r']);
+    private updateWeakStones(stones: Stone[]){
+      for(const stone of stones){
+        this.createPicture("some", stone.y*32, stone.x*32, this.resources.images['box'])
+      }
+    }
+
+    private updateExploded(positions: Position[]){
+        for(const position of positions){
+          this.createPicture("some", position.y*32, position.x*32, this.resources.images[''])
         }
+      }
 
+
+    private updatePlayers(players: Player[]) {
+        for (const player of players) {
+            let direction = '';
+            const playerFromLastRound = this.playersLastRound.find((oldPlayer) => oldPlayer.id === player.id);
+
+            if (this.playersLastRound.length === 0 || playerFromLastRound === undefined) {
+                direction = 'd';
+            } else {
+                if (playerFromLastRound.x < player.x) {
+                    // move right
+                    direction = 'r';
+                } else if (playerFromLastRound.x > player.x) {
+                    // move left
+                    direction = 'l';
+                } else if (playerFromLastRound.y < player.y) {
+                    // move down
+                    direction = 'd';
+                } else if (playerFromLastRound.y > player.y) {
+                    // move up
+                    direction = 'u';
+                } else {
+                    // no movement
+                    direction = this.playersLastDirection[player.id];
+                }
+                this.createPicture(player.id, player.y * 32, player.x * 32, this.resources.images['hero-1-' + direction]);
+            }
+            this.playersLastDirection[player.id] = direction;
+        }
+        this.playersLastRound = players;
+    }
+
+    private updateBombs(bombs: Bomb[]) {
         const now = new Date();
         for (const bomb of bombs) {
             // display correct sprite for bomb according to detonation time
