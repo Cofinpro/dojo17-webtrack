@@ -1,6 +1,6 @@
 import { GEPicture } from "./gameelements/gepicture";
 import { GameNotification } from './messages/gamenotification';
-import { State, Bomb, Player} from "../../models";
+import { State, Bomb, Player, Stone} from "../../models";
 
 export class PlayGround {
     image: any;
@@ -70,9 +70,12 @@ export class PlayGround {
 
         this.clearSprites();
 
+        this.updateWeakStones(state.weakStones);
+
         this.updatePlayers(state.players);
 
         this.updateBombs(state.bombs);
+
     }
 
     private clearSprites(): void {
@@ -82,6 +85,14 @@ export class PlayGround {
         }
         this.sprites = [];
     }
+
+    private updateWeakStones(stones: Stone[]){
+      for(const stone of stones){
+        this.createPicture("some", stone.y*32, stone.x*32, this.resources.images['box'])
+      }
+    }
+
+
 
     private updatePlayers(players: Player[]) {
         for (const player of players) {
