@@ -194,7 +194,7 @@ public class GameLogic {
                 .findFirst()
                 .orElse(null);
 
-        if (player != null) {
+        if (player == null) {
             System.out.println("Tried to add a bomb for invalid user");
             return null;
         }
