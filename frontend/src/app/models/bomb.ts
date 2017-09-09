@@ -13,12 +13,12 @@ export class Bomb {
   userId: string;
   detonateAt: Date;
 
-  constructor(id: string, x: number, y:number, userId: string, detonateAt: Date){
-    this.id = id;
-    this.x = x;
-    this.y = y;
-    this.userId = userId;
-    this.detonateAt = detonateAt;
+  constructor(obj = {} as Bomb) {
+    this.id = obj.id;
+    this.x = obj.x;
+    this.y = obj.y;
+    this.userId = obj.userId;
+    this.detonateAt = obj.detonateAt;
   }
 
 

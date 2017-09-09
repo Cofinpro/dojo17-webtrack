@@ -1,21 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable, Observer } from 'rxjs/Rx';
-import { Message } from '../models/message';
-import { State } from '../models/state';
+import { Message, State, Player, Bomb } from '../models';
 import { StompService } from 'ng2-stomp-service';
-import { Player } from '../models/player';
 
 @Injectable()
 export class WebsocketService {
 
     // This is for stomp
+    private subject: Subject<State> = new Subject<State>();
     private subscription: any;
-    private connected;
+    private connected: boolean = false;
 
     constructor(private stomp: StompService) {
-    }
-
-    public connect(): Promise<any> {
         //configuration
         this.stomp.configure({
             host: 'http://localhost:8080',
@@ -24,33 +20,47 @@ export class WebsocketService {
         });
 
         //start connection
-        this.connected = this.stomp.startConnect();
-        this.connected.then(() => {
+        this.stomp.startConnect().then(() => {
             this.stomp.done('init');
             console.log('connected stomp');
 
             //subscribe
             this.subscription = this.stomp.subscribe('/topic/state', this.response);
-
+            this.connected = true;
         });
-        return this.connected;
     }
 
-    public sendPlayer(player: Player) {
+    public sendPlayer(player: Player): void {
+        this.send('/app/player', player);
+    }
+
+    public sendBomb(bomb: Bomb): void {
+        this.send('/app/bomb', bomb);
+    }
+
+    private send(topic: string, obj: Player | Bomb) {
         if (this.connected) {
-            console.log("Sending player");
-            this.stomp.send('/app/player', player);
-        }
-        else {
+            console.log('Sending object', obj);
+            this.stomp.send(topic, obj);
+        } else {
             console.log("Not connected yet");
         }
     }
 
     //response
-    public response(data: any) {
-        console.log("Received Player", data);
+    public response(state: State): State {
+        this.subject.next(state);
+        console.log("Received Player", state);
+        return state;
     }
 
+    public getState(): Observable<State> {
+        return this.subject.asObservable();
+    }
+
+    public getMockState(): Observable<State> {
+        return Observable.interval(100).map(x => State.getMock(x));
+    }
 
     public unsubscribe() {
         this.subscription.unsubscribe();
@@ -62,34 +72,5 @@ export class WebsocketService {
             console.log('Connection closed')
         })
     }
-
-
-
-    private createWebSocket(): Subject<Message> {
-        const socket = new WebSocket('wss://echo.websocket.org');
-        const observable: Observable<any> = Observable.create(
-            (observer: Observer<Message>) => {
-                socket.onmessage = observer.next.bind(observer);
-                socket.onerror = observer.error.bind(observer);
-                socket.onclose = observer.complete.bind(observer);
-                return socket.close.bind(socket);
-            }
-        )
-        const observer = {
-            next: (data: Object) => {
-                if (socket.readyState === WebSocket.OPEN) {
-                    socket.send(JSON.stringify(data));
-                }
-            }
-        }
-        return Subject.create(observer, observable);
-    }
-
-    public getObservable(): Observable<Message> {
-        return Observable.interval(1000).map(x => new Message(State.getMock(x), null));
-        //  return this.socket;
-    }
-
-
 
 }

@@ -3,8 +3,7 @@ import { PlayGround } from '../playground';
 import { Direction } from '../move/direction';
 import { HeroAnimator } from '../move/heroanimator';
 import { ModalMessage } from '../messages/modalmessage';
-import { Bomb } from "../../../models/bomb";
-import { Message } from '../../../models/message';
+import { Bomb, Player, State } from "../../../models";
 import { Subscription, Observer, Subject } from 'rxjs/Rx';
 import { GameResources } from './gameresources';
 import {TimerObservable} from "rxjs/observable/TimerObservable";
@@ -21,9 +20,8 @@ export class Game {
 
     direction: Direction = new Direction();
 
-    socket: Subject<Message>;
+    socket: Subject<State>;
     counterSubscription: Subscription;
-    sentMessage: Message;
 
     images = {};
     audios = {};
@@ -77,11 +75,11 @@ export class Game {
 
         // this.counterTag = document.getElementById('picks');
         // this.livesTag = document.getElementById('lives');
-        this.socketSubscription = this.websocketService.getObservable().subscribe((message: Message) => {
-            console.log('got server message:', message.inMsg.bombs);
+        this.socketSubscription = this.websocketService.getMockState().subscribe((state: State) => {
+            console.log('got server message:', state.bombs);
             if (this.playGround && this.playGround.resources) {
                 console.log("playground defined");
-                this.playGround.updateBombsAndPlayers(message.inMsg.bombs, message.inMsg.players);
+                this.playGround.updateBombsAndPlayers(state.bombs, state.players);
             }
         });
 
