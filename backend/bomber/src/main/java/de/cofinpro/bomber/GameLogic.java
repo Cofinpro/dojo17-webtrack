@@ -32,6 +32,11 @@ public class GameLogic {
 
     private static final int INACTIVITY_TIMEOUT_SECONDS = 20;
 
+    private static final int SCORE_PLAYER_KILL = 10000;
+    private static final int SCORE_STONE_KILL = 1500;
+    private static final int SCORE_POWERUP = 3500;
+    private static final int SCORE_MOVED = 1;
+
     private State currentState;
 
     private final CopyOnWriteArrayList<MapDefinition> mapDefinitions = new CopyOnWriteArrayList<>();
@@ -193,20 +198,23 @@ public class GameLogic {
 
         Stream<Position> blastPowerupStream = this.currentState.getBlastRadiusPowerups().stream().map(BlastRadiusPowerup::getPosition);
         if (blastPowerupStream.anyMatch(p -> p.equals(newPosition))) {
-            System.out.println("Collected blast radius upgrade");
+            System.out.println("Collected blast radius upgrade: " + player);
             player.increaseBlastRadius();
             this.currentState.removeBlastRadiusPowerup(newPosition);
+            player.setScore(player.getScore() + SCORE_POWERUP);
         }
 
         Stream<Position> bombPowerupStream = this.currentState.getBombCountPowerups().stream().map(BombCountPowerup::getPosition);
         if (bombPowerupStream.anyMatch(p -> p.equals(newPosition))) {
-            System.out.println("Collected bomb count upgrade");
+            System.out.println("Collected bomb count upgrade: " + player);
             player.increaseBombCount();
             this.currentState.removeBombCountPowerup(newPosition);
+            player.setScore(player.getScore() + SCORE_POWERUP);
         }
 
         player.setX(newPosition.getX());
         player.setY(newPosition.getY());
+        player.setScore(player.getScore() + SCORE_MOVED);
 
         return this.currentState;
     }
@@ -268,7 +276,12 @@ public class GameLogic {
             return;
         }
 
-        System.out.println("Bomb detonated: " + explodedBomb);
+        System.out.println("Root bomb detonation: " + explodedBomb);
+
+        Player bombOwner = this.currentState.getPlayers().stream()
+                .filter(p -> p.getId().equals(explodedBomb.getUserId()))
+                .findFirst()
+                .orElse(null);
 
         // Build maps for all objects, to find them easily by position
         MapObjects objects = new MapObjects(this.currentState);
@@ -282,10 +295,22 @@ public class GameLogic {
         objects.getPlayers().entrySet().stream()
                 .filter(e -> blownPositions.contains(e.getKey()))
                 .flatMap(e -> e.getValue().stream())
-                .forEach(p -> this.currentState.getPlayers().remove(p));
+                .forEach(p -> {
+                    System.out.println("PLAYER KILLED: " + p);
+                    if (bombOwner != null && !p.getId().equals(bombOwner.getId())) {
+                        bombOwner.setScore(bombOwner.getScore() + SCORE_PLAYER_KILL);
+                    }
+                    this.currentState.getPlayers().remove(p);
+                });
         objects.getWeakStones().entrySet().stream()
                 .filter(e -> blownPositions.contains(e.getKey()))
-                .forEach(e -> this.currentState.getWeakStones().remove(e.getValue()));
+                .forEach(e -> {
+                    System.out.println("Blew weak stone: " + e.getValue());
+                    if (bombOwner != null) {
+                        bombOwner.setScore(bombOwner.getScore() + SCORE_STONE_KILL);
+                    }
+                    this.currentState.getWeakStones().remove(e.getValue());
+                });
 
         this.currentState.setServerTime(System.currentTimeMillis());
 
@@ -305,6 +330,7 @@ public class GameLogic {
         if (!found) {
             return;   // Already removed in another iteration
         }
+        System.out.println("Bomb detonated: " + explodedBomb);
         objects.getBombs().remove(explodedBomb.getPosition());  // may remove more than one: they both exploded, makes no difference
 
         // determine exploded positions
@@ -420,17 +446,5 @@ public class GameLogic {
                 || objects.getBombs().containsKey(position)
                 || objects.getPlayers().containsKey(position));
     }
-
-    /*
-    private void startTimerForUser(final String userId) {
-        scheduler.scheduleWithFixedDelay(new TimerTask() {
-            @Override
-            public void run() {
-                explodeBomb(bombId);
-            }
-        }, BOMB_TIMEOUT_SECONDS * 1000);
-
-    }
-    */
 
 }
