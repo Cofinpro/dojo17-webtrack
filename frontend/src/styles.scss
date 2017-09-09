@@ -28,8 +28,54 @@ body {
     text-align: center;
 }
 
-#time, #score, #start, #bomb, #userName {
+#time, #score, #bomb {
     font-size: 2rem;
     font-family: $monoton;
     color: #ffffff;
+}
+
+#userName {
+    font-family: $monoton;
+    font-size: 1.5rem;
+    margin-top: 8px;
+}
+
+.btn-default {
+    border: 3px solid lighten(#ccc, 20%);
+    background-color: #333;
+    cursor: pointer;
+    border-radius: 8px;
+    font-family: $monoton;
+    font-size: 1.6rem;
+    width: 100%;
+    color: darken(#fff, 15%);
+    padding: 8px;
+    margin: 8px 0;
+}
+
+.btn-default:hover {
+    border-style: dotted;
+    background-color: darken(#333, 5%);
+    color: #fff;
+}
+
+.form-input {
+    width: 100%;
+    padding: 8px;
+    font-size: 1.3rem;
+    background-color: #333;
+    border: 2px solid lighten(#ccc, 20%);
+    margin: 8px 0;
+    color: #fff;
+    border-radius: 3px;
+}
+
+.form-input:active {
+    border-color: lighten(#333, 20%);
+}
+
+.wait-for-server {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

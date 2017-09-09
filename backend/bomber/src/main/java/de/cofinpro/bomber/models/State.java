@@ -15,6 +15,7 @@ public class State {
     private List<Position> exploded = new ArrayList<>();
     private List<BombCountPowerup> bombCountPowerups = new ArrayList<>();
     private List<BlastRadiusPowerup> blastRadiusPowerups = new ArrayList<>();
+    private List<Bush> foliage = new ArrayList<>();
     private Long serverTime;
 
     public int getSizeX() {
@@ -146,6 +147,14 @@ public class State {
         bombCountPowerups.add(new BombCountPowerup(position.getX(), position.getY()));
     }
 
+    public List<Bush> getFoliage() {
+        return foliage;
+    }
+
+    public void setFoliage(List<Bush> foliage) {
+        this.foliage = foliage;
+    }
+
     @Override
     public String toString() {
         return "State{" +
@@ -159,6 +168,7 @@ public class State {
                 ", blastRadiusPowerups=" + blastRadiusPowerups +
                 ", bombCountPowerups=" + bombCountPowerups +
                 ", serverTime=" + serverTime +
+                ", foliage=" + foliage +
                 '}';
     }
 }
