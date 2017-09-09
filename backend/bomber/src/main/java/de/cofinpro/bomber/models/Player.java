@@ -8,6 +8,7 @@ public class Player implements Positionable {
     private String nickName;
     private int x;
     private int y;
+    private int blastRadius;
 
     public String getId() {
         return id;
@@ -49,6 +50,14 @@ public class Player implements Positionable {
         return new Position(x, y);
     }
 
+    public void setBlastRadius(int blastRadius) {
+        this.blastRadius = blastRadius;
+    }
+
+    public int getBlastRadius () {
+        return blastRadius;
+    }
+
     @Override
     public String toString() {
         return "Player{" +
@@ -56,6 +65,7 @@ public class Player implements Positionable {
                 ", nickName='" + nickName + '\'' +
                 ", x=" + x +
                 ", y=" + y +
+                ", blastRadius=" + blastRadius +
                 '}';
     }
 }

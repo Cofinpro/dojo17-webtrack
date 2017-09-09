@@ -5,15 +5,18 @@ import { StompService } from 'ng2-stomp-service';
 import { AppComponent } from './app.component';
 import { BattlefieldComponent } from './battlefield/battlefield.component';
 import { WebsocketService } from './services/websocket.service';
+import { GamestartComponent } from './gamestart/gamestart.component';
+import { FormsModule } from "@angular/forms";
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    BattlefieldComponent
+    BattlefieldComponent,
+    GamestartComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule, FormsModule
   ],
   providers: [StompService],
   bootstrap: [AppComponent]
