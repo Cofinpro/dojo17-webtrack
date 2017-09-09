@@ -3,26 +3,25 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class PlayerDataService {
 
-  playerName: string;
-  playerAvatarId: number = 1;
+    playerName: string;
+    playerAvatarId: number = 1;
 
-  constructor() { }
+    constructor() { }
 
-  public getPlayerName(): string {
-    return this.playerName;
-  }
+    public getPlayerName(): string {
+        return this.playerName;
+    }
 
-  public setPlayerName(playername: string): void {
-    this.playerName = playername;
-  }
+    public setPlayerName(playername: string): void {
+        this.playerName = playername;
+    }
 
-  public getPlayerAvatarId(): number {
-    return this.playerAvatarId;
-  }
+    public getPlayerAvatarId(): number {
+        return this.playerAvatarId;
+    }
 
-  public setPlayerAvatarId(playerAvatarId: number): void {
-    this.playerAvatarId = playerAvatarId;
-  }
-
+    public setPlayerAvatarId(playerAvatarId: number): void {
+        this.playerAvatarId = playerAvatarId;
+    }
 
 }

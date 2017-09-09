@@ -37,6 +37,9 @@ public class GameLogic {
     private static final int SCORE_POWERUP = 3500;
     private static final int SCORE_MOVED = 1;
 
+    private static final float POWERUP_SPAWN_PROB_BOMB = 0.15F;
+    private static final float POWERUP_SPAWN_PROB_BLAST = 0.15F;
+
     private State currentState;
 
     private final CopyOnWriteArrayList<MapDefinition> mapDefinitions = new CopyOnWriteArrayList<>();
@@ -310,11 +313,24 @@ public class GameLogic {
                         bombOwner.setScore(bombOwner.getScore() + SCORE_STONE_KILL);
                     }
                     this.currentState.getWeakStones().remove(e.getValue());
+
+                    handlePowerupSpawn(e.getValue().getPosition());
                 });
 
         this.currentState.setServerTime(System.currentTimeMillis());
 
         this.template.convertAndSend("/topic/state", this.currentState);
+    }
+
+    private void handlePowerupSpawn(Position position) {
+        float rand = ThreadLocalRandom.current().nextFloat();
+
+        if (rand < POWERUP_SPAWN_PROB_BOMB) {
+            currentState.addBombCountPowerup(position);
+        } 
+        else if (rand < POWERUP_SPAWN_PROB_BOMB + POWERUP_SPAWN_PROB_BLAST) {
+            currentState.addBlastRadiusPowerup(position);
+        }
     }
 
     private Bomb getExplodedBomb(String bombId) {

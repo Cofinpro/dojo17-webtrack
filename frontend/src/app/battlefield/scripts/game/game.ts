@@ -100,7 +100,7 @@ export class Game {
         this.resources.startLoading();
 
 
-        this.checkResources(this.resources, playerDataService);
+        this.checkResources(this.resources);
 
         // key event init
         document.body.onkeydown = this.checkReturn;
@@ -118,7 +118,7 @@ export class Game {
 
     }
 
-    checkResources(resources, playerDataService) {
+    checkResources(resources: GameResources) {
         console.log('called');
         resources.resourcesLoaded().then( () => {
 
@@ -128,10 +128,10 @@ export class Game {
             playGroundElement.innerHTML = '';
             // this.counterTag.innerHTML = '';
 
-            this.playGround = new PlayGround(playGroundElement, 544, 544, playerDataService);
+            this.playGround = new PlayGround(playGroundElement, 544, 544, this.playerDataService);
             this.playGround.resources = this.resources;
 
-            this.placeHero();
+            this.placeHero(this.playerDataService.getPlayerName());
 
             this.gameLoaded = true;
         });
@@ -171,7 +171,7 @@ export class Game {
       });
     }
 
-    placeHero() {
+    placeHero(playerName: string) {
         this.playGround.removeGameElement(this.hero);
 /*
         let heroImages = {};
@@ -182,7 +182,7 @@ export class Game {
 
         this.hero = this.playGround.createPicture(null, 32, 32, heroImages['right']);
 */
-        this.player  = new NewPlayer({ id: null, nickName: 'Player 1' });
+        this.player  = new NewPlayer({ id: null, nickName: playerName });
         this.playGround.setPlayer(this.player);
 
         this.websocketService.registerPlayer(this.player);

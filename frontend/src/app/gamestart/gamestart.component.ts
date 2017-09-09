@@ -1,34 +1,36 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
-import {PlayerDataService} from "../services/player-data.service";
+import { Component, Input, OnInit, Output } from '@angular/core';
+import { PlayerDataService } from "../services/player-data.service";
+import { GameService } from "../services/game.service";
+import { WebsocketService } from "../services/websocket.service";
 
 @Component({
   selector: 'gamestart',
   templateUrl: './gamestart.component.html',
-  styleUrls: ['./gamestart.component.scss'],
-  providers: []
+  styleUrls: ['./gamestart.component.scss']
 })
 
 export class GamestartComponent implements OnInit {
-  inputPlayerName: boolean = false;
+    inputPlayerName: boolean = false;
 
-  constructor(public playerDataService: PlayerDataService) { }
+    playerName: string;
 
-  ngOnInit() {
-  }
+    constructor(private gameService: GameService, private playerDataService: PlayerDataService) { }
 
-  public toggleGameStart(): void {
-    if (!this.playerDataService.getPlayerName()) {
-      this.inputPlayerName = true;
+    ngOnInit() {
     }
-    else {
-      this.beginGame();
-    }
-  }
 
-  public beginGame(): void {
-    this.inputPlayerName=false;
-    // TODO: call gamestart to start game und begin timer count
-    console.log("tada!");
-  }
+    public toggleGameStart(): void {
+        if (!this.playerDataService.getPlayerName()) {
+            this.inputPlayerName = true;
+        } else {
+            this.beginGame();
+        }
+    }
+
+    public beginGame(): void {
+        this.inputPlayerName = false;
+        this.playerDataService.setPlayerName(this.playerName);
+        this.gameService.startGame();
+    }
 
 }

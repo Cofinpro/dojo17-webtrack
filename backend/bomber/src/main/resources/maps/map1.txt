@@ -1,16 +1,16 @@
 15x15
 xxxxxxxxxxxxxxx
-x   boooo     x
-x x xfxoxfx x x
-x oob  o oo  fx
-xox xox xoxox x
-x booo  bo   ox
-x x xfx xoxox x
-xofooooo   o ox
-xoxfxoxoxbx x x
-x  ooo   ooof x
-xoxoxox xox xox
-xof  o  oboo ox
-xbx x x x x x x
-x     oofo    x
+x    oooo     x
+x xoxoxox xoxox
+xooo   oooo   x
+xoxoxox xoxoxox
+x  ooo   o   ox
+x xoxox xoxoxox
+xooooooo   ooox
+x x xoxoxoxox x
+x   oo   ooo  x
+xoxoxox xoxoxox
+xoo oo  oooooox
+x x x x xox x x
+x     oooo    x
 xxxxxxxxxxxxxxx
