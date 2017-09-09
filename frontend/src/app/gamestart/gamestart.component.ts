@@ -6,8 +6,9 @@ import {PlayerDataService} from "../services/player-data.service";
   selector: 'gamestart',
   templateUrl: './gamestart.component.html',
   styleUrls: ['./gamestart.component.scss'],
-  providers: [PlayerDataService]
+  providers: []
 })
+
 export class GamestartComponent implements OnInit {
   inputPlayerName: boolean = false;
 
@@ -29,6 +30,7 @@ export class GamestartComponent implements OnInit {
     this.inputPlayerName=false;
     // TODO: call gamestart to start game und begin timer count
     console.log("tada!")
+    console.log('avATarId', this.playerDataService.getPlayerAvatarId());
   }
 
 }

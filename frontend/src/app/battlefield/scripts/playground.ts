@@ -1,6 +1,6 @@
 import { GEPicture } from "./gameelements/gepicture";
 import { State, Bomb, Player, Stone, Position, NewPlayer, BombCountPowerup, BlastRadiusPowerup } from "../../models";
-
+import {PlayerDataService} from "../../services/player-data.service";
 
 export class PlayGround {
     image: any;
@@ -31,7 +31,7 @@ export class PlayGround {
     battleFieldSizeX: number;
     battleFieldSizeY: number;
 
-    constructor(tag, height, width) {
+    constructor(tag, height, width, private playerDataService: PlayerDataService) {
         this.obstacles = [];
         this.pickItUps = [];
         this.targets = [];
@@ -173,7 +173,7 @@ export class PlayGround {
                     // no movement
                     direction = this.playersLastDirection[player.id];
                 }
-                const playerImageId = (this.ownPlayer.id === player.id ? 1 : this.getOpponentImageId(player.id));
+                const playerImageId = (this.ownPlayer.id === player.id ? this.playerDataService.getPlayerAvatarId() : this.getOpponentImageId(player.id));
                 this.createPicture(
                     player.id,
                     player.y * 32,
