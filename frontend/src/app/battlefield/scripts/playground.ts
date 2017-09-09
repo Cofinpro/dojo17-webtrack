@@ -73,6 +73,8 @@ export class PlayGround {
 
         this.clearSprites();
 
+        this.updateFixStones(state.fixStones);
+
         this.updateWeakStones(state.weakStones);
 
         this.updatePlayers(state.players);
@@ -91,9 +93,17 @@ export class PlayGround {
         this.sprites = [];
     }
 
-    private updateWeakStones(stones: Stone[]){
+    private updateFixStones(stones: Stone[]) {
+        this.updateStones('fixStone-id', 'wall-light', stones);
+    }
+
+    private updateWeakStones(stones: Stone[]) {
+        this.updateStones('weakStone-id', 'box', stones);
+    }
+
+    private updateStones(id: string, imageId: string, stones: Stone[]){
       for(const stone of stones){
-        this.createPicture("some", stone.y*32, stone.x*32, this.resources.images['box'])
+        this.createPicture(id, stone.y*32, stone.x*32, this.resources.images[imageId])
       }
     }
 
