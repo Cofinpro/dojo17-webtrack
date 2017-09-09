@@ -7,13 +7,15 @@ import { BattlefieldComponent } from './battlefield/battlefield.component';
 import { WebsocketService } from './services/websocket.service';
 import { GamestartComponent } from './gamestart/gamestart.component';
 import { FormsModule } from "@angular/forms";
+import { HighscoreComponent } from './highscore/highscore.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     BattlefieldComponent,
-    GamestartComponent
+    GamestartComponent,
+    HighscoreComponent
   ],
   imports: [
     BrowserModule, FormsModule
