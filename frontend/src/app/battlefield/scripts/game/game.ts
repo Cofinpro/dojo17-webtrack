@@ -7,6 +7,7 @@ import { Bomb, Player, State } from "../../../models";
 import { Subscription, Observer, Subject } from 'rxjs/Rx';
 import { GameResources } from './gameresources';
 import {TimerObservable} from "rxjs/observable/TimerObservable";
+import {PlayerDataService} from "../../../services/player-data.service";
 
 export class Game {
 
@@ -37,7 +38,7 @@ export class Game {
 
     player: Player;
 
-    constructor(private websocketService: WebsocketService) {
+    constructor(private websocketService: WebsocketService, private playerDataService: PlayerDataService) {
 
         this.resources = new GameResources();
 
@@ -202,7 +203,7 @@ export class Game {
 
         this.hero = this.playGround.createPicture(null, 32, 32, heroImages['right']);
 */
-        this.player  = new Player({id: null, x:0,y:0,nickName:'Player 1', blastRadius:4});
+        this.player  = new Player({id: null, x:0, y:0, nickName: this.playerDataService.getPlayerName(), blastRadius:4});
         this.playGround.setPlayer(this.player);
         //this.animator = new HeroAnimator(this.hero, this.playGround, this.websocketService, this.player);
        // this.animator.setImages(heroImages);
