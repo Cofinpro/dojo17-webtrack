@@ -81,6 +81,12 @@ public class GameLogic {
                         result.getFixStones().add(new Stone(curColumn, curRow));
                     } else if (c == 'o' || c == 'O' || c == '0') {
                         result.getWeakStones().add(new Stone(curColumn, curRow));
+                    } else if (c == 'b' || c == 'B') {
+                        result.getBombCountPowerups().add(new BombCountPowerup(curColumn, curRow));
+                    } else if (c== 'f' || c == 'F') {
+                        result.getBlastRadiusPowerups().add(new BlastRadiusPowerup(curColumn, curRow));
+                    } else {
+                        System.out.println("WARN: Code in map generation not recognized and will be ignored: " + c);
                     }
                     curColumn++;
                 }
@@ -98,6 +104,8 @@ public class GameLogic {
         this.currentState.setSizeY(definition.getSizeY());
         this.currentState.setFixStones(definition.getFixStones());
         this.currentState.setWeakStones(definition.getWeakStones());
+        this.currentState.setBlastRadiusPowerups(definition.getBlastRadiusPowerups());
+        this.currentState.setBombCountPowerups(definition.getBombCountPowerups());
         System.out.println("State reset: " + currentState.toString());
     }
 

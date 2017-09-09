@@ -10,6 +10,8 @@ public class MapDefinition {
 
     private List<Stone> fixStones = new ArrayList<>();
     private List<Stone> weakStones = new ArrayList<>();
+    private List<BlastRadiusPowerup> blastRadiusPowerups = new ArrayList<>();
+    private List<BombCountPowerup> bombCountPowerups = new ArrayList<>();
 
     public int getSizeX() {
         return sizeX;
@@ -43,6 +45,22 @@ public class MapDefinition {
         this.weakStones = weakStones;
     }
 
+    public List<BombCountPowerup> getBombCountPowerups() {
+        return bombCountPowerups;
+    }
+
+    public void setBombCountPowerups (List<BombCountPowerup> bombCountPowerups) {
+        this.bombCountPowerups = bombCountPowerups;
+    }
+
+    public List<BlastRadiusPowerup> getBlastRadiusPowerups() {
+        return blastRadiusPowerups;
+    }
+
+    public void setBlastRadiusPowerups (List<BlastRadiusPowerup> blastRadiusPowerups) {
+        this.blastRadiusPowerups = blastRadiusPowerups;
+    }
+
     @Override
     public String toString() {
         return "MapDefinition{" +
@@ -50,6 +68,8 @@ public class MapDefinition {
                 ", sizeY=" + sizeY +
                 ", fixStones=" + fixStones +
                 ", weakStones=" + weakStones +
+                ", bombCountPowerups=" + bombCountPowerups + 
+                ", blastRadiusPowerups=" + blastRadiusPowerups +
                 '}';
     }
 }
