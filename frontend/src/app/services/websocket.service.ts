@@ -54,7 +54,7 @@ export class WebsocketService implements OnDestroy{
             console.log('Sending object', obj);
             this.stomp.send(topic, obj);
         } else {
-            console.log("Not connected yet");
+            console.log('Not connected yet');
         }
     }
 
@@ -66,26 +66,23 @@ export class WebsocketService implements OnDestroy{
         return Math.floor((1 + Math.random()) * 0x10000).toString(16).substr(1);
     }
 
-    //response
     public response = (state: State): State => {
         this.subject.next(state);
-        console.log("Received Player", state);
         return state;
     }
 
     public getState(): Observable<State> {
         return this.subject.asObservable().map((state) => new State(state));
     }
-    
+
     public disconnect() {
-        //disconnect
         this.subscription.unsubscribe();
         this.stomp.disconnect().then(() => {
-            console.log('Connection closed')
-        })
+            console.log('Connection closed');
+        });
     }
 
-    public ngOnDestroy(){
+    public ngOnDestroy() {
         this.disconnect();
     }
 
