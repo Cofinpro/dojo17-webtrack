@@ -28,7 +28,8 @@ body {
     text-align: center;
 }
 
-#time, #score {
+#time, #score, #start, #bomb {
     font-size: 2rem;
     font-family: $monoton;
+    color: #ffffff;
 }
