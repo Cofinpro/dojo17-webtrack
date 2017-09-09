@@ -144,7 +144,7 @@ export class PlayGround {
             if (timeUntilExplosion > 0) {
                 bombSpriteIndex = 'bomb' + Math.max(0, Math.round(timeUntilExplosion / 1000));
             } else {
-                bombSpriteIndex = 'explosion1';
+                bombSpriteIndex = 'explosionFullCenter';
             }
             this.createPicture(bomb.id, bomb.y * 32, bomb.x * 32, this.resources.images[bombSpriteIndex]);
         }
@@ -201,9 +201,7 @@ export class PlayGround {
     public createPicture(id, elmTop, elmLeft, image, isObstacle?) {
         let ctx = isObstacle ? this.obstaclesContext : this.context;
         let pic = new GEPicture(id, elmTop, elmLeft, image, ctx);
-        if (!isObstacle) {
-            this.sprites.push(pic);
-        }
+        this.sprites.push(pic);
         return pic;
     };
 

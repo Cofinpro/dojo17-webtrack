@@ -62,7 +62,7 @@ export class WebsocketService implements OnDestroy{
     }
 
     //response
-    public response(state: State): State {
+    public response = (state: State): State => {
         this.subject.next(state);
         console.log("Received Player", state);
         return state;
