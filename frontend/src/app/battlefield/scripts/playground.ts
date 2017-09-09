@@ -23,6 +23,8 @@ export class PlayGround {
     obstaclesCanvas: any;
     bombs: Bomb[] = [];
     players: Player[] = [];
+    playersLastRound: Player[] = [];
+    playersLastDirection: any[] = [];
     sprites: any[] = [];
     resources;
 
@@ -102,8 +104,33 @@ export class PlayGround {
 
     private updatePlayers(players: Player[]) {
         for (const player of players) {
-            this.createPicture(player.id, player.y * 32, player.x * 32, this.resources.images['hero-1-r']);
+            let direction = '';
+            const playerFromLastRound = this.playersLastRound.find((oldPlayer) => oldPlayer.id === player.id);
+
+            if (this.playersLastRound.length === 0 || playerFromLastRound === undefined) {
+                direction = 'd';
+            } else {
+                if (playerFromLastRound.x < player.x) {
+                    // move right
+                    direction = 'r';
+                } else if (playerFromLastRound.x > player.x) {
+                    // move left
+                    direction = 'l';
+                } else if (playerFromLastRound.y < player.y) {
+                    // move down
+                    direction = 'd';
+                } else if (playerFromLastRound.y > player.y) {
+                    // move up
+                    direction = 'u';
+                } else {
+                    // no movement
+                    direction = this.playersLastDirection[player.id];
+                }
+                this.createPicture(player.id, player.y * 32, player.x * 32, this.resources.images['hero-1-' + direction]);
+            }
+            this.playersLastDirection[player.id] = direction;
         }
+        this.playersLastRound = players;
     }
 
     private updateBombs(bombs: Bomb[]) {
