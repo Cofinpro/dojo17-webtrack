@@ -29,10 +29,12 @@ export class Game {
     end = false;
     startedAt = null;
     hero = null;
-    animator = null;
+    animator: HeroAnimator = null;
 
     counterTag;
     livesTag;
+
+    player: Player;
 
     constructor(private websocketService: WebsocketService) {
 
@@ -74,7 +76,7 @@ export class Game {
 
         // this.counterTag = document.getElementById('picks');
         // this.livesTag = document.getElementById('lives');
-        this.socketSubscription = this.websocketService.getMockState().subscribe((state: State) => {
+        this.socketSubscription = this.websocketService.getState().subscribe((state: State) => {
             console.log('got server message:', state.bombs);
             if (this.playGround && this.playGround.resources) {
                 console.log("playground defined");
@@ -168,7 +170,7 @@ export class Game {
 
     placeHero() {
         this.playGround.removeGameElement(this.hero);
-
+/*
         let heroImages = {};
         heroImages['up'] = this.images['hero-1-u'];
         heroImages['down'] = this.images['hero-1-d'];
@@ -176,9 +178,14 @@ export class Game {
         heroImages['right'] = this.images['hero-1-r'];
 
         this.hero = this.playGround.createPicture(null, 32, 32, heroImages['right']);
-        this.animator = new HeroAnimator(this.hero, this.playGround, this.websocketService);
-        this.animator.setImages(heroImages);
-        this.playGround.addTarget(this.hero);
+*/
+        this.player  = new Player({id: null, x:0,y:0,nickName:'Player 1'});
+        //this.animator = new HeroAnimator(this.hero, this.playGround, this.websocketService, this.player);
+       // this.animator.setImages(heroImages);
+        //this.playGround.addTarget(this.hero);
+        this.startGame();
+
+
     };
 
     // FIXME:
@@ -244,16 +251,6 @@ export class Game {
         }
     };
 
-    setKeyDown(keyCode):void {
-        if (!this.animator) return;
-        this.animator.setKeyDown(keyCode);
-    };
-
-    setKeyUp(keyCode) {
-        if (!this.animator) return;
-        this.animator.setKeyUp(keyCode);
-    };
-
     startGame() {
         document.onkeydown = (e) => {
             let event: any = window.event ? window.event : e;
@@ -276,35 +273,44 @@ export class Game {
                 case 32:
                     break;
             }
-            this.animator.addToActiveDirections(dir);
+            //this.animator.addToActiveDirections(dir);
         };
 
         document.onkeyup = (e) => {
             let event: any = window.event ? window.event : e;
             let keyCode = event.keyCode;
             let dir;
+            let posUpdated = false;
             switch(keyCode){
                 case 37:
-                    dir = this.direction.left;
+                    this.player.x--;
+                    posUpdated = true;
                     break;
                 case 39:
-                    dir = this.direction.right;
+                    this.player.x++;
+                     posUpdated = true;
                     break;
                 case 38:
-                    dir = this.direction.up;
+                    this.player.y++;
+                    posUpdated = true;
                     break;
                 case 40:
-                    dir = this.direction.down;
+                    this.player.y--;    
+                     posUpdated = true;
                     break;
             }
-            this.animator.removeFromActiveDirections(dir);
+            if(posUpdated)
+            {
+                this.websocketService.sendPlayer(this.player);
+            }
+         //   this.animator.removeFromActiveDirections(dir);
         };
 
-        this.audios['loop'].loop = true;
-        this.audios['loop'].volume = 0.8;
-        this.audios['loop'].play();
+      //  this.audios['loop'].loop = true;
+    // this.audios['loop'].volume = 0.8;
+    //    this.audios['loop'].play();
 
-        this.animator.start();
+      //  this.animator.start();
         // this.playGround.startMovers();
         //this.playGround.shieldTarget(this.hero, 2000);
         this.startedAt = null;

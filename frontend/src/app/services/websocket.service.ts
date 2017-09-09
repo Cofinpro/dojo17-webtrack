@@ -8,11 +8,13 @@ import { OnDestroy } from '@angular/core';
 export class WebsocketService implements OnDestroy{
 
     // This is for stomp
-    private subject: Subject<State> = new Subject<State>();
+    private subject: Subject<State>;
     private subscription: any;
     private connected: boolean = false;
 
     constructor(private stomp: StompService) {
+
+        this.subject = new Subject<State>();
         //configuration
         this.stomp.configure({
             host: 'http://localhost:8080',
