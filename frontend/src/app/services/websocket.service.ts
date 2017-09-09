@@ -35,14 +35,14 @@ export class WebsocketService implements OnDestroy{
     }
 
     public registerPlayer(player: NewPlayer): void {
-        if (!player.uuid) {
-            player.uuid = this.generateUUID();
+        if (!player.id) {
+            player.id = this.generateUUID();
         }
-        this.send('/register', player);
+        this.send('/app/register', player);
     }
 
     public sendMovement(movement: Movement): void {
-        this.send('/move', movement);
+        this.send('/app/move', movement);
     }
 
     public sendBomb(playerId: string): void {
