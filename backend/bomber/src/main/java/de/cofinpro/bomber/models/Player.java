@@ -67,6 +67,14 @@ public class Player implements Positionable {
         this.bombCount = bombCount;
     }
 
+    public void increaseBlastRadius() {
+        blastRadius++;
+    }
+
+    public void increaseBombCount() {
+        bombCount++;
+    }
+
     @Override
     public String toString() {
         return "Player{" +

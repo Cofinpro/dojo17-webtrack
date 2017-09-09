@@ -185,6 +185,20 @@ public class GameLogic {
             return null;
         }
 
+        Stream<Position> blastPowerupStream = this.currentState.getBlastRadiusPowerups().stream().map(BlastRadiusPowerup::getPosition);
+        if (blastPowerupStream.anyMatch(p -> p.equals(newPosition))) {
+            System.out.println("Collected blast radius upgrade");
+            player.increaseBlastRadius();
+            this.currentState.removeBlastRadiusPowerup(newPosition);
+        }
+
+        Stream<Position> bombPowerupStream = this.currentState.getBombCountPowerups().stream().map(BombCountPowerup::getPosition);
+        if (bombPowerupStream.anyMatch(p -> p.equals(newPosition))) {
+            System.out.println("Collected bomb count upgrade");
+            player.increaseBombCount();
+            this.currentState.removeBombCountPowerup(newPosition);
+        }
+
         player.setX(newPosition.getX());
         player.setY(newPosition.getY());
 

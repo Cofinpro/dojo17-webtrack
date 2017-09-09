@@ -118,6 +118,26 @@ public class State {
         this.serverTime = serverTime;
     }
 
+    public void removeBombCountPowerup(Position position) {
+        BombCountPowerup found = null;
+        for (BombCountPowerup powerup: bombCountPowerups) {
+            if (powerup.getPosition().equals(position)) {
+                found = powerup;
+            }
+        }
+        bombCountPowerups.remove(found);
+    }
+
+    public void removeBlastRadiusPowerup(Position position) {
+        BlastRadiusPowerup found = null;
+        for (BlastRadiusPowerup powerup: blastRadiusPowerups) {
+            if (powerup.getPosition().equals(position)) {
+                found = powerup;
+            }
+        }
+        blastRadiusPowerups.remove(found);
+    }
+
     @Override
     public String toString() {
         return "State{" +
