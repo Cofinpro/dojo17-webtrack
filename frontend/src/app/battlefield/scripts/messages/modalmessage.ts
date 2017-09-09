@@ -7,24 +7,23 @@ export class ModalMessage {
     public static Cheer = 'cheer';
     public static BadNews = 'bad-news';
    
-    displayMillis
+    displayMillis;
     displayStyle;
     message;
     playGround;
-    tag;
+    tag?: any;
     static messages = [];
 
-    constructor(displayMillis, displayStyle, message, playGround) {
-
-        this.displayMillis = displayMillis;
-        this.displayStyle = displayStyle;
-        this.message = message;
-        this.playGround = playGround;
+    constructor(obj = {} as ModalMessage) {
+        this.displayMillis = obj.displayMillis;
+        this.displayStyle = obj.displayStyle;
+        this.message = obj.message;
+        this.playGround = obj.playGround;
         this.tag = null;
         ModalMessage.messages.push(this);
     }
 
-    show() {
+    public show(): number {
         this.playGround.pause();
         const count = ModalMessage.messages.length;
         this.tag = document.createElement('p');
@@ -58,14 +57,11 @@ export class ModalMessage {
 
     };
 
-    end = function () {
-        this.playGround.endPause();
-        if (!this.parentNode) return;
-
+    end() {
         this.tag.parentNode.removeChild(this.tag);
-        const index = this.messages.indexOf(this.tag);
+        const index = ModalMessage.messages.indexOf(this.tag);
         if (index > -1) {
-            this.messages.splice(index, 1);
+            ModalMessage.messages.splice(index, 1);
         }
     };
 

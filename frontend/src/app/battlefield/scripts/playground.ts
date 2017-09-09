@@ -190,7 +190,7 @@ export class PlayGround {
             console.log('time until explosion: ', timeUntilExplosion);
             let bombSpriteIndex = '';
             if (timeUntilExplosion > 0) {
-                bombSpriteIndex = 'bomb' + Math.max(0, Math.round(timeUntilExplosion / 1000));
+                bombSpriteIndex = 'bomb' + Math.min(Math.max(0, Math.round(timeUntilExplosion / 1000) * 2), 5);
             } else {
                 bombSpriteIndex = 'explosionFullCenter';
             }

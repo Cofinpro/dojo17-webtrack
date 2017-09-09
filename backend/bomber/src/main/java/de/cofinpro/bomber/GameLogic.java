@@ -24,11 +24,11 @@ import java.util.stream.Stream;
 @Component
 public class GameLogic {
 
-    private static final int BOMB_TIMEOUT_SECONDS = 6;
+    private static final int BOMB_TIMEOUT_SECONDS = 3;
 
-    private static final int DEFAULT_BLAST_RADIUS = 4;
+    private static final int DEFAULT_BLAST_RADIUS = 2;
 
-    private static final int DEFAULT_BOMB_COUNT = 3;
+    private static final int DEFAULT_BOMB_COUNT = 2;
 
     private static final int INACTIVITY_TIMEOUT_SECONDS = 20;
 
