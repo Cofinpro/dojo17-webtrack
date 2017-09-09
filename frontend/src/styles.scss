@@ -16,7 +16,7 @@ body {
     background: url("./assets/images/bomberman/1.png") repeat green;
     padding: 16px;
     margin-top: 16px;
-    text-align: center;
+    // text-align: center;
 }
 
 .well {
@@ -31,4 +31,8 @@ body {
 #time, #score {
     font-size: 2rem;
     font-family: $monoton;
+}
+
+#playground {
+    margin: 0 auto;
 }

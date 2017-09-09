@@ -98,6 +98,7 @@ public class GameLogic {
     }
 
     synchronized State addOrMovePlayer(Player player) {
+        System.out.println("Adding or Moving Player: " + player);
         this.currentState.setExploded(null);
 
         Player existing;
@@ -112,10 +113,12 @@ public class GameLogic {
         }
 
         if (existing != null) {
+            System.out.println("Player found, updating his position");
             existing.setX(player.getX());
             existing.setY(player.getY());
         } else {
             Position newPosition = randomValidPosition();
+            System.out.println("New player! Sending him to position: " + newPosition);
             player.setX(newPosition.getX());
             player.setY(newPosition.getY());
             this.currentState.getPlayers().add(player);
@@ -126,6 +129,7 @@ public class GameLogic {
     }
 
     synchronized State addBomb(Bomb bomb) {
+        System.out.println("Adding a bomb: " + bomb);
         this.currentState.setExploded(null);
 
         final String bombId = UUID.randomUUID().toString();
@@ -153,6 +157,8 @@ public class GameLogic {
         if (explodedBomb == null) {
             return;
         }
+
+        System.out.println("Bomb detonated: " + explodedBomb);
 
         // Build maps for all objects, to find them easily by position
         MapObjects objects = new MapObjects(this.currentState);
