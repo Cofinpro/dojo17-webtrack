@@ -148,7 +148,8 @@ public class GameLogic {
         // remove exploded players and stones
         objects.getPlayers().entrySet().stream()
                 .filter(e -> blownPositions.contains(e.getKey()))
-                .forEach(e -> this.currentState.getPlayers().remove(e.getValue()));
+                .flatMap(e -> e.getValue().stream())
+                .forEach(p -> this.currentState.getPlayers().remove(p));
         objects.getWeakStones().entrySet().stream()
                 .filter(e -> blownPositions.contains(e.getKey()))
                 .forEach(e -> this.currentState.getWeakStones().remove(e.getValue()));
@@ -168,7 +169,7 @@ public class GameLogic {
     private void recursiveExplodeBomb(Bomb explodedBomb, MapObjects objects, Set<Position> blownPositions) {
         // remove bomb from state and map
         this.currentState.getBombs().remove(explodedBomb);
-        objects.getBombs().remove(explodedBomb.getPosition());
+        objects.getBombs().remove(explodedBomb.getPosition());  // may remove more than one: they both exploded, makes no difference
 
         // determine exploded positions
         addBlownPositions(explodedBomb, objects, blownPositions);
@@ -176,7 +177,8 @@ public class GameLogic {
         // Explode next bombs - weak stones will still stop them (objects map not changed)
         objects.getBombs().entrySet().stream()
                 .filter(e -> blownPositions.contains(e.getKey()))
-                .forEach(e -> recursiveExplodeBomb(e.getValue(), objects, blownPositions));
+                .flatMap(e -> e.getValue().stream())
+                .forEach(b -> recursiveExplodeBomb(b, objects, blownPositions));
     }
 
     private void addBlownPositions(Bomb explodedBomb, MapObjects objects, Set<Position> result) {
