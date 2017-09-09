@@ -32,6 +32,10 @@ public class GameLogic {
 
     private static final int INACTIVITY_TIMEOUT_SECONDS = 20;
 
+    private static final int ROUND_TIME_SECONDS = 120;
+
+    private static final int SUDDEN_DEATH_INTERVAL_MILLIS = 500;
+
     private static final int SCORE_PLAYER_KILL = 10000;
     private static final int SCORE_STONE_KILL = 1500;
     private static final int SCORE_POWERUP = 3500;
@@ -47,6 +51,8 @@ public class GameLogic {
     private final ThreadPoolTaskScheduler scheduler;
 
     private SimpMessagingTemplate template;
+
+    private int currentRound = 0;
 
     @Autowired
     public GameLogic(SimpMessagingTemplate template) {
@@ -120,7 +126,53 @@ public class GameLogic {
         this.currentState.setBlastRadiusPowerups(definition.getBlastRadiusPowerups());
         this.currentState.setBombCountPowerups(definition.getBombCountPowerups());
         this.currentState.setFoliage(definition.getFoliage());
+        this.currentRound++;
         System.out.println("State reset: " + currentState.toString());
+
+        scheduler.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                startSuddenDeath(currentRound);
+            }
+        }, new Date(System.currentTimeMillis() + (ROUND_TIME_SECONDS * 1000)));
+    }
+
+    private synchronized void startSuddenDeath(int affectedRound) {
+        if (affectedRound != currentRound) {
+            return;
+        }
+
+        placeVerticalFixStones(0,0);
+    }
+
+    private synchronized void placeVerticalFixStones(int row, int col) {
+        this.currentState.getFixStones().add(new Stone(col, row));
+        Position deathPos = new Position(col, row);
+
+        Player killedPlayer = null;
+        for (Player p: this.currentState.getPlayers()) {
+            if (deathPos.equals(p.getPosition())) {
+                killedPlayer = p;
+                break;
+            }
+        }
+        if (killedPlayer != null) {
+            System.out.println("Player killed by sudden death: " + killedPlayer);
+            this.currentState.getPlayers().remove(killedPlayer);
+            handleKilledPlayerUpgrades(killedPlayer);
+        }
+
+        scheduler.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (col + 1 < this.currentState.getSizeX()) {
+                    placeVerticalFixStones(row, col + 1);
+                }
+                else if (row + 1 < this.currentState.getSizeY()) {
+                    placeVerticalFixStones(row +1, 0);
+                }
+            }
+        }, new Date(System.currentTimeMillis() + (SUDDEN_DEATH_INTERVAL_MILLIS)));
     }
 
     synchronized State addPlayer(NewPlayer newPlayer) {
