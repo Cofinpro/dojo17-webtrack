@@ -29,7 +29,7 @@ export class PlayGround {
     sprites: GEPicture[] = [];
     resources;
 
-    constructor(tag, height, width, player) {
+    constructor(tag, height, width) {
         this.obstacles = [];
         this.pickItUps = [];
         this.targets = [];
@@ -43,8 +43,6 @@ export class PlayGround {
         this.height = height;
         this.tag = tag;
         this.paused = false;
-
-        this.ownPlayer = player;
 
         this.canvas = document.createElement('canvas');
         this.obstaclesCanvas = document.createElement('canvas');
@@ -66,6 +64,10 @@ export class PlayGround {
         this.tag.style.width = width + 'px';
         this.tag.style.height = height + 'px';
 
+    }
+
+    public setPlayer(player: Player) {
+        this.ownPlayer = player;
     }
 
     public updateState(state: State) {

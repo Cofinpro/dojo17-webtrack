@@ -124,7 +124,7 @@ export class Game {
             playGroundElement.innerHTML = '';
             // this.counterTag.innerHTML = '';
 
-            this.playGround = new PlayGround(playGroundElement, 544, 544, this.player);
+            this.playGround = new PlayGround(playGroundElement, 544, 544);
             this.playGround.resources = this.resources;
 
             this.playGround.setPickItUpCallBack(this.picked);
@@ -203,6 +203,7 @@ export class Game {
         this.hero = this.playGround.createPicture(null, 32, 32, heroImages['right']);
 */
         this.player  = new Player({id: null, x:0,y:0,nickName:'Player 1'});
+        this.playGround.setPlayer(this.player);
         //this.animator = new HeroAnimator(this.hero, this.playGround, this.websocketService, this.player);
        // this.animator.setImages(heroImages);
         //this.playGround.addTarget(this.hero);
