@@ -20,12 +20,13 @@ import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @ApplicationScope
 @Component
 public class GameLogic {
 
-    private static final int BOMB_TIMEOUT_SECONDS = 10;
+    private static final int BOMB_TIMEOUT_SECONDS = 6;
 
     private static final int BOMB_RADIUS = 4;
 
@@ -95,6 +96,82 @@ public class GameLogic {
         this.currentState.setFixStones(definition.getFixStones());
         this.currentState.setWeakStones(definition.getWeakStones());
         System.out.println("State reset: " + currentState.toString());
+    }
+
+    synchronized State addPlayer(NewPlayer newPlayer) {
+        System.out.println("Adding new player: " + newPlayer);
+        Player existing;
+        if (this.currentState.getPlayers().isEmpty()) {
+            resetState();
+            existing = null;
+        } else {
+            existing = this.currentState.getPlayers().stream()
+                    .filter(p -> p.getId().equals(newPlayer.getId()))
+                    .findFirst()
+                    .orElse(null);
+        }
+
+        if (existing == null) {
+            System.out.println("Hacker tried to log again");
+            return null;  // No change
+        }
+
+        Position newPosition = randomValidPosition();
+        System.out.println("Sending new player to position: " + newPosition);
+        Player player = new Player();
+        player.setId(newPlayer.getId());
+        player.setNickName(newPlayer.getNickName());
+        player.setX(newPosition.getX());
+        player.setY(newPosition.getY());
+        this.currentState.getPlayers().add(player);
+
+        this.currentState.setServerTime(LocalDateTime.now());
+        return this.currentState;
+    }
+
+    synchronized State movePlayer(Movement movement) {
+        System.out.println("Moving player: " + movement);
+        Player player = this.currentState.getPlayers().stream()
+                .filter(p -> p.getId().equals(movement.getPlayerId()))
+                .findFirst()
+                .orElse(null);
+
+        if (player == null) {
+            System.out.println("Tried to move unexisting player");
+            return null;
+        }
+
+        Position newPosition;
+        if (Character.toLowerCase(movement.getDirection()) == 'u') {
+            newPosition = new Position(player.getX(), player.getY() - 1);
+        } else if (Character.toLowerCase(movement.getDirection()) == 'd') {
+            newPosition = new Position(player.getX(), player.getY() + 1);
+        } else if (Character.toLowerCase(movement.getDirection()) == 'l') {
+            newPosition = new Position(player.getX() - 1, player.getY());
+        } else if (Character.toLowerCase(movement.getDirection()) == 'r') {
+            newPosition = new Position(player.getX() + 1, player.getY());
+        } else {
+            System.out.println("Wrong direction sent");
+            return null;
+        }
+
+        if (newPosition.getX() < 0 || newPosition.getX() >= this.currentState.getSizeX()
+                || newPosition.getY() < 0 || newPosition.getY() >= this.currentState.getSizeY()) {
+            System.out.println("Tried to move out of the field");
+            return null;
+        }
+
+        Stream<Position> fixedStream = this.currentState.getFixStones().stream().map(Stone::getPosition);
+        Stream<Position> weakStream = this.currentState.getWeakStones().stream().map(Stone::getPosition);
+        if (Stream.concat(fixedStream, weakStream).anyMatch(p -> p.equals(newPosition))) {
+            System.out.println("Collision - invalid position");
+            return null;
+        }
+
+        player.setX(newPosition.getX());
+        player.setY(newPosition.getY());
+
+        return this.currentState;
     }
 
     synchronized State addOrMovePlayer(Player player) {
