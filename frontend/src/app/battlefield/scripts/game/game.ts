@@ -8,7 +8,6 @@ import { Subscription, Observer, Subject } from 'rxjs/Rx';
 import { GameResources } from './gameresources';
 import {TimerObservable} from "rxjs/observable/TimerObservable";
 
-
 export class Game {
 
     public game;
