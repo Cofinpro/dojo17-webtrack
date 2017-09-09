@@ -5,9 +5,11 @@
 
 <battlefield [hidden]="!this.websocketService.connected"></battlefield>
 
-<div [hidden]="this.websocketService.connected" style="text-align: center">
-  <span>Backend is away, stay tuned!</span><br>
-  <img src="../assets/images/stayingalive.gif">
+<div [hidden]="this.websocketService.connected">
+  <div  class="wait-for-server">
+    <h2>Backend is away, stay tuned!</h2>
+    <img src="../assets/images/stayingalive.gif">
+</div>
 </div>
 
 <!-- put the main components here -->
