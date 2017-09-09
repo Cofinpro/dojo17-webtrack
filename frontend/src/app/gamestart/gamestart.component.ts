@@ -3,7 +3,6 @@ import { PlayerDataService } from "../services/player-data.service";
 import { GameService } from "../services/game.service";
 import { WebsocketService } from "../services/websocket.service";
 
-
 @Component({
   selector: 'gamestart',
   templateUrl: './gamestart.component.html',

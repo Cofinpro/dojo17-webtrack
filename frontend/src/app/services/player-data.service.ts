@@ -17,12 +17,10 @@ export class PlayerDataService {
     }
 
     public getPlayerAvatarId(): number {
-        // console.log("avatar ", this.playerAvatarId);
         return this.playerAvatarId;
     }
 
     public setPlayerAvatarId(playerAvatarId: number): void {
-        console.log("player id", playerAvatarId);
         this.playerAvatarId = playerAvatarId;
     }
 

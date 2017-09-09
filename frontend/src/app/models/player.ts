@@ -11,6 +11,7 @@ export class Player {
   y: number;
   nickName: string;
   blastRadius: number;
+  score: number;
 
   constructor(obj = {} as Player) {
     this.id = obj.id;
@@ -18,5 +19,6 @@ export class Player {
     this.y = obj.y;
     this.nickName = obj.nickName;
     this.blastRadius = obj.blastRadius;
+    this.score = obj.score;
   }
 }
