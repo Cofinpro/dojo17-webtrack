@@ -101,29 +101,8 @@ export class Game {
 
             this.playGround.setPickItUpCallBack(this.picked);
             this.playGround.setTargetCaughtCallBack(this.caught);
-
-            const wallDark = this.images['wall-dark'];
-            const wallLight = this.images['wall-light'];
-            let obstacle;
-
-            for (let y = 0; y < 17; y++) {
-                for (let x = 0; x < 17; x++) {
-                    if (x === 0 && y === 0 || x === 16 && y === 0) {
-                        obstacle = this.playGround.createPicture(null, y * 32 , x * 32, wallLight, true);
-                        this.playGround.addObstacle(obstacle);
-                    } else if (y === 0 || y === 16) {
-                        obstacle = this.playGround.createPicture(null, y * 32 , x * 32, wallDark, true);
-                        this.playGround.addObstacle(obstacle);
-                    } else if (x === 0 || x === 16) {
-                        obstacle = this.playGround.createPicture(null, y * 32 , x * 32, wallLight, true);
-                        this.playGround.addObstacle(obstacle);
-                    } else if (x % 2 === 0 && y % 2 === 0) {
-                        obstacle = this.playGround.createPicture(null, y * 32 , x * 32, wallLight, true);
-                        this.playGround.addObstacle(obstacle);
-                    }
-                }
-            }
             this.placeHero();
+
             this.gameLoaded = true;
         });
     }
@@ -162,7 +141,6 @@ export class Game {
       });
     }
 
-
     placeHero() {
         this.playGround.removeGameElement(this.hero);
 /*
@@ -175,13 +153,20 @@ export class Game {
         this.hero = this.playGround.createPicture(null, 32, 32, heroImages['right']);
 */
         this.player  = new Player({id: null, x:0,y:0,nickName:'Player 1'});
+        // also set in PayGround
+        this.playGround.localPlayer = this.player;
         //this.animator = new HeroAnimator(this.hero, this.playGround, this.websocketService, this.player);
        // this.animator.setImages(heroImages);
         //this.playGround.addTarget(this.hero);
         this.startGame();
+    }
 
-
-    };
+    isGameOver(): boolean {
+        if (this.playGround) {
+            return this.playGround.isGameOver();
+        }
+        return false;
+    }
 
     // FIXME:
     // public placeBomb(x: number, y: number): void {
@@ -315,38 +300,34 @@ export class Game {
         //this.playGround.shieldTarget(this.hero, 2000);
         this.startedAt = null;
         this.end = false;
-    };
+    }
 
     movePlayerLeft(){
-        if(this.player.x>1)
-        {
+        if (this.player.x > 1) {
             this.player.x--;
             return true;
         }
         return false;
     }
 
-    movePlayerRight(){
-        if(this.player.x<13)
-        {
+    movePlayerRight() {
+        if (this.player.x < 13) {
             this.player.x++;
             return true;
         }
         return false;
     }
 
-    movePlayerDown(){
-        if(this.player.y<13)
-        {
+    movePlayerDown() {
+        if (this.player.y < 13) {
             this.player.y++;
             return true;
         }
         return false;
     }
 
-    movePlayerUp(){
-        if(this.player.y>1)
-        {
+    movePlayerUp() {
+        if (this.player.y > 1) {
             this.player.y--;
             return true;
         }
@@ -360,22 +341,22 @@ export class Game {
         document.onkeyup = null;
         this.animator.stop();
         this.animator = null;
-    };
+    }
 
     resumeGame() {
         this.playGround.endPause();
-    };
+    }
 
     pauseGame(millis) {
         this.playGround.pause();
         if (millis) {
             return setTimeout(this.resumeGame, millis);
         }
-    };
+    }
 
     isPaused() {
         return this.playGround.isPaused();
-    };
+    }
 
     getPlayGround() {
         return this.playGround;

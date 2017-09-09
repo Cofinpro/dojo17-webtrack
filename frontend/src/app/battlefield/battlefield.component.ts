@@ -34,4 +34,8 @@ export class BattlefieldComponent implements OnInit, OnDestroy {
         return this.game && this.game.isGameLoaded();
     }
 
+    gameOver() {
+        return this.game && this.game.isGameOver();
+    }
+
 }

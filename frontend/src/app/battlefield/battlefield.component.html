@@ -1,6 +1,10 @@
 <div class="is-loading" *ngIf="!gameLoaded()">
     <img src="assets/images/loading.png" />
 </div>
+<div class="is-game-over" *ngIf="gameOver()">
+    <img src="assets/images/gameover.png" />
+</div>
+
 <div class="row" [hidden]="gameLoaded()">
     <div class="col-md-6">
         <div class="well">
