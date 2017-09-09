@@ -1,5 +1,7 @@
 import { PlayGround } from '../playground';
 import { Direction } from './direction';
+import { WebsocketService } from '../../../services/websocket.service';
+import { Player } from "../../../models";
 /**
  * Created by mhinz on 5/12/2017.
  */
@@ -18,7 +20,7 @@ export class HeroAnimator {
     images: any;
 
 
-    constructor(element: any, playGround: PlayGround){
+    constructor(element: any, playGround: PlayGround, private websocketService: WebsocketService, private player: Player){
         this.stepWidth = 32;
 
         this.element = element;
@@ -130,24 +132,9 @@ export class HeroAnimator {
 
     if(move.horizontal == 0 && move.vertical == 0) return;
 
-    let imageToPaint = this.images['right'];
-    if(move.horizontal < 0)imageToPaint = this.images['left'];
 
-    if (imageToPaint && imageToPaint != this.currentImage && move.horizontal != 0) {
-        this.element.setImage(imageToPaint);
-        this.currentImage = imageToPaint;
-    }
-
-    let newPos = this.playGround.checkBorder(this.element, move);
-    if(newPos.hrzCollission || newPos.vrtCollission){
-        this.element.setPosition(newPos.top, newPos.left);
-        this.playGround.checkPickItUp(this.element, move);
-        return;
-    }
-
-    newPos = this.playGround.checkObstacle(this.element,move);
-    this.element.setPosition(newPos.top, newPos.left);
-    this.playGround.checkPickItUp(this.element, move);
+    let newPos = this.playGround.checkObstacle(this.element,move);
+    debugger;
 };
 
 

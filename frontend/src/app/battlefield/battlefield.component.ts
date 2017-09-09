@@ -1,5 +1,5 @@
 import { WebsocketService } from '../services/websocket.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 
 import { Game } from './scripts/game/game';
 
@@ -9,7 +9,6 @@ import { Game } from './scripts/game/game';
     styleUrls: ['./battlefield.component.scss'],
     providers: [WebsocketService]
 })
-
 
 /**
 * The battlefields holds the 2D game logic
@@ -24,6 +23,16 @@ export class BattlefieldComponent implements OnInit {
         // start game
         this.game = new Game(this.websocketService);
         this.game.startTimer();
+    }
+
+    gameLoaded() {
+        return this.game && this.game.isGameLoaded();
+    }
+
+    @HostListener('window:beforeunload', ['$event'])
+    unloadHandler(event) {
+        this.game.socketSubscription.unsubscribe();
+        console.log('unsubscribing');
     }
 
 }

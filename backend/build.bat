@@ -1,1 +1,1 @@
-docker build -t bomber python
+docker build -t bomber bomber
