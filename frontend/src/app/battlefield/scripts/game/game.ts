@@ -203,7 +203,7 @@ export class Game {
 
         this.hero = this.playGround.createPicture(null, 32, 32, heroImages['right']);
 */
-        this.player  = new NewPlayer({ uuid: null, nickName: 'Player 1' });
+        this.player  = new NewPlayer({ id: null, nickName: 'Player 1' });
         this.websocketService.registerPlayer(this.player);
         //this.animator = new HeroAnimator(this.hero, this.playGround, this.websocketService, this.player);
        // this.animator.setImages(heroImages);
@@ -306,7 +306,7 @@ export class Game {
             let keyCode = event.keyCode;
             let dir;
             let posUpdated = false;
-            const movement: Movement = new Movement({ playerId: this.player.uuid });
+            const movement: Movement = new Movement({ playerId: this.player.id });
             switch(keyCode){
                 case 37:
                     movement.direction = 'L';
@@ -321,7 +321,7 @@ export class Game {
                     movement.direction = 'D';
                     break;
                 case 32:
-                    this.websocketService.sendBomb(this.player.uuid);
+                    this.websocketService.sendBomb(this.player.id);
                     break;
             }
             if (movement.direction) {

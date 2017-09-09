@@ -1,10 +1,10 @@
 export class NewPlayer {
 
-    uuid: string;
+    id: string;
     nickName: string;
 
     constructor(obj = {} as NewPlayer) {
-        this.uuid = obj.uuid;
+        this.id = obj.id;
         this.nickName = obj.nickName;
     }
 
