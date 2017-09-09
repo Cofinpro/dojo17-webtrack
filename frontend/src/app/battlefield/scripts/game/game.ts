@@ -2,7 +2,6 @@ import { WebsocketService } from '../../../services/websocket.service';
 import { PlayGround } from '../playground';
 import { Direction } from '../move/direction';
 import { HeroAnimator } from '../move/heroanimator';
-import { ModalMessage } from '../messages/modalmessage';
 import { Bomb, NewPlayer, Player, State, Movement, NewBomb } from "../../../models";
 import { Subscription, Observer, Subject } from 'rxjs/Rx';
 import { GameResources } from './gameresources';
@@ -131,7 +130,7 @@ export class Game {
 
             this.playGround = new PlayGround(playGroundElement, 544, 544);
             this.playGround.resources = this.resources;
-            
+
             this.placeHero();
 
             this.gameLoaded = true;
@@ -258,14 +257,6 @@ export class Game {
     }
 
     shutDownGame() {
-        new ModalMessage({
-            displayMillis: 5000,
-            displayStyle: ModalMessage.Cheer,
-            message: 'Bye Bye',
-            playGround: this.playGround,
-            show: null,
-            end: null
-        }).show();
         this.end = true;
         document.onkeydown = null;
         document.onkeyup = null;

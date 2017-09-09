@@ -183,7 +183,10 @@ public class GameLogic {
 
         Stream<Position> fixedStream = this.currentState.getFixStones().stream().map(Stone::getPosition);
         Stream<Position> weakStream = this.currentState.getWeakStones().stream().map(Stone::getPosition);
-        if (Stream.concat(fixedStream, weakStream).anyMatch(p -> p.equals(newPosition))) {
+        Stream<Position> bombStream = this.currentState.getBombs().stream().map(Bomb::getPosition);
+        Stream<Position> playerStream = this.currentState.getPlayers().stream().map(Player::getPosition);
+        if (Stream.concat(Stream.concat(Stream.concat(fixedStream, weakStream), bombStream), playerStream)
+                .anyMatch(p -> p.equals(newPosition))) {
             System.out.println("Collision - invalid position");
             return null;
         }
@@ -298,17 +301,24 @@ public class GameLogic {
 
     private void recursiveExplodeBomb(Bomb explodedBomb, MapObjects objects, Set<Position> blownPositions) {
         // remove bomb from state and map
-        this.currentState.getBombs().remove(explodedBomb);
+        boolean found = this.currentState.getBombs().remove(explodedBomb);
+        if (!found) {
+            return;   // Already removed in another iteration
+        }
         objects.getBombs().remove(explodedBomb.getPosition());  // may remove more than one: they both exploded, makes no difference
 
         // determine exploded positions
         addBlownPositions(explodedBomb, objects, blownPositions);
 
         // Explode next bombs - weak stones will still stop them (objects map not changed)
-        objects.getBombs().entrySet().stream()
+        // Don't stream them - the recursive function may change things
+        Set<Bomb> toExplode = objects.getBombs().entrySet().stream()
                 .filter(e -> blownPositions.contains(e.getKey()))
                 .flatMap(e -> e.getValue().stream())
-                .forEach(b -> recursiveExplodeBomb(b, objects, blownPositions));
+                .collect(Collectors.toCollection(HashSet::new));
+        for (Bomb exploding : toExplode) {
+            recursiveExplodeBomb(exploding, objects, blownPositions);
+        }
     }
 
     private void addBlownPositions(Bomb explodedBomb, MapObjects objects, Set<Position> result) {
@@ -398,10 +408,17 @@ public class GameLogic {
                     ThreadLocalRandom.current().nextInt(0, this.currentState.getSizeX()),
                     ThreadLocalRandom.current().nextInt(0, this.currentState.getSizeY()));
 
-            invalid = objects.getWeakStones().containsKey(result) || objects.getFixStones().containsKey(result);
+            invalid = !isPositionValid(result, objects);
         } while (invalid);
 
         return result;
+    }
+
+    private boolean isPositionValid(Position position, MapObjects objects) {
+        return !(objects.getWeakStones().containsKey(position)
+                || objects.getFixStones().containsKey(position)
+                || objects.getBombs().containsKey(position)
+                || objects.getPlayers().containsKey(position));
     }
 
     /*
