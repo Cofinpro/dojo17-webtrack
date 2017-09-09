@@ -1,6 +1,8 @@
 package de.cofinpro.bomber;
 
-import de.cofinpro.bomber.models.*;
+import de.cofinpro.bomber.models.Movement;
+import de.cofinpro.bomber.models.NewPlayer;
+import de.cofinpro.bomber.models.State;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -14,12 +16,6 @@ public class EventHandler {
     @Autowired
     public EventHandler(GameLogic gameLogic) {
         this.gameLogic = gameLogic;
-    }
-
-    @MessageMapping("/player")
-    @SendTo("/topic/state")
-    public State playerUpdate(Player player) throws Exception {
-        return gameLogic.addOrMovePlayer(player);
     }
 
     @MessageMapping("/register")

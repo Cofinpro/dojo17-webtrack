@@ -138,11 +138,15 @@ public class GameLogic {
         player.setBombCount(DEFAULT_BOMB_COUNT);
         this.currentState.getPlayers().add(player);
 
+        // TODO Start a timer to kill player for inactivity
+
         this.currentState.setServerTime(System.currentTimeMillis());
         return this.currentState;
     }
 
     synchronized State movePlayer(Movement movement) {
+        // TODO Reset player timer
+
         System.out.println("Moving player: " + movement);
         Player player = this.currentState.getPlayers().stream()
                 .filter(p -> p.getId().equals(movement.getPlayerId()))
@@ -187,39 +191,9 @@ public class GameLogic {
         return this.currentState;
     }
 
-    @Deprecated
-    synchronized State addOrMovePlayer(Player player) {
-        System.out.println("Adding or Moving Player: " + player);
-        this.currentState.setExploded(null);
-
-        Player existing;
-        if (this.currentState.getPlayers().isEmpty()) {
-            resetState();
-            existing = null;
-        } else {
-            existing = this.currentState.getPlayers().stream()
-                    .filter(p -> p.getId().equals(player.getId()))
-                    .findFirst()
-                    .orElse(null);
-        }
-
-        if (existing != null) {
-            System.out.println("Player found, updating his position");
-            existing.setX(player.getX());
-            existing.setY(player.getY());
-        } else {
-            Position newPosition = randomValidPosition();
-            System.out.println("New player! Sending him to position: " + newPosition);
-            player.setX(newPosition.getX());
-            player.setY(newPosition.getY());
-            this.currentState.getPlayers().add(player);
-        }
-
-        this.currentState.setServerTime(System.currentTimeMillis());
-        return this.currentState;
-    }
-
     synchronized State addBomb(String playerId) {
+        // TODO Reset timer for player
+
         System.out.println("Adding a bomb for player: " + playerId);
         this.currentState.setExploded(null);
 
@@ -409,5 +383,17 @@ public class GameLogic {
 
         return result;
     }
+
+    /*
+    private void startTimerForUser(final String userId) {
+        scheduler.scheduleWithFixedDelay(new TimerTask() {
+            @Override
+            public void run() {
+                explodeBomb(bombId);
+            }
+        }, BOMB_TIMEOUT_SECONDS * 1000);
+
+    }
+    */
 
 }
