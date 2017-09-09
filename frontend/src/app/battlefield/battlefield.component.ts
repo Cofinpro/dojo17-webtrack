@@ -2,13 +2,12 @@ import { WebsocketService } from '../services/websocket.service';
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 
 import { Game } from './scripts/game/game';
-import {PlayerDataService} from "../services/player-data.service";
 
 @Component({
     selector: 'battlefield',
     templateUrl: './battlefield.component.html',
     styleUrls: ['./battlefield.component.scss'],
-    providers: [WebsocketService, PlayerDataService]
+    providers: [WebsocketService]
 })
 
 /**
