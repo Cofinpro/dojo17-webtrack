@@ -30,7 +30,7 @@ services:
     bomber:
         image: de.cofinpro.dojo/bomberscale:1.0-SNAPSHOT
         deploy:
-            replicas: 4
+            replicas: 1
         ports:
             - "3000:8080"
         depends_on:

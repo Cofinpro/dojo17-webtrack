@@ -18,7 +18,7 @@ import { Player } from './models/player';
 export class AppComponent {
     title = 'Cofinpro Bomberman';
 
-    constructor(private websocketService: WebsocketService, private playerDataService: PlayerDataService, private gameService: GameService) {
+    constructor(public websocketService: WebsocketService, public playerDataService: PlayerDataService, private gameService: GameService) {
 
     }
 }
