@@ -22,12 +22,15 @@ export class PlayGround {
     canvas: any;
     obstaclesCanvas: any;
     bombs: Bomb[] = [];
+    ownPlayerDied: boolean;
     players: Player[] = [];
     ownPlayer: NewPlayer;
     playersLastRound: Player[] = [];
     playersLastDirection: any[] = [];
     sprites: GEPicture[] = [];
     resources;
+    battleFieldSizeX: number;
+    battleFieldSizeY: number;
 
     constructor(tag, height, width) {
         this.obstacles = [];
@@ -35,6 +38,7 @@ export class PlayGround {
         this.targets = [];
         this.movers = [];
         this.protectedAreas = [];
+        this.ownPlayerDied = false;
 
         this.pickItUpCallBack = null;
         this.tragetCallBack = null;
@@ -76,6 +80,14 @@ export class PlayGround {
             return;
         }
 
+        if (!this.battleFieldSizeX) {
+            this.battleFieldSizeX = state.sizeX;
+        }
+
+        if (!this.battleFieldSizeY) {
+            this.battleFieldSizeY = state.sizeY;
+        }
+
         this.clearSprites();
 
         this.updateFixStones(state.fixStones);
@@ -83,9 +95,9 @@ export class PlayGround {
         this.updateWeakStones(state.weakStones);
 
         this.updateBombs(state.bombs);
-        
+
         this.updateExploded(state.exploded);
-        
+
         this.updatePlayers(state.players);
 
     }
@@ -99,22 +111,24 @@ export class PlayGround {
     }
 
     private updateFixStones(stones: Stone[]) {
-        this.updateStones('fixStone-id', 'wall-light', stones);
+        for (const stone of stones) {
+            let imageId = 'wall-light';
+            if (stone.x !== 0 && (stone.y === 0 || stone.y === this.battleFieldSizeY)) {
+                imageId = 'wall-dark';
+            }
+            this.createPicture('fixStone-id', stone.y * 32, stone.x * 32, this.resources.images[imageId]);
+        }
     }
 
     private updateWeakStones(stones: Stone[]) {
-        this.updateStones('weakStone-id', 'box', stones);
-    }
-
-    private updateStones(id: string, imageId: string, stones: Stone[]){
-      for(const stone of stones){
-        this.createPicture(id, stone.y*32, stone.x*32, this.resources.images[imageId])
-      }
+        for (const stone of stones) {
+            this.createPicture('weakStone-id', stone.y * 32, stone.x * 32, this.resources.images['box']);
+        }
     }
 
     private updateExploded(positions: Position[]){
-        for(const position of positions){
-          this.createPicture("some", position.y*32, position.x*32, this.resources.images['explosionFullCenter'])
+        for (const position of positions){
+            this.createPicture('some', position.y * 32, position.x * 32, this.resources.images['explosionFullCenter']);
         }
       }
 
@@ -154,6 +168,14 @@ export class PlayGround {
             this.playersLastDirection[player.id] = direction;
         }
         this.playersLastRound = players;
+        // still alive or died?
+        if (this.ownPlayer && !players.find((player) => player.id === this.ownPlayer.id)) {
+            this.ownPlayerDied = true;
+        }
+    }
+
+    public isGameOver(): boolean {
+        return this.ownPlayerDied;
     }
 
     private getOpponentImageId(id) {
@@ -165,6 +187,7 @@ export class PlayGround {
         for (const bomb of bombs) {
             // display correct sprite for bomb according to detonation time
             const timeUntilExplosion = bomb.detonateAt.getTime() - now.getTime();
+            console.log('time until explosion: ', timeUntilExplosion);
             let bombSpriteIndex = '';
             if (timeUntilExplosion > 0) {
                 bombSpriteIndex = 'bomb' + Math.max(0, Math.round(timeUntilExplosion / 1000));
@@ -203,15 +226,15 @@ export class PlayGround {
         let borderColor = this.tag.style.borderColor;
 
         return {width: borderWidth, style: borderStyle, color: borderColor};
-    };
+    }
 
     public setBackgroundColor(color): void {
         this.tag.style.backgroundColor = color;
-    };
+    }
 
     public getBackgroundColor() {
         return this.tag.style.backgroundColor;
-    };
+    }
 
     // public createRectAngle(elmHeight, elmWidth, elmTop, elmLeft, color, isObstacle) {
     //     let ctx = isObstacle ? this.obstaclesContext : this.context;
@@ -269,7 +292,7 @@ export class PlayGround {
     };
 
     public removeObstacle(obstacle): void {
-        let index = this.obstacles.indexOf(obstacle);
+        const index = this.obstacles.indexOf(obstacle);
         if (index > -1) {
             this.obstacles.splice(index, 1);
         }
@@ -279,7 +302,7 @@ export class PlayGround {
     };
 
     public removeBomb(bomb): void {
-        let index = this.bombs.indexOf(bomb);
+        const index = this.bombs.indexOf(bomb);
         if (index > -1) {
             this.bombs.splice(index, 1);
         }
@@ -298,17 +321,19 @@ export class PlayGround {
     };
 
     public checkPickItUp(element, move): void {
-        let hrzTarget = element.left + move.horizontal;
-        let vrtTarget = element.top + move.vertical;
-        let caught = element.getOverlappedElements(this.pickItUps, hrzTarget, vrtTarget);
+        const hrzTarget = element.left + move.horizontal;
+        const vrtTarget = element.top + move.vertical;
+        const caught = element.getOverlappedElements(this.pickItUps, hrzTarget, vrtTarget);
 
-        if (caught.length == 0) return;
+        if (caught.length === 0) {
+            return;
+        }
 
         this.pickItUpCallBack(caught);
     };
 
     public removePickItUp(pickItUp): void {
-        let index = this.pickItUps.indexOf(pickItUp);
+        const index = this.pickItUps.indexOf(pickItUp);
         if (index > -1) {
             this.pickItUps.splice(index, 1);
             pickItUp.clear();
@@ -330,8 +355,10 @@ export class PlayGround {
     public checkProtectedArea(position, element) {
         let i;
         for (i = 0; i < this.protectedAreas.length; i++) {
-            let result = this.protectedAreas[i].collisionCorrection(position, element.shapeData);
-            if (result) return result;
+            const result = this.protectedAreas[i].collisionCorrection(position, element.shapeData);
+            if (result) {
+                return result;
+            }
         }
         return false;
     };
