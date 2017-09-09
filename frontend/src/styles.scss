@@ -16,7 +16,9 @@ body {
     background: url("./assets/images/bomberman/1.png") repeat green;
     padding: 16px;
     margin-top: 16px;
-    // text-align: center;
+    height: calc(100vh - 160px);
+    display: flex;
+    align-items: center;
 }
 
 .well {
