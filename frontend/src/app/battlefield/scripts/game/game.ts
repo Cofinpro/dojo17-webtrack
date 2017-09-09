@@ -127,9 +127,7 @@ export class Game {
 
             this.playGround = new PlayGround(playGroundElement, 544, 544);
             this.playGround.resources = this.resources;
-
-            this.playGround.setPickItUpCallBack(this.picked);
-            this.playGround.setTargetCaughtCallBack(this.caught);
+            
             this.placeHero();
 
             this.gameLoaded = true;
@@ -198,71 +196,6 @@ export class Game {
         return false;
     }
 
-    // FIXME:
-    // public placeBomb(x: number, y: number): void {
-    //     this.sprites.push(this.playGround.createPicture(y * 32, x * 32, this.images['bomb3']));
-    //    this.playGround.bombs.push(new Bomb(null, x, y, null, null));
-    // }
-
-    picked(pickItUps) {
-
-        if (pickItUps.length === 0) {
-            return;
-        }
-
-        let i;
-        for(i = 0; i < pickItUps.length; i++){
-            let pickItUp = pickItUps[i];
-            let top = pickItUp.top;
-            let left = pickItUp.left;
-
-            this.playGround.removeGameElement(pickItUp);
-
-            let finished = this.playGround.getPickItUps().length == 0;
-
-            let im = new Image();
-            im.src = this.images['diamond'].getImageSource();
-            this.counterTag.appendChild(im);
-
-            if (finished) {
-                new ModalMessage(-1, ModalMessage.Cheer, 'You Win!!', this.playGround).show();
-                this.audios['win'].volume = '0.2';
-                this.audios['win'].play();
-                this.shutDownGame();
-            } else {
-                this.playGround.showNotification(0.05, ModalMessage.Cheer, top, left, 'Pick!!');
-                this.audios['pick'].play();
-            }
-
-        }
-
-    };
-
-    caught(target: any):void {
-
-        this.animator.stop();
-
-        let current = this.livesTag.childElementCount;
-        this.livesTag.removeChild(this.livesTag.firstElementChild);
-        let next = current - 1;
-        if (next <= 0) {
-            new ModalMessage(-1, ModalMessage.BadNews, 'Lost!!', this.playGround).show();
-            this.audios['lost'].volume = 0.2;
-            this.audios['lost'].play();
-            this.shutDownGame();
-        } else {
-            target.clear();
-            this.playGround.removeGameElement(this.animator.element);
-            new ModalMessage(5000, ModalMessage.BadNews, 'Caught!!', this.playGround).show();
-            this.audios['caught'].volume = 0.2;
-            this.audios['caught'].play();
-
-            this.placeHero();
-            this.playGround.shieldTarget(this.hero, 7000);
-            this.animator.start();
-        }
-    };
-
     startGame() {
         document.onkeydown = (e) => {
             let event: any = window.event ? window.event : e;
@@ -321,6 +254,14 @@ export class Game {
     }
 
     shutDownGame() {
+        new ModalMessage({
+            displayMillis: 5000,
+            displayStyle: ModalMessage.Cheer,
+            message: 'Bye Bye',
+            playGround: this.playGround,
+            show: null,
+            end: null
+        }).show();
         this.end = true;
         document.onkeydown = null;
         document.onkeyup = null;
