@@ -1,6 +1,8 @@
+import { Position } from './position';
 import { Bomb } from "./bomb";
 import { Player } from "./player";
 import { Stone } from "./stone";
+
 
 export class State {
     sizeX : number;
@@ -10,6 +12,7 @@ export class State {
     fixStones: Stone[];
     weakStones: Stone[];
     timestamp: Date;
+    exploded : Position[];
 
 
 
@@ -22,6 +25,9 @@ export class State {
         this.timestamp = obj.timestamp;
         this.sizeX = obj.sizeX;
         this.sizeY = obj.sizeY;
+        this.exploded = obj.exploded;
+
+
     }
 
     static getMock(x: number): State {
@@ -33,7 +39,8 @@ export class State {
             sizeY : 3,
             fixStones: [],
             weakStones: [new Stone({x : 2, y: 1})],
-            timestamp: new Date(now)
+            timestamp: new Date(now),
+            exploded : []
         });
     }
 
