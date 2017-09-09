@@ -10,7 +10,6 @@ import { Game } from './scripts/game/game';
     providers: [WebsocketService]
 })
 
-
 /**
 * The battlefields holds the 2D game logic
 */
@@ -25,11 +24,15 @@ export class BattlefieldComponent implements OnInit {
         this.game = new Game(this.websocketService);
         this.game.startTimer();
     }
-    
+
+    gameLoaded() {
+        return this.game && this.game.isGameLoaded();
+    }
+
     @HostListener('window:beforeunload', ['$event'])
     unloadHandler(event) {
         this.game.socketSubscription.unsubscribe();
-        alert('unsubscribing');
+        console.log('unsubscribing');
     }
 
 }

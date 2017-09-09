@@ -1,7 +1,6 @@
 import { GEPicture } from "./gameelements/gepicture";
 import { GameNotification } from './messages/gamenotification';
-import {Bomb} from "../../models/bomb";
-import {Player} from "../../models/player";
+import { State, Bomb, Player, Stone} from "../../models";
 
 export class PlayGround {
     image: any;
@@ -63,22 +62,45 @@ export class PlayGround {
 
     }
 
-    public updateBombsAndPlayers(bombs: Bomb[], players: Player[]) {
+    public updateState(state: State) {
         // TODO: removePicture für Bombs die nicht mehr existieren
         if (!this.resources) {
             return;
         }
 
+        this.clearSprites();
+
+        this.updateWeakStones(state.weakStones);
+
+        this.updatePlayers(state.players);
+
+        this.updateBombs(state.bombs);
+
+    }
+
+    private clearSprites(): void {
         for (const sprite of this.sprites) {
             sprite.clear();
             this.removeGameElement(sprite);
         }
         this.sprites = [];
+    }
 
+    private updateWeakStones(stones: Stone[]){
+      for(const stone of stones){
+        this.createPicture("some", stone.y*32, stone.x*32, this.resources.images['box'])
+      }
+    }
+
+
+
+    private updatePlayers(players: Player[]) {
         for (const player of players) {
             this.createPicture(player.id, player.y * 32, player.x * 32, this.resources.images['hero-1-r']);
         }
+    }
 
+    private updateBombs(bombs: Bomb[]) {
         const now = new Date();
         for (const bomb of bombs) {
             // display correct sprite for bomb according to detonation time

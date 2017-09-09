@@ -15,7 +15,7 @@ export class WebsocketService implements OnDestroy{
     constructor(private stomp: StompService) {
         //configuration
         this.stomp.configure({
-            host: 'http://localhost:8080',
+            host: 'http://192.168.75.47:3000',
             debug: true,
             queue: { 'init': false }
         });
