@@ -1,0 +1,16 @@
+29x15
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+x    oo o  ooo  o   oooo    x
+x xoxox x xoxox x xoxox xox x 
+xo  oo  ooo  oooo oo  o  oo x
+x x x xox x xox xox x xox xox 
+x  oo  o   oooo  oo  ooo  oox
+x xox xoxoxoxox x xoxox xoxox 
+xooo   ooo    ooo  ooo   ooox
+x xox x xoxoxoxoxoxox x xoxox 
+x  ooo   o  oo  o     ooo   x
+xoxox x xox xox xoxox x x x x 
+x  oo  ooo   oo o  ooo   ooox
+x xox xox xoxox x xox xox x x 
+x    ooo   ooo  o oo   oo   x
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
