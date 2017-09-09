@@ -1,9 +1,13 @@
+
+echo BUILD BACKEND
 cd backend
-docker build -t rabbit rabbit
+START CMD /C CALL docker build -t rabbit rabbit
 cd bomberscale
-gradlew buildDocker
+START CMD /C CALL gradlew buildDocker
+
+echo BUILD FRONTEND
 cd ../..
 cd frontend
-ng build -prod
-docker build -t bomberweb .
+CALL ng build -prod
+CALL docker build -t bomberweb .
 cd ..
