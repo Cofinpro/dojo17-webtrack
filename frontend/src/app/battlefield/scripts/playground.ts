@@ -79,6 +79,8 @@ export class PlayGround {
 
         this.updateBombs(state.bombs);
 
+        this.updateExploded(state.exploded);
+
     }
 
     private clearSprites(): void {
