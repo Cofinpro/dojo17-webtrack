@@ -304,6 +304,8 @@ public class GameLogic {
                         bombOwner.setScore(bombOwner.getScore() + SCORE_PLAYER_KILL);
                     }
                     this.currentState.getPlayers().remove(p);
+
+                    handleKilledPlayerUpgrades(p);
                 });
         objects.getWeakStones().entrySet().stream()
                 .filter(e -> blownPositions.contains(e.getKey()))
@@ -330,6 +332,15 @@ public class GameLogic {
         } 
         else if (rand < POWERUP_SPAWN_PROB_BOMB + POWERUP_SPAWN_PROB_BLAST) {
             currentState.addBlastRadiusPowerup(position);
+        }
+    }
+
+    private void handleKilledPlayerUpgrades(Player p) {
+        for (int i = DEFAULT_BLAST_RADIUS; i < p.getBlastRadius(); i++) {
+            currentState.addBlastRadiusPowerup(randomValidPosition());
+        }
+        for (int i = DEFAULT_BOMB_COUNT; i < p.getBombCount(); i++) {
+            currentState.addBombCountPowerup(randomValidPosition());
         }
     }
 
