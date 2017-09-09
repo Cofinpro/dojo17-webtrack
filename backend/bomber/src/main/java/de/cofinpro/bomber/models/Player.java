@@ -1,6 +1,6 @@
 package de.cofinpro.bomber.models;
 
-public class Player {
+public class Player implements Positionable {
 
     private String id;
     private String nickName;
@@ -23,6 +23,7 @@ public class Player {
         this.nickName = nickName;
     }
 
+    @Override
     public int getX() {
         return x;
     }
@@ -31,6 +32,7 @@ public class Player {
         this.x = x;
     }
 
+    @Override
     public int getY() {
         return y;
     }
@@ -39,4 +41,17 @@ public class Player {
         this.y = y;
     }
 
+    @Override
+    public Position getPosition() {
+        return new Position(x, y);
+    }
+    @Override
+    public String toString() {
+        return "Player{" +
+                "id='" + id + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }

@@ -2,7 +2,7 @@ package de.cofinpro.bomber.models;
 
 import java.time.LocalDateTime;
 
-public class Bomb {
+public class Bomb implements Positionable {
 
     private String id;
     private String userId;
@@ -26,6 +26,7 @@ public class Bomb {
         this.userId = userId;
     }
 
+    @Override
     public int getX() {
         return x;
     }
@@ -34,6 +35,7 @@ public class Bomb {
         this.x = x;
     }
 
+    @Override
     public int getY() {
         return y;
     }
@@ -48,5 +50,21 @@ public class Bomb {
 
     public void setDetonateAt(LocalDateTime detonateAt) {
         this.detonateAt = detonateAt;
+    }
+
+    @Override
+    public Position getPosition() {
+        return new Position(x, y);
+    }
+
+    @Override
+    public String toString() {
+        return "Bomb{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", x=" + x +
+                ", y=" + y +
+                ", detonateAt=" + detonateAt +
+                '}';
     }
 }
