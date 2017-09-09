@@ -19,5 +19,11 @@ services:
             - "3000:8080"
         networks:
             - bombernet
+    web:
+        image: bomberweb
+        ports:
+            - "80:80"
+        networks:
+            - bombernet
 networks:
     bombernet:
