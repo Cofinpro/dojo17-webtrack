@@ -1,3 +1,4 @@
+import { Position } from './../../models/position';
 import { GEPicture } from "./gameelements/gepicture";
 import { GameNotification } from './messages/gamenotification';
 import { State, Bomb, Player, Stone, Position} from "../../models";
@@ -78,6 +79,8 @@ export class PlayGround {
         this.updatePlayers(state.players);
 
         this.updateBombs(state.bombs);
+
+        this.updateExploded(state.exploded);
 
     }
 
