@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Player} from '../models/player';
+// import { GameDataService } from '';
 
 @Component({
   selector: 'highscore',
@@ -7,7 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HighscoreComponent implements OnInit {
 
-  constructor() { }
+  players: Player[] = [];
+
+  constructor() { 
+    // this.players.push(new Player(1, 2, 2, 'player 1', 4, 100));
+  }
 
   ngOnInit() {
   }
