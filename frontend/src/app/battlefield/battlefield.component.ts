@@ -1,42 +1,39 @@
-import { WebsocketService } from '../services/websocket.service';
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnDestroy, HostListener } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
+import { GameService } from "../services/game.service";
 import { Game } from './scripts/game/game';
-import {PlayerDataService} from "../services/player-data.service";
+import { Player } from '../models';
 
 @Component({
     selector: 'battlefield',
     templateUrl: './battlefield.component.html',
-    styleUrls: ['./battlefield.component.scss'],
-    providers: [WebsocketService]
+    styleUrls: ['./battlefield.component.scss']
 })
 
 /**
 * The battlefields holds the 2D game logic
 */
-export class BattlefieldComponent implements OnInit, OnDestroy {
+export class BattlefieldComponent implements OnDestroy {
 
     public game: Game;
 
-    constructor(private websocketService: WebsocketService, public playerDataService: PlayerDataService) { }
-
-    ngOnInit() {
-        // start game
-        this.game = new Game(this.websocketService, this.playerDataService);
-        this.game.startTimer();
-    }
+    constructor(private gameService: GameService) { }
 
     ngOnDestroy(): void {
-        this.game.socketSubscription.unsubscribe();
-        this.websocketService.disconnect();
+        this.gameService.destroy();
     }
 
     gameLoaded() {
-        return this.game && this.game.isGameLoaded();
+        return this.gameService.isGameLoaded();
     }
 
     gameOver() {
-        return this.game && this.game.isGameOver();
+        return this.gameService.isGameOver();
+    }
+
+    getPlayers(): Observable<Player[]> {
+        return this.gameService.getPlayers();
     }
 
 }
