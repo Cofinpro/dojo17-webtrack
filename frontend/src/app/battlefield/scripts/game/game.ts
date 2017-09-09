@@ -78,7 +78,7 @@ export class Game {
             console.log('got server message:', state.bombs);
             if (this.playGround && this.playGround.resources) {
                 console.log("playground defined");
-                this.playGround.updateBombsAndPlayers(state.bombs, state.players);
+                this.playGround.updateState(state);
             }
         });
 
