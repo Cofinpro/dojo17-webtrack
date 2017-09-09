@@ -13,6 +13,8 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableStompBrokerRelay("/topic", "/queue")
+                .setRelayHost("rabbit")
+                .setRelayPort(61613)
                 .setClientLogin("guest")
                 .setClientPasscode("guest");
         config.setApplicationDestinationPrefixes("/app");
