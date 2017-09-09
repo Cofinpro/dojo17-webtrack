@@ -1,14 +1,17 @@
-<div class="row">
-  <div class="col-md-6">
-    <div class="well">
-      <span id="score">0</span>
+<div class="is-loading" *ngIf="!gameLoaded()">
+    <img src="assets/images/loading.png" />
+</div>
+<div class="row" [hidden]="gameLoaded()">
+    <div class="col-md-6">
+        <div class="well">
+            <span id="score">0</span>
+        </div>
     </div>
-  </div>
-  <div class="col-md-6">
-    <div class="well">
-      <span id="time"></span>
+    <div class="col-md-6">
+        <div class="well">
+            <span id="time"></span>
+        </div>
     </div>
-  </div>
 </div>
 <div class="playground-background">
     <div id="playground"></div>

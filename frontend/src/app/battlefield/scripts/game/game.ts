@@ -16,6 +16,7 @@ export class Game {
     public playGround: PlayGround = null;
     public resources;
     public sprites = [];
+    public gameLoaded = false;
 
     direction: Direction = new Direction();
 
@@ -121,8 +122,12 @@ export class Game {
                 }
             }
             this.placeHero();
+            this.gameLoaded = true;
         });
+    }
 
+    isGameLoaded() {
+        return this.gameLoaded;
     }
 
     checkReturn(e) {
@@ -155,13 +160,6 @@ export class Game {
       });
     }
 
-    placeCockpit() {
-        //let cockpit = document.getElementById('game-cockpit');
-        ////cockpit.innerHTML = '';
-        //cockpit.style.position = 'absolute';
-        //cockpit.style.top = '700px';
-        //cockpit.style.left = '750px';
-    };
 
     placeHero() {
         this.playGround.removeGameElement(this.hero);
