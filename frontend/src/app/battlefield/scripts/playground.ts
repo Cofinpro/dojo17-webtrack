@@ -87,7 +87,7 @@ export class PlayGround {
             if (timeUntilExplosion > 0) {
                 bombSpriteIndex = 'bomb' + Math.max(0, Math.round(timeUntilExplosion / 1000));
             } else {
-                bombSpriteIndex = 'explosion1';
+                bombSpriteIndex = 'explosionFullCenter';
             }
             this.createPicture(bomb.id, bomb.y * 32, bomb.x * 32, this.resources.images[bombSpriteIndex]);
         }
