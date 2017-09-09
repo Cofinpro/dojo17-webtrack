@@ -1,13 +1,14 @@
 <span [hidden]="inputPlayerName">{{playerDataService.getPlayerName()}}</span>
 
-<button (click)="toggleGameStart()" [hidden]="playerDataService.getPlayerName()">START GAME</button>
+<button id="start" class="well" (click)="toggleGameStart()" [hidden]="playerDataService.getPlayerName()">START
+GAME</button>
 
 <div [hidden]="!inputPlayerName">
   <input [(ngModel)]="playerName"
          minlength="1"
          maxlength="20"
          required>
-  <button (click)="beginGame()">Let's bomb!</button>
+  <button id="bomb" class="well" (click)="beginGame()">Let's bomb!</button>
 </div>
 
 
