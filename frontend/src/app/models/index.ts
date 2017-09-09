@@ -6,5 +6,6 @@ import { State } from './state';
 import { Stone } from './stone';
 import { NewPlayer } from './new-player';
 import { Movement } from './movement';
+import { NewBomb } from './new-bomb';
 
-export { Bomb, Player, Message, State, Stone, Position, Movement, NewPlayer };
+export { Bomb, Player, Message, State, Stone, Position, Movement, NewPlayer, NewBomb };
