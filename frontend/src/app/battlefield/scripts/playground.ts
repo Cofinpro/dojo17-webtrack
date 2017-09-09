@@ -1,6 +1,7 @@
 import { GEPicture } from "./gameelements/gepicture";
 import { GameNotification } from './messages/gamenotification';
-import { State, Bomb, Player, Stone} from "../../models";
+import { State, Bomb, Player, Stone, Position} from "../../models";
+
 
 export class PlayGround {
     image: any;
@@ -22,6 +23,8 @@ export class PlayGround {
     obstaclesCanvas: any;
     bombs: Bomb[] = [];
     players: Player[] = [];
+    playersLastRound: Player[] = [];
+    playersLastDirection: any[] = [];
     sprites: any[] = [];
     resources;
 
@@ -76,6 +79,8 @@ export class PlayGround {
 
         this.updateBombs(state.bombs);
 
+        this.updateExploded(state.exploded);
+
     }
 
     private clearSprites(): void {
@@ -92,12 +97,42 @@ export class PlayGround {
       }
     }
 
+    private updateExploded(positions: Position[]){
+        for(const position of positions){
+          this.createPicture("some", position.y*32, position.x*32, this.resources.images['explosion1'])
+        }
+      }
 
 
     private updatePlayers(players: Player[]) {
         for (const player of players) {
-            this.createPicture(player.id, player.y * 32, player.x * 32, this.resources.images['hero-1-r']);
+            let direction = '';
+            const playerFromLastRound = this.playersLastRound.find((oldPlayer) => oldPlayer.id === player.id);
+
+            if (this.playersLastRound.length === 0 || playerFromLastRound === undefined) {
+                direction = 'd';
+            } else {
+                if (playerFromLastRound.x < player.x) {
+                    // move right
+                    direction = 'r';
+                } else if (playerFromLastRound.x > player.x) {
+                    // move left
+                    direction = 'l';
+                } else if (playerFromLastRound.y < player.y) {
+                    // move down
+                    direction = 'd';
+                } else if (playerFromLastRound.y > player.y) {
+                    // move up
+                    direction = 'u';
+                } else {
+                    // no movement
+                    direction = this.playersLastDirection[player.id];
+                }
+                this.createPicture(player.id, player.y * 32, player.x * 32, this.resources.images['hero-1-' + direction]);
+            }
+            this.playersLastDirection[player.id] = direction;
         }
+        this.playersLastRound = players;
     }
 
     private updateBombs(bombs: Bomb[]) {
@@ -109,7 +144,7 @@ export class PlayGround {
             if (timeUntilExplosion > 0) {
                 bombSpriteIndex = 'bomb' + Math.max(0, Math.round(timeUntilExplosion / 1000));
             } else {
-                bombSpriteIndex = 'explosion1';
+                bombSpriteIndex = 'explosionFullCenter';
             }
             this.createPicture(bomb.id, bomb.y * 32, bomb.x * 32, this.resources.images[bombSpriteIndex]);
         }
@@ -166,9 +201,7 @@ export class PlayGround {
     public createPicture(id, elmTop, elmLeft, image, isObstacle?) {
         let ctx = isObstacle ? this.obstaclesContext : this.context;
         let pic = new GEPicture(id, elmTop, elmLeft, image, ctx);
-        if (!isObstacle) {
-            this.sprites.push(pic);
-        }
+        this.sprites.push(pic);
         return pic;
     };
 

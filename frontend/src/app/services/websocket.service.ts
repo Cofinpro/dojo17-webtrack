@@ -8,11 +8,13 @@ import { OnDestroy } from '@angular/core';
 export class WebsocketService implements OnDestroy{
 
     // This is for stomp
-    private subject: Subject<State> = new Subject<State>();
+    private subject: Subject<State>;
     private subscription: any;
     private connected: boolean = false;
 
     constructor(private stomp: StompService) {
+
+        this.subject = new Subject<State>();
         //configuration
         this.stomp.configure({
             host: 'http://192.168.75.47:3000',
@@ -52,8 +54,7 @@ export class WebsocketService implements OnDestroy{
     }
 
     private generateUUID(): string {
-        return `${this.s4()}${this.s4()}-${this.s4()}-${this.s4()}
-                -${this.s4()}-${this.s4()}${this.s4()}${this.s4()}`;
+        return `${this.s4()}${this.s4()}-${this.s4()}-${this.s4()}-${this.s4()}-${this.s4()}${this.s4()}${this.s4()}`;
     }
 
     private s4(): string {
@@ -61,7 +62,7 @@ export class WebsocketService implements OnDestroy{
     }
 
     //response
-    public response(state: State): State {
+    public response = (state: State): State => {
         this.subject.next(state);
         console.log("Received Player", state);
         return state;
