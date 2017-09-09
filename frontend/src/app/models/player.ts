@@ -10,11 +10,13 @@ export class Player {
   x: number;
   y: number;
   nickName: string;
+  blastRadius: number;
 
   constructor(obj = {} as Player) {
     this.id = obj.id;
     this.x = obj.x;
     this.y = obj.y;
     this.nickName = obj.nickName;
+    this.blastRadius = obj.blastRadius;
   }
 }

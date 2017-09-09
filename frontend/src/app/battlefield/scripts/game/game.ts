@@ -174,7 +174,7 @@ export class Game {
 
         this.hero = this.playGround.createPicture(null, 32, 32, heroImages['right']);
 */
-        this.player  = new Player({id: null, x:0,y:0,nickName:'Player 1'});
+        this.player  = new Player({id: null, x:0,y:0,nickName:'Player 1', blastRadius:4});
         //this.animator = new HeroAnimator(this.hero, this.playGround, this.websocketService, this.player);
        // this.animator.setImages(heroImages);
         //this.playGround.addTarget(this.hero);
@@ -295,7 +295,8 @@ export class Game {
                         x: this.player.x,
                         y: this.player.y,
                         userId: this.player.id,
-                        detonateAt: null
+                        detonateAt: null,
+                        blastRadius: this.player.blastRadius
                     });
                     this.websocketService.sendBomb(bomb);
             }

@@ -28,8 +28,6 @@ public class GameLogic {
 
     private static final int BOMB_TIMEOUT_SECONDS = 6;
 
-    private static final int BOMB_RADIUS = 4;
-
     private State currentState;
 
     private final CopyOnWriteArrayList<MapDefinition> mapDefinitions = new CopyOnWriteArrayList<>();
@@ -285,7 +283,7 @@ public class GameLogic {
         // Process UP
         int curX = explodedBomb.getX();
         int curY = explodedBomb.getY();
-        for (int i = 0; i < BOMB_RADIUS; i++) {
+        for (int i = 0; i < explodedBomb.getBlastRadius(); i++) {
             curY--;
             if (curY < 0) {
                 break;
@@ -303,7 +301,7 @@ public class GameLogic {
         // Process DOWN
         curX = explodedBomb.getX();
         curY = explodedBomb.getY();
-        for (int i = 0; i < BOMB_RADIUS; i++) {
+        for (int i = 0; i < explodedBomb.getBlastRadius(); i++) {
             curY++;
             if (curY >= this.currentState.getSizeY()) {
                 break;
@@ -321,7 +319,7 @@ public class GameLogic {
         // Process LEFT
         curX = explodedBomb.getX();
         curY = explodedBomb.getY();
-        for (int i = 0; i < BOMB_RADIUS; i++) {
+        for (int i = 0; i < explodedBomb.getBlastRadius(); i++) {
             curX--;
             if (curX < 0) {
                 break;
@@ -339,7 +337,7 @@ public class GameLogic {
         // Process RIGHT
         curX = explodedBomb.getX();
         curY = explodedBomb.getY();
-        for (int i = 0; i < BOMB_RADIUS; i++) {
+        for (int i = 0; i < explodedBomb.getBlastRadius(); i++) {
             curX++;
             if (curX >= this.currentState.getSizeX()) {
                 break;
