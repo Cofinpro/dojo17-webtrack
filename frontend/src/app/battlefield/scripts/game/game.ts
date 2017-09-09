@@ -127,7 +127,7 @@ export class Game {
 
             this.playGround = new PlayGround(playGroundElement, 544, 544);
             this.playGround.resources = this.resources;
-            
+
             this.placeHero();
 
             this.gameLoaded = true;
@@ -254,14 +254,14 @@ export class Game {
     }
 
     shutDownGame() {
-        new ModalMessage({
-            displayMillis: 5000,
-            displayStyle: ModalMessage.Cheer,
-            message: 'Bye Bye',
-            playGround: this.playGround,
-            show: null,
-            end: null
-        }).show();
+        // new ModalMessage({
+        //     displayMillis: 5000,
+        //     displayStyle: ModalMessage.Cheer,
+        //     message: 'Bye Bye',
+        //     playGround: this.playGround,
+        //     show: null,
+        //     end: null
+        // }).show();
         this.end = true;
         document.onkeydown = null;
         document.onkeyup = null;
