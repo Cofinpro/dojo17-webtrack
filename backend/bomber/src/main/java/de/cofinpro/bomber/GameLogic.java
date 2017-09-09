@@ -94,8 +94,10 @@ public class GameLogic {
                         result.getWeakStones().add(new Stone(curColumn, curRow));
                     } else if (c == 'b' || c == 'B') {
                         result.getBombCountPowerups().add(new BombCountPowerup(curColumn, curRow));
-                    } else if (c== 'f' || c == 'F') {
+                    } else if (c == 'f' || c == 'F') {
                         result.getBlastRadiusPowerups().add(new BlastRadiusPowerup(curColumn, curRow));
+                    } else if (c == 's' || c == 'S') {
+                        result.getFoliage().add(new Bush(curColumn, curRow));
                     } else {
                         System.out.println("WARN: Code in map generation not recognized and will be ignored: " + c);
                     }
