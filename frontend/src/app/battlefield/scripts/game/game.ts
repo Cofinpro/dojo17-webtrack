@@ -78,7 +78,7 @@ export class Game {
         this.socketSubscription = this.websocketService.getMockState().subscribe((state: State) => {
             console.log('got server message:', state.bombs);
             if (this.playGround && this.playGround.resources) {
-                this.playGround.updateBombsAndPlayers(state.bombs, state.players);
+                this.playGround.updateState(state);
             }
         });
 
