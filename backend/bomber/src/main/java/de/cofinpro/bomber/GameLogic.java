@@ -119,6 +119,7 @@ public class GameLogic {
         this.currentState.setWeakStones(definition.getWeakStones());
         this.currentState.setBlastRadiusPowerups(definition.getBlastRadiusPowerups());
         this.currentState.setBombCountPowerups(definition.getBombCountPowerups());
+        this.currentState.setFoliage(definition.getFoliage());
         System.out.println("State reset: " + currentState.toString());
     }
 
