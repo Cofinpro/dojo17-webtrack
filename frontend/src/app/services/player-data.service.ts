@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 export class PlayerDataService {
 
   playerName: string;
-  playerAvatarId: number;
+  playerAvatarId: number = 1;
 
   constructor() { }
 
@@ -17,10 +17,12 @@ export class PlayerDataService {
   }
 
   public getPlayerAvatarId(): number {
+   // console.log("avatar ", this.playerAvatarId);
     return this.playerAvatarId;
   }
 
   public setPlayerAvatarId(playerAvatarId: number): void {
+    console.log("player id", playerAvatarId);
     this.playerAvatarId = playerAvatarId;
   }
 

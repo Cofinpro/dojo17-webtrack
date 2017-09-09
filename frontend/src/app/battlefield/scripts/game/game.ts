@@ -99,7 +99,8 @@ export class Game {
 
         this.resources.startLoading();
 
-        this.checkResources(this.resources);
+
+        this.checkResources(this.resources, playerDataService);
 
         // key event init
         document.body.onkeydown = this.checkReturn;
@@ -110,7 +111,6 @@ export class Game {
         // this.counterTag = document.getElementById('picks');
         // this.livesTag = document.getElementById('lives');
         this.socketSubscription = this.websocketService.getState().subscribe((state: State) => {
-            console.log('got server message:', state.bombs);
             if (this.playGround && this.playGround.resources) {
                 this.playGround.updateState(state);
             }
@@ -118,7 +118,7 @@ export class Game {
 
     }
 
-    checkResources(resources) {
+    checkResources(resources, playerDataService) {
         console.log('called');
         resources.resourcesLoaded().then( () => {
 
@@ -128,7 +128,7 @@ export class Game {
             playGroundElement.innerHTML = '';
             // this.counterTag.innerHTML = '';
 
-            this.playGround = new PlayGround(playGroundElement, 544, 544);
+            this.playGround = new PlayGround(playGroundElement, 544, 544, playerDataService);
             this.playGround.resources = this.resources;
 
             this.placeHero();
