@@ -26,7 +26,7 @@ export class PlayGround {
     ownPlayer: Player;
     playersLastRound: Player[] = [];
     playersLastDirection: any[] = [];
-    sprites: any[] = [];
+    sprites: GEPicture[] = [];
     resources;
 
     constructor(tag, height, width, player) {
@@ -80,11 +80,11 @@ export class PlayGround {
 
         this.updateWeakStones(state.weakStones);
 
-        this.updatePlayers(state.players);
-
         this.updateBombs(state.bombs);
-
+        
         this.updateExploded(state.exploded);
+        
+        this.updatePlayers(state.players);
 
     }
 

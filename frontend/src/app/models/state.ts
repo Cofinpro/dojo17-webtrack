@@ -18,7 +18,7 @@ export class State {
 
     constructor(obj = {} as State) {
         this.players = obj.players;
-        this.bombs = obj.bombs;
+        this.bombs = obj.bombs.map((bomb => new Bomb(bomb)));
         this.fixStones = obj.fixStones;
         this.weakStones = obj.weakStones;
         this.timestamp = obj.timestamp;
