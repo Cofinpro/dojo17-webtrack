@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { Subject, Observable, Observer } from 'rxjs/Rx';
 import { Message, State, Player, Bomb } from '../models';
 import { StompService } from 'ng2-stomp-service';
+import { OnDestroy } from '@angular/core';
 
 @Injectable()
-export class WebsocketService {
+export class WebsocketService implements OnDestroy{
 
     // This is for stomp
     private subject: Subject<State> = new Subject<State>();
@@ -71,6 +72,10 @@ export class WebsocketService {
         this.stomp.disconnect().then(() => {
             console.log('Connection closed')
         })
+    }
+    public ngOnDestroy(){
+        this.unsubscribe();
+        this.disconnect();
     }
 
 }
