@@ -62,7 +62,7 @@ export class WebsocketService implements OnDestroy{
     }
 
     //response
-    public response(state: State): State {
+    public response = (state: State): State => {
         this.subject.next(state);
         console.log("Received Player", state);
         return state;
@@ -75,19 +75,16 @@ export class WebsocketService implements OnDestroy{
     public getMockState(): Observable<State> {
         return Observable.interval(200).map(x => State.getMock(x));
     }
-
-    public unsubscribe() {
-        this.subscription.unsubscribe();
-    }
-
+    
     public disconnect() {
         //disconnect
+        this.subscription.unsubscribe();
         this.stomp.disconnect().then(() => {
             console.log('Connection closed')
         })
     }
+    
     public ngOnDestroy(){
-        this.unsubscribe();
         this.disconnect();
     }
 

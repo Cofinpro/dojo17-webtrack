@@ -1,5 +1,7 @@
 package de.cofinpro.bomber.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDateTime;
 
 public class Bomb implements Positionable {
@@ -53,6 +55,7 @@ public class Bomb implements Positionable {
     }
 
     @Override
+    @JsonIgnore
     public Position getPosition() {
         return new Position(x, y);
     }

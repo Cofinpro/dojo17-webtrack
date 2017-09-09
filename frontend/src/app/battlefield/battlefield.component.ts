@@ -1,5 +1,5 @@
 import { WebsocketService } from '../services/websocket.service';
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 
 import { Game } from './scripts/game/game';
 
@@ -13,7 +13,7 @@ import { Game } from './scripts/game/game';
 /**
 * The battlefields holds the 2D game logic
 */
-export class BattlefieldComponent implements OnInit {
+export class BattlefieldComponent implements OnInit, OnDestroy {
 
     public game: Game;
 
@@ -25,14 +25,13 @@ export class BattlefieldComponent implements OnInit {
         this.game.startTimer();
     }
 
-    gameLoaded() {
-        return this.game && this.game.isGameLoaded();
+    ngOnDestroy(): void {
+        this.game.socketSubscription.unsubscribe();
+        this.websocketService.disconnect();
     }
 
-    @HostListener('window:beforeunload', ['$event'])
-    unloadHandler(event) {
-        this.game.socketSubscription.unsubscribe();
-        console.log('unsubscribing');
+    gameLoaded() {
+        return this.game && this.game.isGameLoaded();
     }
 
 }

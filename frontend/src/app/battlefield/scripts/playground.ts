@@ -73,6 +73,8 @@ export class PlayGround {
 
         this.clearSprites();
 
+        this.updateFixStones(state.fixStones);
+
         this.updateWeakStones(state.weakStones);
 
         this.updatePlayers(state.players);
@@ -91,15 +93,23 @@ export class PlayGround {
         this.sprites = [];
     }
 
-    private updateWeakStones(stones: Stone[]){
+    private updateFixStones(stones: Stone[]) {
+        this.updateStones('fixStone-id', 'wall-light', stones);
+    }
+
+    private updateWeakStones(stones: Stone[]) {
+        this.updateStones('weakStone-id', 'box', stones);
+    }
+
+    private updateStones(id: string, imageId: string, stones: Stone[]){
       for(const stone of stones){
-        this.createPicture("some", stone.y*32, stone.x*32, this.resources.images['box'])
+        this.createPicture(id, stone.y*32, stone.x*32, this.resources.images[imageId])
       }
     }
 
     private updateExploded(positions: Position[]){
         for(const position of positions){
-          this.createPicture("some", position.y*32, position.x*32, this.resources.images[''])
+          this.createPicture("some", position.y*32, position.x*32, this.resources.images['explosionFullCenter'])
         }
       }
 
@@ -144,7 +154,7 @@ export class PlayGround {
             if (timeUntilExplosion > 0) {
                 bombSpriteIndex = 'bomb' + Math.max(0, Math.round(timeUntilExplosion / 1000));
             } else {
-                bombSpriteIndex = 'explosion1';
+                bombSpriteIndex = 'explosionFullCenter';
             }
             this.createPicture(bomb.id, bomb.y * 32, bomb.x * 32, this.resources.images[bombSpriteIndex]);
         }
@@ -201,9 +211,7 @@ export class PlayGround {
     public createPicture(id, elmTop, elmLeft, image, isObstacle?) {
         let ctx = isObstacle ? this.obstaclesContext : this.context;
         let pic = new GEPicture(id, elmTop, elmLeft, image, ctx);
-        if (!isObstacle) {
-            this.sprites.push(pic);
-        }
+        this.sprites.push(pic);
         return pic;
     };
 

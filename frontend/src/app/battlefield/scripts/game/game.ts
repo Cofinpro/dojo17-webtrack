@@ -62,8 +62,8 @@ export class Game {
         this.resources.addImage('bomb1', '../../assets/images/bombs/1.png', 32, 32);
         this.resources.addImage('bomb0', '../../assets/images/bombs/0.png', 32, 32);
 
-        // explosion
-        this.resources.addImage('explosion1', '../../assets/images/explosion/0.png', 32, 32);
+        // explosions
+        this.resources.addImage('explosionFullCenter', '../../assets/images/explosion/explosionFullCenter.png', 32, 32);
 
         this.resources.startLoading();
 
