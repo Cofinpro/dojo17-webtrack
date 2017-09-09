@@ -1,5 +1,7 @@
 package de.cofinpro.bomber.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Player implements Positionable {
 
     private String id;
@@ -42,9 +44,11 @@ public class Player implements Positionable {
     }
 
     @Override
+    @JsonIgnore
     public Position getPosition() {
         return new Position(x, y);
     }
+
     @Override
     public String toString() {
         return "Player{" +

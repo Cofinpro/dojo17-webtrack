@@ -1,5 +1,7 @@
 package de.cofinpro.bomber.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Stone implements Positionable {
 
     private int x;
@@ -32,6 +34,7 @@ public class Stone implements Positionable {
     }
 
     @Override
+    @JsonIgnore
     public Position getPosition() {
         return new Position(x, y);
     }

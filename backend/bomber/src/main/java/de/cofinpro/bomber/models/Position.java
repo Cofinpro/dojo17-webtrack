@@ -1,5 +1,7 @@
 package de.cofinpro.bomber.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * A simple position - implements equals, hashcode, etc.
  */
@@ -24,6 +26,7 @@ public class Position implements Positionable {
     }
 
     @Override
+    @JsonIgnore
     public Position getPosition() {
         return this;
     }
