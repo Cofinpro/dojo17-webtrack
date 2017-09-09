@@ -183,14 +183,14 @@ public class GameLogic {
         return this.currentState;
     }
 
-    synchronized State addBomb(String playerId) {
+    synchronized State addBomb(NewBomb newBomb) {
         // TODO Reset timer for player
 
-        System.out.println("Adding a bomb for player: " + playerId);
+        System.out.println("Adding a bomb: " + newBomb);
         this.currentState.setExploded(null);
 
         Player player = this.currentState.getPlayers().stream()
-                .filter(p -> p.getId().equals(playerId))
+                .filter(p -> p.getId().equals(newBomb.getPlayerId()))
                 .findFirst()
                 .orElse(null);
 
@@ -201,7 +201,7 @@ public class GameLogic {
 
         // Check if the user already has too many bombs
         int bombs = (int)this.currentState.getBombs().stream()
-                .filter(b -> b.getUserId().equals(playerId))
+                .filter(b -> b.getUserId().equals(newBomb.getPlayerId()))
                 .count();
 
         if (bombs >= player.getBombCount()) {
