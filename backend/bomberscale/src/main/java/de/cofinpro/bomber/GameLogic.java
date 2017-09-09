@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 @ApplicationScope
 @Component
@@ -50,7 +51,7 @@ public class GameLogic {
     private void initializeMaps() throws IOException {
         ClassLoader cl = this.getClass().getClassLoader();
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(cl);
-        Resource[] resources = resolver.getResources("classpath*:/*.txt");
+        Resource[] resources = resolver.getResources("classpath*:/maps/*.txt");
         List<MapDefinition> maps = new ArrayList<>();
         for (Resource resource: resources){
             maps.add(readMap(resource));
@@ -69,16 +70,18 @@ public class GameLogic {
             result.setSizeX(sizeX);
             result.setSizeY(sizeY);
             int curRow = 0;
-            reader.lines().forEach(line -> {
+            for (String line : reader.lines().collect(Collectors.toList())) {
                 int curColumn = 0;
-                line.chars().forEach(i -> {
-                    if (i == (int)'x' || i == (int)'X') {
+                for (char c : line.toCharArray()) {
+                    if (c == 'x' || c == 'X') {
                         result.getFixStones().add(new Stone(curColumn, curRow));
-                    } else if (i == (int)'o' || i == (int)'O' || i == (int)'0') {
+                    } else if (c == 'o' || c == 'O' || c == '0') {
                         result.getWeakStones().add(new Stone(curColumn, curRow));
                     }
-                });
-            });
+                    curColumn++;
+                }
+                curRow++;
+            }
             System.out.println("Map definition read: " + result.toString());
             return result;
         }
