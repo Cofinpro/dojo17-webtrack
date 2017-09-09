@@ -1,6 +1,7 @@
 import { GEPicture } from "./gameelements/gepicture";
 import { GameNotification } from './messages/gamenotification';
-import { State, Bomb, Player, Stone} from "../../models";
+import { State, Bomb, Player, Stone, Position} from "../../models";
+
 
 export class PlayGround {
     image: any;
@@ -92,6 +93,11 @@ export class PlayGround {
       }
     }
 
+    private updateExploded(positions: Position[]){
+        for(const position of positions){
+          this.createPicture("some", position.y*32, position.x*32, this.resources.images[''])
+        }
+      }
 
 
     private updatePlayers(players: Player[]) {
