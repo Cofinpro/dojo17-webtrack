@@ -23,9 +23,10 @@ export class PlayGround {
     obstaclesCanvas: any;
     bombs: Bomb[] = [];
     players: Player[] = [];
+    ownPlayer: Player;
     playersLastRound: Player[] = [];
     playersLastDirection: any[] = [];
-    sprites: any[] = [];
+    sprites: GEPicture[] = [];
     resources;
 
     constructor(tag, height, width) {
@@ -65,6 +66,10 @@ export class PlayGround {
 
     }
 
+    public setPlayer(player: Player) {
+        this.ownPlayer = player;
+    }
+
     public updateState(state: State) {
         // TODO: removePicture für Bombs die nicht mehr existieren
         if (!this.resources) {
@@ -73,13 +78,15 @@ export class PlayGround {
 
         this.clearSprites();
 
+        this.updateFixStones(state.fixStones);
+
         this.updateWeakStones(state.weakStones);
 
-        this.updatePlayers(state.players);
-
         this.updateBombs(state.bombs);
-
+        
         this.updateExploded(state.exploded);
+        
+        this.updatePlayers(state.players);
 
     }
 
@@ -91,15 +98,23 @@ export class PlayGround {
         this.sprites = [];
     }
 
-    private updateWeakStones(stones: Stone[]){
+    private updateFixStones(stones: Stone[]) {
+        this.updateStones('fixStone-id', 'wall-light', stones);
+    }
+
+    private updateWeakStones(stones: Stone[]) {
+        this.updateStones('weakStone-id', 'box', stones);
+    }
+
+    private updateStones(id: string, imageId: string, stones: Stone[]){
       for(const stone of stones){
-        this.createPicture("some", stone.y*32, stone.x*32, this.resources.images['box'])
+        this.createPicture(id, stone.y*32, stone.x*32, this.resources.images[imageId])
       }
     }
 
     private updateExploded(positions: Position[]){
         for(const position of positions){
-          this.createPicture("some", position.y*32, position.x*32, this.resources.images['explosion1'])
+          this.createPicture("some", position.y*32, position.x*32, this.resources.images['explosionFullCenter'])
         }
       }
 
@@ -128,11 +143,21 @@ export class PlayGround {
                     // no movement
                     direction = this.playersLastDirection[player.id];
                 }
-                this.createPicture(player.id, player.y * 32, player.x * 32, this.resources.images['hero-1-' + direction]);
+                const playerImageId = (this.ownPlayer.id === player.id ? 1 : this.getOpponentImageId(player.id));
+                this.createPicture(
+                    player.id,
+                    player.y * 32,
+                    player.x * 32,
+                    this.resources.images['hero-' + playerImageId + '-' + direction]
+                );
             }
             this.playersLastDirection[player.id] = direction;
         }
         this.playersLastRound = players;
+    }
+
+    private getOpponentImageId(id) {
+        return (id.charCodeAt(0) + id.charCodeAt(1)) % 7 + 2;
     }
 
     private updateBombs(bombs: Bomb[]) {

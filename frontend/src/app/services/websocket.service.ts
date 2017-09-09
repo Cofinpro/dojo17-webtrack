@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable, Observer } from 'rxjs/Rx';
-import { Message, State, Player, Bomb } from '../models';
+import 'rxjs/add/operator/map';
+import { Message, State, Player, Bomb, NewPlayer, Movement } from '../models';
 import { StompService } from 'ng2-stomp-service';
 import { OnDestroy } from '@angular/core';
 
@@ -33,11 +34,15 @@ export class WebsocketService implements OnDestroy{
         });
     }
 
-    public sendPlayer(player: Player): void {
+    public registerPlayer(player: NewPlayer): void {
         if (!player.id) {
             player.id = this.generateUUID();
         }
-        this.send('/app/player', player);
+        this.send('/register', player);
+    }
+
+    public sendMovement(movement: Movement): void {
+        this.send('/move', movement);
     }
 
     public sendBomb(bomb: Bomb): void {
@@ -69,25 +74,22 @@ export class WebsocketService implements OnDestroy{
     }
 
     public getState(): Observable<State> {
-        return this.subject.asObservable();
+        return this.subject.asObservable().map((state) => new State(state));
     }
 
     public getMockState(): Observable<State> {
         return Observable.interval(200).map(x => State.getMock(x));
     }
-
-    public unsubscribe() {
-        this.subscription.unsubscribe();
-    }
-
+    
     public disconnect() {
         //disconnect
+        this.subscription.unsubscribe();
         this.stomp.disconnect().then(() => {
             console.log('Connection closed')
         })
     }
+
     public ngOnDestroy(){
-        this.unsubscribe();
         this.disconnect();
     }
 

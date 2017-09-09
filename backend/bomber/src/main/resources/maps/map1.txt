@@ -1,14 +1,16 @@
-13x13
-
- x x x x x x
-
- x xox x x x
-  o
- x x x x x x
-
- x x x x x x
-
- x x x x x x
-
- x x x x x x
-
+15x15
+xxxxxxxxxxxxxxx
+x    oooo     x
+x x x xox x x x
+x oo   o oo   x
+xox xox xoxox x
+x  ooo   o   ox
+x x x x xoxox x
+xo ooooo   o ox
+xox xoxox x x x
+x  ooo   ooo  x
+xoxoxox xox xox
+xo   o  o oo ox
+x x x x x x x x
+x     oo o    x
+xxxxxxxxxxxxxxx

@@ -18,7 +18,7 @@ export class State {
 
     constructor(obj = {} as State) {
         this.players = obj.players;
-        this.bombs = obj.bombs;
+        this.bombs = obj.bombs.map((bomb => new Bomb(bomb)));
         this.fixStones = obj.fixStones;
         this.weakStones = obj.weakStones;
         this.timestamp = obj.timestamp;
@@ -44,9 +44,12 @@ export class State {
 
     static getMock(x: number): State {
         let now: number = Date.now();
+        let playerX : number[] = [5,6,7,7,7,6,5,5]; 
+        let playerY : number[] = [1,1,1,2,3,3,3,2];
+
 
         return new State({
-            players: [new Player({ id: "player-one", x: (x % 15) + 1, y: 1, nickName: "GodPlayer" })],
+            players: [new Player({ id: "player-one", x: (playerX[x % 8]), y: playerY[x % 8], nickName: "GodPlayer" })],
             bombs: [new Bomb({ id: "a-bomb", x: 3, y: 3, userId: "player-one", detonateAt: new Date(now + (5 - (x % 6)) * 1000) })],
             sizeX : 2,
             sizeY : 3,

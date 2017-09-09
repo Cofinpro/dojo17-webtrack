@@ -53,6 +53,34 @@ export class Game {
         this.resources.addImage('hero-1-r', '../../assets/images/hero/1/r-2.png', 32, 32);
         this.resources.addImage('hero-1-l', '../../assets/images/hero/1/l-2.png', 32, 32);
         this.resources.addImage('hero-1-u', '../../assets/images/hero/1/u-2.png', 32, 32);
+        this.resources.addImage('hero-2-d', '../../assets/images/hero/2/d-2.png', 32, 32);
+        this.resources.addImage('hero-2-r', '../../assets/images/hero/2/r-2.png', 32, 32);
+        this.resources.addImage('hero-2-l', '../../assets/images/hero/2/l-2.png', 32, 32);
+        this.resources.addImage('hero-2-u', '../../assets/images/hero/2/u-2.png', 32, 32);
+        this.resources.addImage('hero-3-d', '../../assets/images/hero/3/d-2.png', 32, 32);
+        this.resources.addImage('hero-3-r', '../../assets/images/hero/3/r-2.png', 32, 32);
+        this.resources.addImage('hero-3-l', '../../assets/images/hero/3/l-2.png', 32, 32);
+        this.resources.addImage('hero-3-u', '../../assets/images/hero/3/u-2.png', 32, 32);
+        this.resources.addImage('hero-4-d', '../../assets/images/hero/4/d-2.png', 32, 32);
+        this.resources.addImage('hero-4-r', '../../assets/images/hero/4/r-2.png', 32, 32);
+        this.resources.addImage('hero-4-l', '../../assets/images/hero/4/l-2.png', 32, 32);
+        this.resources.addImage('hero-4-u', '../../assets/images/hero/4/u-2.png', 32, 32);
+        this.resources.addImage('hero-5-d', '../../assets/images/hero/5/d-2.png', 32, 32);
+        this.resources.addImage('hero-5-r', '../../assets/images/hero/5/r-2.png', 32, 32);
+        this.resources.addImage('hero-5-l', '../../assets/images/hero/5/l-2.png', 32, 32);
+        this.resources.addImage('hero-5-u', '../../assets/images/hero/5/u-2.png', 32, 32);
+        this.resources.addImage('hero-6-d', '../../assets/images/hero/6/d-2.png', 32, 32);
+        this.resources.addImage('hero-6-r', '../../assets/images/hero/6/r-2.png', 32, 32);
+        this.resources.addImage('hero-6-l', '../../assets/images/hero/6/l-2.png', 32, 32);
+        this.resources.addImage('hero-6-u', '../../assets/images/hero/6/u-2.png', 32, 32);
+        this.resources.addImage('hero-7-d', '../../assets/images/hero/7/d-2.png', 32, 32);
+        this.resources.addImage('hero-7-r', '../../assets/images/hero/7/r-2.png', 32, 32);
+        this.resources.addImage('hero-7-l', '../../assets/images/hero/7/l-2.png', 32, 32);
+        this.resources.addImage('hero-7-u', '../../assets/images/hero/7/u-2.png', 32, 32);
+        this.resources.addImage('hero-8-d', '../../assets/images/hero/8/d-2.png', 32, 32);
+        this.resources.addImage('hero-8-r', '../../assets/images/hero/8/r-2.png', 32, 32);
+        this.resources.addImage('hero-8-l', '../../assets/images/hero/8/l-2.png', 32, 32);
+        this.resources.addImage('hero-8-u', '../../assets/images/hero/8/u-2.png', 32, 32);
 
         // bombs
         this.resources.addImage('bomb5', '../../assets/images/bombs/5.png', 32, 32);
@@ -175,6 +203,7 @@ export class Game {
         this.hero = this.playGround.createPicture(null, 32, 32, heroImages['right']);
 */
         this.player  = new Player({id: null, x:0,y:0,nickName:'Player 1'});
+        this.playGround.setPlayer(this.player);
         //this.animator = new HeroAnimator(this.hero, this.playGround, this.websocketService, this.player);
        // this.animator.setImages(heroImages);
         //this.playGround.addTarget(this.hero);
@@ -278,21 +307,26 @@ export class Game {
             let posUpdated = false;
             switch(keyCode){
                 case 37:
-                    this.player.x--;
-                    posUpdated = true;
+                    posUpdated = this.movePlayerLeft();
                     break;
                 case 39:
-                    this.player.x++;
-                     posUpdated = true;
+                    posUpdated = this.movePlayerRight();
                     break;
                 case 38:
-                    this.player.y++;
-                    posUpdated = true;
+                    posUpdated = this.movePlayerUp();
                     break;
                 case 40:
-                    this.player.y--;    
-                     posUpdated = true;
+                    posUpdated = this.movePlayerDown()
                     break;
+                case 32:
+                    const bomb = new Bomb({
+                        id: null,
+                        x: this.player.x,
+                        y: this.player.y,
+                        userId: this.player.id,
+                        detonateAt: null
+                    });
+                    this.websocketService.sendBomb(bomb);
             }
             if(posUpdated)
             {
@@ -312,6 +346,41 @@ export class Game {
         this.end = false;
     };
 
+    movePlayerLeft(){
+        if(this.player.x>1)
+        {
+            this.player.x--;
+            return true;
+        }
+        return false;
+    }
+
+    movePlayerRight(){
+        if(this.player.x<13)
+        {
+            this.player.x++;
+            return true;
+        }
+        return false;
+    }
+
+    movePlayerDown(){
+        if(this.player.y<13)
+        {
+            this.player.y++;
+            return true;
+        }
+        return false;
+    }
+
+    movePlayerUp(){
+        if(this.player.y>1)
+        {
+            this.player.y--;
+            return true;
+        }
+        return false;
+    }
     shutDownGame() {
         this.end = true;
         this.audios['loop'].load();
