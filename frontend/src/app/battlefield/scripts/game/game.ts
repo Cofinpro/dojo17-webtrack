@@ -98,6 +98,9 @@ export class Game {
         this.resources.addImage('powerupBlue', '../../assets/images/powerups/powerupBlue.png', 32, 32);
         this.resources.addImage('powerupRed', '../../assets/images/powerups/powerupRed.png', 32, 32);
 
+        // misc
+        this.resources.addImage('bush', '../../assets/images/misc/bush.png', 32, 32);
+
         this.resources.startLoading();
 
 
@@ -116,7 +119,6 @@ export class Game {
                 this.playGround.updateState(state);
             }
         });
-
     }
 
     checkResources(resources: GameResources) {
@@ -127,7 +129,6 @@ export class Game {
 
             const playGroundElement = document.getElementById('playground');
             playGroundElement.innerHTML = '';
-            // this.counterTag.innerHTML = '';
 
             this.playGround = new PlayGround(playGroundElement, 480, 928, this.playerDataService);
             this.playGround.resources = this.resources;
@@ -145,30 +146,26 @@ export class Game {
     checkReturn(e) {
         let event = window.event ? window.event : e;
         let keyCode = event.keyCode;
-        if (keyCode == 80) {
+        if (keyCode === 80) {
             if (this.isPaused()) {
                 this.resumeGame();
             } else {
                 this.pauseGame(1000);
             }
         }
-        if(event.altKey & event.ctrlKey && keyCode == 71){
+        if (event.altKey & event.ctrlKey && keyCode === 71) {
             this.playGround.shieldTarget(this.hero, -1);
         }
     }
 
     startTimer(): void {
-      let timer = TimerObservable.create(0, 10);
+      const timer = TimerObservable.create(0, 10);
       this.timerSubscription = timer.subscribe(t => {
-       let minutes = Math.floor(t/6000) % 60;
-       let seconds = Math.floor(t/100) % 60;
-       let rest = t;
-
-
-        let timeElement = document.getElementById('time');
-        timeElement.innerHTML = ('00' + minutes).slice(-2) + ':' + ('00' + seconds).slice(-2) ;//+ ':' +  ('00' +
-        // rest).slice(-2);
-
+        const minutes = Math.floor(t / 6000) % 60;
+        const seconds = Math.floor(t / 100) % 60;
+        const rest = t;
+        const timeElement = document.getElementById('time');
+        timeElement.innerHTML = ('00' + minutes).slice(-2) + ':' + ('00' + seconds).slice(-2) ;
       });
     }
 

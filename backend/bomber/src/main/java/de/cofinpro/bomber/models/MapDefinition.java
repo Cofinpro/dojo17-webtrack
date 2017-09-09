@@ -12,6 +12,7 @@ public class MapDefinition {
     private List<Stone> weakStones = new ArrayList<>();
     private List<BlastRadiusPowerup> blastRadiusPowerups = new ArrayList<>();
     private List<BombCountPowerup> bombCountPowerups = new ArrayList<>();
+    private List<Bush> foliage = new ArrayList<>();
 
     public int getSizeX() {
         return sizeX;
@@ -61,6 +62,14 @@ public class MapDefinition {
         this.blastRadiusPowerups = blastRadiusPowerups;
     }
 
+    public void setFoliage (List<Bush> foliage) {
+        this.foliage = foliage;
+    }
+
+    public List<Bush> getFoliage() {
+        return foliage;
+    }
+
     @Override
     public String toString() {
         return "MapDefinition{" +
@@ -70,6 +79,7 @@ public class MapDefinition {
                 ", weakStones=" + weakStones +
                 ", bombCountPowerups=" + bombCountPowerups + 
                 ", blastRadiusPowerups=" + blastRadiusPowerups +
+                ", foliage=" + foliage +
                 '}';
     }
 }

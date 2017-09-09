@@ -1,4 +1,4 @@
-<span [hidden]="inputPlayerName">{{playerDataService.getPlayerName()}}</span>
+<span id="userName" [hidden]="inputPlayerName">{{playerDataService.getPlayerName()}}</span>
 
 <button id="start" class="btn-default" (click)="toggleGameStart()" [hidden]="playerDataService.getPlayerName()">
   START GAME
