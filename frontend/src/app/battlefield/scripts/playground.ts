@@ -1,5 +1,4 @@
 import { GEPicture } from "./gameelements/gepicture";
-import { GameNotification } from './messages/gamenotification';
 import { State, Bomb, Player, Stone, Position, NewPlayer } from "../../models";
 
 
@@ -202,23 +201,23 @@ export class PlayGround {
 
     public setPositionStyle(positionStyle): void {
         this.tag.style.position = positionStyle;
-    };
+    }
 
     public getPositionStyle() {
         return this.tag.style.position;
-    };
+    }
 
     public getPosition() {
         let top = parseInt(this.tag.style.top);
         let left = parseInt(this.tag.style.left);
         return {top: top, left: left};
-    };
+    }
 
     public setBorder(width, style, color): void {
         this.tag.style.borderWidth = width + 'px';
         this.tag.style.borderStyle = style;
         this.tag.style.borderColor = color;
-    };
+    }
 
     public getBorder() {
         let borderWidth = parseInt(this.tag.style.borderWidth);
@@ -236,30 +235,20 @@ export class PlayGround {
         return this.tag.style.backgroundColor;
     }
 
-    // public createRectAngle(elmHeight, elmWidth, elmTop, elmLeft, color, isObstacle) {
-    //     let ctx = isObstacle ? this.obstaclesContext : this.context;
-    //     return new GERectangle(elmHeight, elmWidth, elmTop, elmLeft, color, ctx);
-    // };
-    //
-    // public createCircle(elmHeight, elmWidth, elmTop, elmLeft, color, isObstacle) {
-    //     let ctx = isObstacle ? this.obstaclesContext : this.context;
-    //     return new GECircle(elmHeight, elmWidth, elmTop, elmLeft, color, ctx);
-    // };
-
     public createPicture(id, elmTop, elmLeft, image, isObstacle?) {
         let ctx = isObstacle ? this.obstaclesContext : this.context;
         let pic = new GEPicture(id, elmTop, elmLeft, image, ctx);
         this.sprites.push(pic);
         return pic;
-    };
+    }
 
     public setPickItUpCallBack(callBack): void {
         this.pickItUpCallBack = callBack;
-    };
+    }
 
     public setTargetCaughtCallBack(callBack): void {
         this.targetCaughtCallBack = callBack;
-    };
+    }
 
     public checkBorder(element, move) {
 
@@ -285,40 +274,40 @@ export class PlayGround {
             returned.vrtCollission = true;
         }
         return returned;
-    };
+    }
 
     public addObstacle(obstacle): void {
         this.obstacles[this.obstacles.length] = obstacle;
-    };
+    }
 
     public removeObstacle(obstacle): void {
         const index = this.obstacles.indexOf(obstacle);
         if (index > -1) {
             this.obstacles.splice(index, 1);
         }
-    };
+    }
     public addBomb(bomb): void {
         this.bombs[this.bombs.length] = bomb;
-    };
+    }
 
     public removeBomb(bomb): void {
         const index = this.bombs.indexOf(bomb);
         if (index > -1) {
             this.bombs.splice(index, 1);
         }
-    };
+    }
 
     public checkObstacle(element, move) {
         return element.collisionCorrection(this.obstacles, move);
-    };
+    }
 
     public addPickItUp(pickItUp): void {
         this.pickItUps[this.pickItUps.length] = pickItUp;
-    };
+    }
 
     public getPickItUps() {
         return this.pickItUps;
-    };
+    }
 
     public checkPickItUp(element, move): void {
         const hrzTarget = element.left + move.horizontal;
@@ -330,7 +319,7 @@ export class PlayGround {
         }
 
         this.pickItUpCallBack(caught);
-    };
+    }
 
     public removePickItUp(pickItUp): void {
         const index = this.pickItUps.indexOf(pickItUp);
@@ -338,11 +327,11 @@ export class PlayGround {
             this.pickItUps.splice(index, 1);
             pickItUp.clear();
         }
-    };
+    }
 
     public addProtectedArea(area): void {
         this.protectedAreas[this.protectedAreas.length] = area;
-    };
+    }
 
     public removeProtectedArea(area) {
         let index = this.protectedAreas.indexOf(area);
@@ -350,7 +339,7 @@ export class PlayGround {
             this.protectedAreas.splice(index, 1);
             area.clear();
         }
-    };
+    }
 
     public checkProtectedArea(position, element) {
         let i;
@@ -361,11 +350,11 @@ export class PlayGround {
             }
         }
         return false;
-    };
+    }
 
     public addAutoMover(mover) {
         this.movers[this.movers.length] = mover;
-    };
+    }
 
     public removeAutoMover(mover) {
         let index = this.movers.indexOf(mover);
@@ -373,7 +362,7 @@ export class PlayGround {
             this.movers.splice(index, 1);
             mover.clear();
         }
-    };
+    }
 
     public startMovers() {
         let i;
@@ -381,18 +370,18 @@ export class PlayGround {
             this.movers[i].start();
         }
 
-    };
+    }
 
     public stopMovers() {
         let i;
         for (i = 0; i < this.movers.length; i++) {
             this.movers[i].stop();
         }
-    };
+    }
 
     public addTarget(target) {
         this.targets[this.targets.length] = target;
-    };
+    }
 
     public removeTarget(target) {
         let index = this.targets.indexOf(target);
@@ -400,7 +389,7 @@ export class PlayGround {
             this.targets.splice(index, 1);
             target.clear();
         }
-    };
+    }
 
     public checkAllTargets(element, move) {
         let hrzTarget = element.left + move.horizontal;
@@ -409,7 +398,7 @@ export class PlayGround {
 
         if (caught.length == 0) return;
         this.targetCaughtCallBack(caught[0]);
-    };
+    }
 
     public shieldTarget(target, millis) {
         let index = this.targets.indexOf(target);
@@ -420,7 +409,7 @@ export class PlayGround {
         if (millis > -1) {
             return setTimeout(this.unShieldTarget, millis, target, this);
         }
-    };
+    }
 
     public unShieldTarget(target, that) {
         let index = that.obstacles.indexOf(target);
@@ -428,39 +417,35 @@ export class PlayGround {
             that.obstacles.splice(index, 1);
         }
         that.targets[that.targets.length] = target;
-    };
+    }
 
     public checkCollision(position, toBeChecked) {
         for (let i = 0; i < toBeChecked.length; i++) {
             if (toBeChecked[i].collisionCorrection(position)) return toBeChecked[i];
         }
         return null;
-    };
+    }
 
     public pause() {
         this.paused = true;
-    };
+    }
 
     public endPause() {
         this.paused = false;
-    };
+    }
 
     public isPaused() {
         return this.paused;
-    };
+    }
 
     public paintBackGround() {
         this.context.drawImage(this.image, 0, 0);
-    };
+    }
 
     public removeGameElement(element) {
         this.removePickItUp(element);
         this.removeObstacle(element);
         this.removeTarget(element);
-    };
-
-    public showNotification(displayMillis, displayStyle, top, left, message) {
-        new GameNotification(displayMillis, displayStyle, top, left, message, this.obstaclesContext).show();
-    };
+    }
 
 }
