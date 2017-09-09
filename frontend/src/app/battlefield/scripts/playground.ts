@@ -23,6 +23,7 @@ export class PlayGround {
     obstaclesCanvas: any;
     bombs: Bomb[] = [];
     players: Player[] = [];
+    ownPlayer: Player;
     playersLastRound: Player[] = [];
     playersLastDirection: any[] = [];
     sprites: GEPicture[] = [];
@@ -63,6 +64,10 @@ export class PlayGround {
         this.tag.style.width = width + 'px';
         this.tag.style.height = height + 'px';
 
+    }
+
+    public setPlayer(player: Player) {
+        this.ownPlayer = player;
     }
 
     public updateState(state: State) {
@@ -138,11 +143,21 @@ export class PlayGround {
                     // no movement
                     direction = this.playersLastDirection[player.id];
                 }
-                this.createPicture(player.id, player.y * 32, player.x * 32, this.resources.images['hero-1-' + direction]);
+                const playerImageId = (this.ownPlayer.id === player.id ? 1 : this.getOpponentImageId(player.id));
+                this.createPicture(
+                    player.id,
+                    player.y * 32,
+                    player.x * 32,
+                    this.resources.images['hero-' + playerImageId + '-' + direction]
+                );
             }
             this.playersLastDirection[player.id] = direction;
         }
         this.playersLastRound = players;
+    }
+
+    private getOpponentImageId(id) {
+        return 2;
     }
 
     private updateBombs(bombs: Bomb[]) {

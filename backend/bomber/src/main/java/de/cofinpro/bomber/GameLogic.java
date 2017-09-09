@@ -15,7 +15,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -123,7 +122,7 @@ public class GameLogic {
         player.setY(newPosition.getY());
         this.currentState.getPlayers().add(player);
 
-        this.currentState.setServerTime(LocalDateTime.now());
+        this.currentState.setServerTime(System.currentTimeMillis());
         return this.currentState;
     }
 
@@ -199,7 +198,7 @@ public class GameLogic {
             this.currentState.getPlayers().add(player);
         }
 
-        this.currentState.setServerTime(LocalDateTime.now());
+        this.currentState.setServerTime(System.currentTimeMillis());
         return this.currentState;
     }
 
@@ -210,7 +209,7 @@ public class GameLogic {
         final String bombId = UUID.randomUUID().toString();
 
         bomb.setId(bombId);
-        bomb.setDetonateAt(LocalDateTime.now().plusSeconds(BOMB_TIMEOUT_SECONDS));
+        bomb.setDetonateAt(System.currentTimeMillis() + (BOMB_TIMEOUT_SECONDS * 1000));
 
         this.currentState.getBombs().add(bomb);
 
@@ -221,7 +220,7 @@ public class GameLogic {
             }
         }, BOMB_TIMEOUT_SECONDS * 1000);
 
-        this.currentState.setServerTime(LocalDateTime.now());
+        this.currentState.setServerTime(System.currentTimeMillis());
         return this.currentState;
     }
 
@@ -252,7 +251,7 @@ public class GameLogic {
                 .filter(e -> blownPositions.contains(e.getKey()))
                 .forEach(e -> this.currentState.getWeakStones().remove(e.getValue()));
 
-        this.currentState.setServerTime(LocalDateTime.now());
+        this.currentState.setServerTime(System.currentTimeMillis());
 
         this.template.convertAndSend("/topic/state", this.currentState);
     }
