@@ -182,6 +182,7 @@ export class Game {
         this.hero = this.playGround.createPicture(null, 32, 32, heroImages['right']);
 */
         this.player  = new NewPlayer({ id: null, nickName: 'Player 1' });
+        this.playGround.setPlayer(this.player);
 
         this.websocketService.registerPlayer(this.player);
         //this.animator = new HeroAnimator(this.hero, this.playGround, this.websocketService, this.player);
