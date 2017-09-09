@@ -8,7 +8,6 @@ import { Subscription, Observer, Subject } from 'rxjs/Rx';
 import { GameResources } from './gameresources';
 import {TimerObservable} from "rxjs/observable/TimerObservable";
 
-
 export class Game {
 
     public game;
@@ -35,7 +34,7 @@ export class Game {
     counterTag;
     livesTag;
 
-    constructor(private websocketService) {
+    constructor(private websocketService: WebsocketService) {
 
         this.resources = new GameResources();
 

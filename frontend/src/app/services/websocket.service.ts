@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { Subject, Observable, Observer } from 'rxjs/Rx';
 import { Message, State, Player, Bomb } from '../models';
 import { StompService } from 'ng2-stomp-service';
+import { OnDestroy } from '@angular/core';
 
 @Injectable()
-export class WebsocketService {
+export class WebsocketService implements OnDestroy{
 
     // This is for stomp
     private subject: Subject<State> = new Subject<State>();
@@ -31,6 +32,9 @@ export class WebsocketService {
     }
 
     public sendPlayer(player: Player): void {
+        if (!player.id) {
+            player.id = this.generateUUID();
+        }
         this.send('/app/player', player);
     }
 
@@ -47,6 +51,15 @@ export class WebsocketService {
         }
     }
 
+    private generateUUID(): string {
+        return `${this.s4()}${this.s4()}-${this.s4()}-${this.s4()}
+                -${this.s4()}-${this.s4()}${this.s4()}${this.s4()}`;
+    }
+
+    private s4(): string {
+        return Math.floor((1 + Math.random()) * 0x10000).toString(16).substr(1);
+    }
+
     //response
     public response(state: State): State {
         this.subject.next(state);
@@ -59,7 +72,7 @@ export class WebsocketService {
     }
 
     public getMockState(): Observable<State> {
-        return Observable.interval(100).map(x => State.getMock(x));
+        return Observable.interval(200).map(x => State.getMock(x));
     }
 
     public unsubscribe() {
@@ -71,6 +84,10 @@ export class WebsocketService {
         this.stomp.disconnect().then(() => {
             console.log('Connection closed')
         })
+    }
+    public ngOnDestroy(){
+        this.unsubscribe();
+        this.disconnect();
     }
 
 }

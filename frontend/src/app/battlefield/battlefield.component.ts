@@ -1,5 +1,5 @@
 import { WebsocketService } from '../services/websocket.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 
 import { Game } from './scripts/game/game';
 
@@ -24,6 +24,12 @@ export class BattlefieldComponent implements OnInit {
         // start game
         this.game = new Game(this.websocketService);
         this.game.startTimer();
+    }
+    
+    @HostListener('window:beforeunload', ['$event'])
+    unloadHandler(event) {
+        this.game.socketSubscription.unsubscribe();
+        alert('unsubscribing');
     }
 
 }
