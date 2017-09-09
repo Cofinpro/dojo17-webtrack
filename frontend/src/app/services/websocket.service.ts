@@ -11,7 +11,7 @@ export class WebsocketService implements OnDestroy{
     // This is for stomp
     private subject: Subject<State>;
     private subscription: any;
-    private connected: boolean = false;
+    connected: boolean = false;
 
     constructor(private stomp: StompService) {
 

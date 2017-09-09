@@ -14,7 +14,7 @@ export class GamestartComponent implements OnInit {
 
     playerName: string;
 
-    constructor(private gameService: GameService, private playerDataService: PlayerDataService) { }
+    constructor(public gameService: GameService, public playerDataService: PlayerDataService) { }
 
     ngOnInit() {
     }
