@@ -173,7 +173,8 @@ export class PlayGround {
                     // no movement
                     direction = this.playersLastDirection[player.id];
                 }
-                const playerImageId = (this.ownPlayer.id === player.id ? this.playerDataService.getPlayerAvatarId() : this.getOpponentImageId(player.id));
+                const playerImageId = this.calculatePlayerId(player.id);
+
                 this.createPicture(
                     player.id,
                     player.y * 32,
@@ -190,12 +191,21 @@ export class PlayGround {
         }
     }
 
+    private calculatePlayerId(playerId: string){
+      let avatarId = this.playerDataService.getPlayerAvatarId();
+      return (this.ownPlayer.id === playerId ? avatarId : this.getOpponentImageId(playerId, avatarId));
+    }
+
     public isGameOver(): boolean {
         return this.ownPlayerDied;
     }
 
-    private getOpponentImageId(id) {
-        return (id.charCodeAt(0) + id.charCodeAt(1)) % 7 + 2;
+    private getOpponentImageId(id, ownAvatarId) {
+        let opponent: number = (id.charCodeAt(0) + id.charCodeAt(1)) % 7 + 2;
+        if(opponent == ownAvatarId){
+          return 1;
+        }
+        return opponent;
     }
 
     private updateBombs(bombs: Bomb[], serverTime) {
@@ -212,7 +222,6 @@ export class PlayGround {
             this.createPicture(bomb.id, bomb.y * 32, bomb.x * 32, this.resources.images[bombSpriteIndex]);
         }
         this.bombs = bombs;
-        console.log('playground has bombs: ', bombs);
     }
 
     public setPositionStyle(positionStyle): void {
