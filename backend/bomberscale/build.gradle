@@ -40,6 +40,8 @@ task buildDocker(type: Docker, dependsOn: build) {
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-websocket")
+    compile("redis.clients:jedis:2.9.0")
+    compile("com.github.jedis-lock:jedis-lock:1.0.0")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.mockito:mockito-core:1.+")
