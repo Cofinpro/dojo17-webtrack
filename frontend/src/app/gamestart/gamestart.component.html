@@ -3,7 +3,7 @@
 <button (click)="toggleGameStart()" [hidden]="playerDataService.getPlayerName()">START GAME</button>
 
 <div [hidden]="!inputPlayerName">
-  <input [(ngModel)]="playerDataService.playerName"
+  <input [(ngModel)]="playerName"
          minlength="1"
          maxlength="20"
          required>
