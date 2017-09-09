@@ -3,6 +3,9 @@
   <img src="./assets/images/Bomberman_Logo.png" alt="BOMBERMAN">
 </div>
 <gamestart></gamestart>
-<battlefield></battlefield>
-
+<battlefield [hidden]="!this.websocketService.connected"></battlefield>
+<div [hidden]="this.websocketService.connected">
+  <span>Backend is away, stay tuned!</span>
+  <img src="../assets/images/stayingalive.gif">
+</div>
 <!-- put the main components here -->
