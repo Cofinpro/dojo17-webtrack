@@ -74,13 +74,14 @@ export class Game {
 
         // this.counterTag = document.getElementById('picks');
         // this.livesTag = document.getElementById('lives');
-        this.socketSubscription = this.websocketService.getState().subscribe((state: State) => {
+        this.socketSubscription = this.websocketService.getMockState().subscribe((state: State) => {
             console.log('got server message:', state.bombs);
             if (this.playGround && this.playGround.resources) {
                 console.log("playground defined");
                 this.playGround.updateBombsAndPlayers(state.bombs, state.players);
             }
         });
+
     }
 
     checkResources(resources) {
