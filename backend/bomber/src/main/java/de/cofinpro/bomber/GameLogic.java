@@ -6,7 +6,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.ApplicationScope;
@@ -37,12 +36,16 @@ public class GameLogic {
 
     private final CopyOnWriteArrayList<MapDefinition> mapDefinitions = new CopyOnWriteArrayList<>();
 
-    private final TaskScheduler scheduler = new ThreadPoolTaskScheduler();
+    private final ThreadPoolTaskScheduler scheduler;
 
     private SimpMessagingTemplate template;
 
     @Autowired
     public GameLogic(SimpMessagingTemplate template) {
+        this.scheduler = new ThreadPoolTaskScheduler();
+        this.scheduler.setPoolSize(4);
+        this.scheduler.initialize();
+
         this.template = template;
         try {
             initializeMaps();
