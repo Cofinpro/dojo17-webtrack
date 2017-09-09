@@ -1,7 +1,9 @@
 import { Component, OnDestroy, HostListener } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
 import { GameService } from "../services/game.service";
 import { Game } from './scripts/game/game';
+import { Player } from '../models';
 
 @Component({
     selector: 'battlefield',
@@ -28,6 +30,10 @@ export class BattlefieldComponent implements OnDestroy {
 
     gameOver() {
         return this.gameService.isGameOver();
+    }
+
+    getPlayers(): Observable<Player[]> {
+        return this.gameService.getPlayers();
     }
 
 }

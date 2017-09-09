@@ -189,6 +189,13 @@ export class Game {
         this.startGame();
     }
 
+    getPlayers(): Player[] {
+        if (this.playGround) {
+            return this.playGround.players;
+        }
+        return [];
+    }
+
     isGameOver(): boolean {
         if (this.playGround) {
             if (this.playGround.isGameOver()) {
