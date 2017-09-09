@@ -31,6 +31,9 @@ export class WebsocketService {
     }
 
     public sendPlayer(player: Player): void {
+        if (!player.id) {
+            player.id = this.generateUUID();
+        }
         this.send('/app/player', player);
     }
 
@@ -45,6 +48,15 @@ export class WebsocketService {
         } else {
             console.log("Not connected yet");
         }
+    }
+
+    private generateUUID(): string {
+        return `${this.s4()}${this.s4()}-${this.s4()}-${this.s4()}
+                -${this.s4()}-${this.s4()}${this.s4()}${this.s4()}`;
+    }
+
+    private s4(): string {
+        return Math.floor((1 + Math.random()) * 0x10000).toString(16).substr(1);
     }
 
     //response

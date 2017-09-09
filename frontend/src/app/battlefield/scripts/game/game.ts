@@ -35,7 +35,7 @@ export class Game {
     counterTag;
     livesTag;
 
-    constructor(private websocketService) {
+    constructor(private websocketService: WebsocketService) {
 
         this.resources = new GameResources();
 
