@@ -109,7 +109,7 @@ export class PlayGround {
 
     private updateExploded(positions: Position[]){
         for(const position of positions){
-          this.createPicture("some", position.y*32, position.x*32, this.resources.images['explosion1'])
+          this.createPicture("some", position.y*32, position.x*32, this.resources.images['explosionFullCenter'])
         }
       }
 
@@ -154,7 +154,7 @@ export class PlayGround {
             if (timeUntilExplosion > 0) {
                 bombSpriteIndex = 'bomb' + Math.max(0, Math.round(timeUntilExplosion / 1000));
             } else {
-                bombSpriteIndex = 'explosion1';
+                bombSpriteIndex = 'explosionFullCenter';
             }
             this.createPicture(bomb.id, bomb.y * 32, bomb.x * 32, this.resources.images[bombSpriteIndex]);
         }
