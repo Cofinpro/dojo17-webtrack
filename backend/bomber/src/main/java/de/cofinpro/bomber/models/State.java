@@ -138,6 +138,14 @@ public class State {
         blastRadiusPowerups.remove(found);
     }
 
+    public void addBlastRadiusPowerup(Position position) {
+        blastRadiusPowerups.add(new BlastRadiusPowerup(position.getX(), position.getY()));
+    }
+
+    public void addBombCountPowerup(Position position) {
+        bombCountPowerups.add(new BombCountPowerup(position.getX(), position.getY()));
+    }
+
     @Override
     public String toString() {
         return "State{" +
