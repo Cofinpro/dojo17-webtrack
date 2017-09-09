@@ -1,7 +1,6 @@
 import {Component, Input, OnInit, Output} from '@angular/core';
 import {PlayerDataService} from "../services/player-data.service";
 
-
 @Component({
   selector: 'gamestart',
   templateUrl: './gamestart.component.html',
@@ -12,7 +11,7 @@ import {PlayerDataService} from "../services/player-data.service";
 export class GamestartComponent implements OnInit {
   inputPlayerName: boolean = false;
 
-  constructor(private playerDataService: PlayerDataService) { }
+  constructor(public playerDataService: PlayerDataService) { }
 
   ngOnInit() {
   }
@@ -29,8 +28,7 @@ export class GamestartComponent implements OnInit {
   public beginGame(): void {
     this.inputPlayerName=false;
     // TODO: call gamestart to start game und begin timer count
-    console.log("tada!")
-    console.log('avATarId', this.playerDataService.getPlayerAvatarId());
+    console.log("tada!");
   }
 
 }
