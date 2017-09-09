@@ -278,21 +278,26 @@ export class Game {
             let posUpdated = false;
             switch(keyCode){
                 case 37:
-                    this.player.x--;
-                    posUpdated = true;
+                    posUpdated = this.movePlayerLeft();
                     break;
                 case 39:
-                    this.player.x++;
-                     posUpdated = true;
+                    posUpdated = this.movePlayerRight();
                     break;
                 case 38:
-                    this.player.y++;
-                    posUpdated = true;
+                    posUpdated = this.movePlayerUp();
                     break;
                 case 40:
-                    this.player.y--;    
-                     posUpdated = true;
+                    posUpdated = this.movePlayerDown()
                     break;
+                case 32:
+                    const bomb = new Bomb({
+                        id: null,
+                        x: this.player.x,
+                        y: this.player.y,
+                        userId: this.player.id,
+                        detonateAt: null
+                    });
+                    this.websocketService.sendBomb(bomb);
             }
             if(posUpdated)
             {
@@ -312,6 +317,41 @@ export class Game {
         this.end = false;
     };
 
+    movePlayerLeft(){
+        if(this.player.x>1)
+        {
+            this.player.x--;
+            return true;
+        }
+        return false;
+    }
+
+    movePlayerRight(){
+        if(this.player.x<13)
+        {
+            this.player.x++;
+            return true;
+        }
+        return false;
+    }
+
+    movePlayerDown(){
+        if(this.player.y<13)
+        {
+            this.player.y++;
+            return true;
+        }
+        return false;
+    }
+
+    movePlayerUp(){
+        if(this.player.y>1)
+        {
+            this.player.y--;
+            return true;
+        }
+        return false;
+    }
     shutDownGame() {
         this.end = true;
         this.audios['loop'].load();
