@@ -11,7 +11,7 @@ export class State {
     bombs: Bomb[];
     fixStones: Stone[];
     weakStones: Stone[];
-    timestamp: Date;
+    serverTime: number;
     exploded : Position[];
 
     static readonly map: Stone[] = State.createStoneRow(0, 16, 1);
@@ -21,7 +21,7 @@ export class State {
         this.bombs = obj.bombs.map((bomb => new Bomb(bomb)));
         this.fixStones = obj.fixStones;
         this.weakStones = obj.weakStones;
-        this.timestamp = obj.timestamp;
+        this.serverTime = obj.serverTime;
         this.sizeX = obj.sizeX;
         this.sizeY = obj.sizeY;
         this.exploded = obj.exploded;
@@ -34,7 +34,7 @@ export class State {
         }
         return row;
     }
-    
+
     static createExplodedRow(rowIndex: number, width: number, step: number): Stone[]{
         let row : Position[] = [];
         for(var i=0; i<width; i+=step){
