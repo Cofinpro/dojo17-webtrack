@@ -11,7 +11,7 @@ import {PlayerDataService} from "../services/player-data.service";
 export class GamestartComponent implements OnInit {
   inputPlayerName: boolean = false;
 
-  constructor(private playerDataService: PlayerDataService) { }
+  constructor(public playerDataService: PlayerDataService) { }
 
   ngOnInit() {
   }
