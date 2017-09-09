@@ -201,9 +201,7 @@ export class PlayGround {
     public createPicture(id, elmTop, elmLeft, image, isObstacle?) {
         let ctx = isObstacle ? this.obstaclesContext : this.context;
         let pic = new GEPicture(id, elmTop, elmLeft, image, ctx);
-        if (!isObstacle) {
-            this.sprites.push(pic);
-        }
+        this.sprites.push(pic);
         return pic;
     };
 
