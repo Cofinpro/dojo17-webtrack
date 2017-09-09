@@ -8,7 +8,7 @@ import {PlayerDataService} from "../services/player-data.service";
     selector: 'battlefield',
     templateUrl: './battlefield.component.html',
     styleUrls: ['./battlefield.component.scss'],
-    providers: [WebsocketService, PlayerDataService]
+    providers: [WebsocketService]
 })
 
 /**

@@ -1,6 +1,6 @@
 import { GEPicture } from "./gameelements/gepicture";
-import { State, Bomb, Player, Stone, Position, NewPlayer } from "../../models";
-
+import { State, Bomb, Player, Stone, Position, NewPlayer, BombCountPowerup, BlastRadiusPowerup } from "../../models";
+import {PlayerDataService} from "../../services/player-data.service";
 
 export class PlayGround {
     image: any;
@@ -31,7 +31,7 @@ export class PlayGround {
     battleFieldSizeX: number;
     battleFieldSizeY: number;
 
-    constructor(tag, height, width) {
+    constructor(tag, height, width, private playerDataService: PlayerDataService) {
         this.obstacles = [];
         this.pickItUps = [];
         this.targets = [];
@@ -94,6 +94,10 @@ export class PlayGround {
 
         this.updateWeakStones(state.weakStones);
 
+        this.updateBlastRadiusPowerups(state.blastRadiusPowerups);
+
+        this.updateBombCountPowerups(state.bombCountPowerups);
+
         this.updateBombs(state.bombs, state.serverTime);
 
         this.updateExploded(state.exploded);
@@ -123,6 +127,18 @@ export class PlayGround {
     private updateWeakStones(stones: Stone[]) {
         for (const stone of stones) {
             this.createPicture('weakStone-id', stone.y * 32, stone.x * 32, this.resources.images['box']);
+        }
+    }
+
+    private updateBombCountPowerups(powerups: BombCountPowerup[]) {
+        for (const powerup of powerups) {
+            this.createPicture('bombCoundPowerup-id', powerup.y * 32, powerup.x * 32, this.resources.images['powerupBlue']);
+        }
+    }
+
+    private updateBlastRadiusPowerups(powerups: BlastRadiusPowerup[]) {
+        for (const powerup of powerups) {
+            this.createPicture('blastRadiusPowerup-id', powerup.y * 32, powerup.x * 32, this.resources.images['powerupRed']);
         }
     }
 
@@ -157,7 +173,7 @@ export class PlayGround {
                     // no movement
                     direction = this.playersLastDirection[player.id];
                 }
-                const playerImageId = (this.ownPlayer.id === player.id ? 1 : this.getOpponentImageId(player.id));
+                const playerImageId = (this.ownPlayer.id === player.id ? this.playerDataService.getPlayerAvatarId() : this.getOpponentImageId(player.id));
                 this.createPicture(
                     player.id,
                     player.y * 32,

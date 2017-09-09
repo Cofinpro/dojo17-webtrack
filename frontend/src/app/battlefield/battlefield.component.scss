@@ -2,10 +2,6 @@
     background-color: rgba(0, 0, 0, 0.8);
 }
 
-.is-game-over {
-    background-color: rgba(0, 0, 0, 0.2);
-}
-
 .is-loading,
 .is-game-over {
     position: absolute;
@@ -21,4 +17,10 @@
     img {
         margin-top: -100px;
     }
+}
+
+.is-game-over {
+    background-color: rgba(0, 0, 0, 0.2);
+    justify-content: flex-start;
+    align-items: center;
 }
