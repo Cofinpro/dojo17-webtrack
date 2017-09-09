@@ -322,12 +322,8 @@ export class Game {
 
     shutDownGame() {
         this.end = true;
-        this.audios['loop'].load();
-        this.playGround.stopMovers();
         document.onkeydown = null;
         document.onkeyup = null;
-        this.animator.stop();
-        this.animator = null;
     }
 
     resumeGame() {

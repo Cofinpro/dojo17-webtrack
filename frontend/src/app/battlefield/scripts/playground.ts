@@ -75,6 +75,7 @@ export class PlayGround {
     }
 
     public updateState(state: State) {
+
         // TODO: removePicture für Bombs die nicht mehr existieren
         if (!this.resources) {
             return;
@@ -94,7 +95,7 @@ export class PlayGround {
 
         this.updateWeakStones(state.weakStones);
 
-        this.updateBombs(state.bombs);
+        this.updateBombs(state.bombs, state.serverTime);
 
         this.updateExploded(state.exploded);
 
@@ -182,11 +183,10 @@ export class PlayGround {
         return (id.charCodeAt(0) + id.charCodeAt(1)) % 7 + 2;
     }
 
-    private updateBombs(bombs: Bomb[]) {
-        const now = new Date();
+    private updateBombs(bombs: Bomb[], serverTime) {
         for (const bomb of bombs) {
             // display correct sprite for bomb according to detonation time
-            const timeUntilExplosion = bomb.detonateAt.getTime() - now.getTime();
+            const timeUntilExplosion = bomb.detonateAt.getTime() - serverTime;
             console.log('time until explosion: ', timeUntilExplosion);
             let bombSpriteIndex = '';
             if (timeUntilExplosion > 0) {
