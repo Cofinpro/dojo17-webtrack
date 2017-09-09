@@ -18,7 +18,7 @@ export class BattlefieldComponent implements OnInit, OnDestroy {
 
     public game: Game;
 
-    constructor(private websocketService: WebsocketService, private playerDataService: PlayerDataService) { }
+    constructor(private websocketService: WebsocketService, public playerDataService: PlayerDataService) { }
 
     ngOnInit() {
         // start game
