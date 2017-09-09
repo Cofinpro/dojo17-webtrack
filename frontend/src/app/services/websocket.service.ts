@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable, Observer } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
-import { Message, State, Player, Bomb, Movement, NewPlayer } from '../models';
+import { Message, State, Player, Bomb, Movement, NewPlayer, NewBomb } from '../models';
 import { StompService } from 'ng2-stomp-service';
 import { OnDestroy } from '@angular/core';
 
@@ -45,8 +45,8 @@ export class WebsocketService implements OnDestroy{
         this.send('/app/move', movement);
     }
 
-    public sendBomb(playerId: string): void {
-        this.send('/app/bomb', playerId);
+    public sendBomb(bomb: NewBomb): void {
+        this.send('/app/bomb', bomb);
     }
 
     private send(topic: string, obj: NewPlayer | string | Movement) {
@@ -54,7 +54,7 @@ export class WebsocketService implements OnDestroy{
             console.log('Sending object', obj);
             this.stomp.send(topic, obj);
         } else {
-            console.log("Not connected yet");
+            console.log('Not connected yet');
         }
     }
 
@@ -66,26 +66,23 @@ export class WebsocketService implements OnDestroy{
         return Math.floor((1 + Math.random()) * 0x10000).toString(16).substr(1);
     }
 
-    //response
     public response = (state: State): State => {
         this.subject.next(state);
-        console.log("Received Player", state);
         return state;
     }
 
     public getState(): Observable<State> {
         return this.subject.asObservable().map((state) => new State(state));
     }
-    
+
     public disconnect() {
-        //disconnect
         this.subscription.unsubscribe();
         this.stomp.disconnect().then(() => {
-            console.log('Connection closed')
-        })
+            console.log('Connection closed');
+        });
     }
 
-    public ngOnDestroy(){
+    public ngOnDestroy() {
         this.disconnect();
     }
 
