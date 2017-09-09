@@ -1,8 +1,8 @@
 import { WebsocketService } from '../services/websocket.service';
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
-
 import { Game } from './scripts/game/game';
-import {PlayerDataService} from "../services/player-data.service";
+import { Player } from '../models/player';
+import { PlayerDataService } from "../services/player-data.service";
 
 @Component({
     selector: 'battlefield',
@@ -37,6 +37,13 @@ export class BattlefieldComponent implements OnInit, OnDestroy {
 
     gameOver() {
         return this.game && this.game.isGameOver();
+    }
+
+    getPlayers(): Player[] {
+        if (this.game) {
+            return this.game.getPlayers();
+        }
+        return [];
     }
 
 }
