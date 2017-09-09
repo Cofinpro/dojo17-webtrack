@@ -6,19 +6,15 @@
 </div>
 
 <div class="row" [hidden]="gameLoaded()">
-    <div class="col-md-6">
-        <div class="well">
-            <span id="score">0</span>
+    <div class="col-md-9">
+        <div class="playground-background">
+            <div id="playground"></div>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
         <div class="well">
             <span id="time"></span>
         </div>
+        <highscore></highscore>
     </div>
 </div>
-<div class="playground-background">
-    <div id="playground"></div>
-</div>
-
-<highscore players="getPlayers()"></highscore>
