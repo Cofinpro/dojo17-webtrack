@@ -9,6 +9,8 @@ public class Bomb implements Positionable {
     private int x;
     private int y;
     private Long detonateAt;
+    private int blastRadius;
+    
 
     public String getId() {
         return id;
@@ -58,6 +60,14 @@ public class Bomb implements Positionable {
         return new Position(x, y);
     }
 
+    public void setBlastRadius(int blastRadius) {
+        this.blastRadius = blastRadius;
+    }
+
+    public int getBlastRadius () {
+        return blastRadius;
+    }
+
     @Override
     public String toString() {
         return "Bomb{" +
@@ -66,6 +76,7 @@ public class Bomb implements Positionable {
                 ", x=" + x +
                 ", y=" + y +
                 ", detonateAt=" + detonateAt +
+                ", blastRadius=" + blastRadius +
                 '}';
     }
 }
