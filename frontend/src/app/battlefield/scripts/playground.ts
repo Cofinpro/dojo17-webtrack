@@ -157,7 +157,7 @@ export class PlayGround {
     }
 
     private getOpponentImageId(id) {
-        return 2;
+        return (id.charCodeAt(0) + id.charCodeAt(1)) % 7 + 2;
     }
 
     private updateBombs(bombs: Bomb[]) {
