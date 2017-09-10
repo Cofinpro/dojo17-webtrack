@@ -1,4 +1,4 @@
-import { Component, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnDestroy, OnInit, HostListener } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { GameService } from "../services/game.service";
@@ -14,11 +14,18 @@ import { Player } from '../models';
 /**
 * The battlefields holds the 2D game logic
 */
-export class BattlefieldComponent implements OnDestroy {
+export class BattlefieldComponent implements OnInit, OnDestroy {
 
     public game: Game;
+    public suddenDeath: boolean = false;
 
     constructor(private gameService: GameService) { }
+
+    ngOnInit(): void {
+        this.gameService.isSuddenDeath().subscribe((isSuddenDeath) => {
+            this.suddenDeath = isSuddenDeath;
+        });
+    }
 
     ngOnDestroy(): void {
         this.gameService.destroy();

@@ -12,9 +12,12 @@
         </div>
     </div>
     <div class="col-md-2">
-      <gamestart></gamestart>
-      <div class="well">
+        <gamestart></gamestart>
+        <div *ngIf="!suddenDeath" class="well">
             <span id="time"></span>
+        </div>
+        <div id="sudden-death" *ngIf="suddenDeath" class="well">
+            Suddendeath
         </div>
       <highscore></highscore>
     </div>

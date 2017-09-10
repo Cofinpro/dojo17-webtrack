@@ -13,6 +13,7 @@ export class GameService {
 
     private game: Game;
     private highScoreSubject: Subject<Player[]> = new Subject<Player[]>();
+    private suddenDeathSubject: Subject<boolean> = new Subject<boolean>();
     private stateSubscription: Subscription;
 
     constructor(private websocketService: WebsocketService, private playerDataService: PlayerDataService) { }
@@ -24,6 +25,7 @@ export class GameService {
 
         this.stateSubscription = this.websocketService.getState().subscribe( (state) => {
             this.highScoreSubject.next(state.players);
+            this.suddenDeathSubject.next(state.suddenDeath);
         });
     }
 
@@ -42,6 +44,10 @@ export class GameService {
             return true;
         }
         return this.game && this.game.isGameLoaded();
+    }
+
+    public isSuddenDeath(): Observable<boolean> {
+        return this.suddenDeathSubject.asObservable();
     }
 
     public getPlayers(): Observable<Player[]> {
