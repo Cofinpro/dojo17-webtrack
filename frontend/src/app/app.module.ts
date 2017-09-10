@@ -9,6 +9,7 @@ import { GamestartComponent } from './gamestart/gamestart.component';
 import { FormsModule } from "@angular/forms";
 import { HighscoreComponent } from './highscore/highscore.component';
 import { AvatarComponent } from './avatar/avatar.component';
+import { TimerComponent } from './timer/timer.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { AvatarComponent } from './avatar/avatar.component';
     BattlefieldComponent,
     GamestartComponent,
     HighscoreComponent,
-    AvatarComponent
+    AvatarComponent,
+    TimerComponent
   ],
   imports: [
     BrowserModule, FormsModule
