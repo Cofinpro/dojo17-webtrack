@@ -128,6 +128,7 @@ public class GameLogic {
         this.currentState.setFoliage(definition.getFoliage());
         this.currentRound++;
         System.out.println("State reset: " + currentState.toString());
+        System.out.println("Starting round " + currentRound);
 
         scheduler.schedule(new TimerTask() {
             @Override
@@ -138,14 +139,15 @@ public class GameLogic {
     }
 
     private synchronized void startSuddenDeath(int affectedRound) {
-        if (affectedRound != currentRound) {
+        placeVerticalFixStones(0,0, affectedRound);
+    }
+
+    private synchronized void placeVerticalFixStones(int row, int col, int affectedRound) {
+        if (currentRound != affectedRound) {
+            // only handle sudden death if no new round has been started
             return;
         }
 
-        placeVerticalFixStones(0,0);
-    }
-
-    private synchronized void placeVerticalFixStones(int row, int col) {
         this.currentState.getFixStones().add(new Stone(col, row));
         Position deathPos = new Position(col, row);
 
