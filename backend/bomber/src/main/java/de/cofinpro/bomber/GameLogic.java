@@ -34,7 +34,7 @@ public class GameLogic {
 
     private static final int ROUND_TIME_SECONDS = 120;
 
-    private static final int SUDDEN_DEATH_INTERVAL_MILLIS = 500;
+    private static final int SUDDEN_DEATH_INTERVAL_MILLIS = 300;
 
     private static final int SCORE_PLAYER_KILL = 10000;
     private static final int SCORE_STONE_KILL = 1500;
