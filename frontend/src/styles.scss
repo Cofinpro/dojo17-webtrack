@@ -30,11 +30,21 @@ body {
     text-align: center;
 }
 
-#time, #score, #bomb {
+@keyframes blink {
+  50% { border-color: #ff0000; }
+}
+
+.well#sudden-death{
+  animation: blink .5s step-end infinite alternate;
+}
+
+#time, #score, #bomb, #sudden-death {
     font-size: 2rem;
     font-family: $monoton;
     color: #ffffff;
 }
+
+
 
 #userName {
     font-family: $monoton;
