@@ -17,6 +17,7 @@ public class State {
     private List<BlastRadiusPowerup> blastRadiusPowerups = new ArrayList<>();
     private List<Bush> foliage = new ArrayList<>();
     private Long serverTime;
+    private boolean suddenDeath = false;
 
     public int getSizeX() {
         return sizeX;
@@ -155,6 +156,14 @@ public class State {
         this.foliage = foliage;
     }
 
+    public boolean isSuddenDeath() {
+        return suddenDeath;
+    }
+
+    public void setSuddenDeath(boolean suddenDeath) {
+        this.suddenDeath = suddenDeath;
+    }
+
     @Override
     public String toString() {
         return "State{" +
@@ -169,6 +178,7 @@ public class State {
                 ", bombCountPowerups=" + bombCountPowerups +
                 ", serverTime=" + serverTime +
                 ", foliage=" + foliage +
+                ", suddenDeath=" + suddenDeath +
                 '}';
     }
 }

@@ -19,6 +19,7 @@ export class State {
     blastRadiusPowerups: BlastRadiusPowerup[];
     serverTime: number;
     exploded : Position[];
+    suddenDeath : boolean;
 
     static readonly map: Stone[] = State.createStoneRow(0, 16, 1);
 
@@ -34,6 +35,7 @@ export class State {
         this.sizeX = obj.sizeX;
         this.sizeY = obj.sizeY;
         this.exploded = obj.exploded;
+        this.suddenDeath = obj.suddenDeath;
     }
 
     static createStoneRow(rowIndex: number, width: number, step: number): Stone[]{

@@ -139,6 +139,7 @@ public class GameLogic {
     }
 
     private synchronized void startSuddenDeath(int affectedRound) {
+        currentState.setSuddenDeath(true);
         placeVerticalFixStones(0,0, affectedRound);
     }
 
