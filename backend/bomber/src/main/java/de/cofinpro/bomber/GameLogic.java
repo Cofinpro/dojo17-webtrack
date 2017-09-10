@@ -163,14 +163,17 @@ public class GameLogic {
             this.currentState.getPlayers().remove(killedPlayer);
             handleKilledPlayerUpgrades(killedPlayer);
         }
+        final int mapSizeX = this.currentState.getSizeX();
+        final int mapSizeY = this.currentState.getSizeY();
+        
 
         scheduler.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (col + 1 < this.currentState.getSizeX()) {
+                if (col + 1 < mapSizeX) {
                     placeVerticalFixStones(row, col + 1, affectedRound);
                 }
-                else if (row + 1 < this.currentState.getSizeY()) {
+                else if (row + 1 < mapSizeY) {
                     placeVerticalFixStones(row +1, 0, affectedRound);
                 }
             }
