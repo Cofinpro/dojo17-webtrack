@@ -168,10 +168,10 @@ public class GameLogic {
             @Override
             public void run() {
                 if (col + 1 < this.currentState.getSizeX()) {
-                    placeVerticalFixStones(row, col + 1);
+                    placeVerticalFixStones(row, col + 1, affectedRound);
                 }
                 else if (row + 1 < this.currentState.getSizeY()) {
-                    placeVerticalFixStones(row +1, 0);
+                    placeVerticalFixStones(row +1, 0, affectedRound);
                 }
             }
         }, new Date(System.currentTimeMillis() + (SUDDEN_DEATH_INTERVAL_MILLIS)));
