@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Rx';
 
 import { GameService } from '../services/game.service';
 
@@ -7,17 +8,22 @@ import { GameService } from '../services/game.service';
   templateUrl: './timer.component.html',
   styleUrls: ['./timer.component.scss']
 })
-export class TimerComponent implements OnInit {
+export class TimerComponent implements OnInit, OnDestroy {
 
   public suddenDeath: boolean = false;
+  private subscription: Subscription;
 
   constructor(private gameService: GameService) {
   }
 
   ngOnInit() {
-      this.gameService.isSuddenDeath().subscribe(suddenDeath => {
+      this.subscription = this.gameService.isSuddenDeath().subscribe(suddenDeath => {
           this.suddenDeath = suddenDeath;
       })
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
 }
