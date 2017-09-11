@@ -4,22 +4,16 @@ import {PlayerDataService} from "../../services/player-data.service";
 
 export class PlayGround {
     image: any;
-    targetCaughtCallBack: any;
     obstaclesContext: any;
     context: any;
     obstacles: any;
-    pickItUps: any;
-    targets: any;
-    movers: any;
-    protectedAreas: any;
-    pickItUpCallBack: any;
-    tragetCallBack: any;
+
     width: any;
     height: any;
     tag: any;
-    paused: any;
     canvas: any;
     obstaclesCanvas: any;
+
     bombs: Bomb[] = [];
     ownPlayerDied: boolean;
     players: Player[] = [];
@@ -27,25 +21,18 @@ export class PlayGround {
     playersLastRound: Player[] = [];
     playersLastDirection: any[] = [];
     sprites: GEPicture[] = [];
+
     resources;
     battleFieldSizeX: number;
     battleFieldSizeY: number;
 
     constructor(tag, height, width, private playerDataService: PlayerDataService) {
-        this.obstacles = [];
-        this.pickItUps = [];
-        this.targets = [];
-        this.movers = [];
-        this.protectedAreas = [];
         this.ownPlayerDied = false;
 
-        this.pickItUpCallBack = null;
-        this.tragetCallBack = null;
 
         this.width = width;
         this.height = height;
         this.tag = tag;
-        this.paused = false;
 
         this.canvas = document.createElement('canvas');
         this.obstaclesCanvas = document.createElement('canvas');
@@ -61,8 +48,8 @@ export class PlayGround {
         this.canvas.style.position = 'absolute';
         this.obstaclesCanvas.style.position = 'absolute';
 
-        tag.appendChild(this.obstaclesCanvas);
-        tag.appendChild(this.canvas);
+        this.tag.appendChild(this.obstaclesCanvas);
+        this.tag.appendChild(this.canvas);
 
         this.tag.style.width = width + 'px';
         this.tag.style.height = height + 'px';
@@ -75,7 +62,6 @@ export class PlayGround {
 
     public updateState(state: State) {
 
-        // TODO: removePicture für Bombs die nicht mehr existieren
         if (!this.resources) {
             return;
         }
@@ -110,7 +96,6 @@ export class PlayGround {
     private clearSprites(): void {
         for (const sprite of this.sprites) {
             sprite.clear();
-            this.removeGameElement(sprite);
         }
         this.sprites = [];
     }
@@ -274,50 +259,6 @@ export class PlayGround {
         return pic;
     }
 
-    public setPickItUpCallBack(callBack): void {
-        this.pickItUpCallBack = callBack;
-    }
-
-    public setTargetCaughtCallBack(callBack): void {
-        this.targetCaughtCallBack = callBack;
-    }
-
-    public checkBorder(element, move) {
-
-        let hrzTarget = element.left + move.horizontal;
-        let vrtTarget = element.top + move.vertical;
-
-        let returned = {left: hrzTarget, top: vrtTarget, hrzCollission: false, vrtCollission: false };
-
-        if (move.horizontal < 0 && hrzTarget < 0) {
-            returned.left = 0;
-            returned.hrzCollission = true;
-        }
-        if (move.horizontal > 0 && hrzTarget + element.width > this.width) {
-            returned.left = this.width - element.width;
-            returned.hrzCollission = true;
-        }
-        if (move.vertical < 0 && vrtTarget < 0) {
-            returned.top = 0;
-            returned.vrtCollission = true;
-        }
-        if (move.vertical > 0 && vrtTarget + element.height > this.height) {
-            returned.top = this.height - element.height;
-            returned.vrtCollission = true;
-        }
-        return returned;
-    }
-
-    public addObstacle(obstacle): void {
-        this.obstacles[this.obstacles.length] = obstacle;
-    }
-
-    public removeObstacle(obstacle): void {
-        const index = this.obstacles.indexOf(obstacle);
-        if (index > -1) {
-            this.obstacles.splice(index, 1);
-        }
-    }
     public addBomb(bomb): void {
         this.bombs[this.bombs.length] = bomb;
     }
@@ -329,155 +270,9 @@ export class PlayGround {
         }
     }
 
-    public checkObstacle(element, move) {
-        return element.collisionCorrection(this.obstacles, move);
-    }
-
-    public addPickItUp(pickItUp): void {
-        this.pickItUps[this.pickItUps.length] = pickItUp;
-    }
-
-    public getPickItUps() {
-        return this.pickItUps;
-    }
-
-    public checkPickItUp(element, move): void {
-        const hrzTarget = element.left + move.horizontal;
-        const vrtTarget = element.top + move.vertical;
-        const caught = element.getOverlappedElements(this.pickItUps, hrzTarget, vrtTarget);
-
-        if (caught.length === 0) {
-            return;
-        }
-
-        this.pickItUpCallBack(caught);
-    }
-
-    public removePickItUp(pickItUp): void {
-        const index = this.pickItUps.indexOf(pickItUp);
-        if (index > -1) {
-            this.pickItUps.splice(index, 1);
-            pickItUp.clear();
-        }
-    }
-
-    public addProtectedArea(area): void {
-        this.protectedAreas[this.protectedAreas.length] = area;
-    }
-
-    public removeProtectedArea(area) {
-        let index = this.protectedAreas.indexOf(area);
-        if (index > -1) {
-            this.protectedAreas.splice(index, 1);
-            area.clear();
-        }
-    }
-
-    public checkProtectedArea(position, element) {
-        let i;
-        for (i = 0; i < this.protectedAreas.length; i++) {
-            const result = this.protectedAreas[i].collisionCorrection(position, element.shapeData);
-            if (result) {
-                return result;
-            }
-        }
-        return false;
-    }
-
-    public addAutoMover(mover) {
-        this.movers[this.movers.length] = mover;
-    }
-
-    public removeAutoMover(mover) {
-        let index = this.movers.indexOf(mover);
-        if (index > -1) {
-            this.movers.splice(index, 1);
-            mover.clear();
-        }
-    }
-
-    public startMovers() {
-        let i;
-        for (i = 0; i < this.movers.length; i++) {
-            this.movers[i].start();
-        }
-
-    }
-
-    public stopMovers() {
-        let i;
-        for (i = 0; i < this.movers.length; i++) {
-            this.movers[i].stop();
-        }
-    }
-
-    public addTarget(target) {
-        this.targets[this.targets.length] = target;
-    }
-
-    public removeTarget(target) {
-        let index = this.targets.indexOf(target);
-        if (index > -1) {
-            this.targets.splice(index, 1);
-            target.clear();
-        }
-    }
-
-    public checkAllTargets(element, move) {
-        let hrzTarget = element.left + move.horizontal;
-        let vrtTarget = element.top + move.vertical;
-        let caught = element.getOverlappedElements(this.targets, hrzTarget, vrtTarget);
-
-        if (caught.length == 0) return;
-        this.targetCaughtCallBack(caught[0]);
-    }
-
-    public shieldTarget(target, millis) {
-        let index = this.targets.indexOf(target);
-        if (index > -1) {
-            this.targets.splice(index, 1);
-        }
-        this.obstacles[this.obstacles.length] = target;
-        if (millis > -1) {
-            return setTimeout(this.unShieldTarget, millis, target, this);
-        }
-    }
-
-    public unShieldTarget(target, that) {
-        let index = that.obstacles.indexOf(target);
-        if (index > -1) {
-            that.obstacles.splice(index, 1);
-        }
-        that.targets[that.targets.length] = target;
-    }
-
-    public checkCollision(position, toBeChecked) {
-        for (let i = 0; i < toBeChecked.length; i++) {
-            if (toBeChecked[i].collisionCorrection(position)) return toBeChecked[i];
-        }
-        return null;
-    }
-
-    public pause() {
-        this.paused = true;
-    }
-
-    public endPause() {
-        this.paused = false;
-    }
-
-    public isPaused() {
-        return this.paused;
-    }
-
     public paintBackGround() {
         this.context.drawImage(this.image, 0, 0);
     }
 
-    public removeGameElement(element) {
-        this.removePickItUp(element);
-        this.removeObstacle(element);
-        this.removeTarget(element);
-    }
 
 }

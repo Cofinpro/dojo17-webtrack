@@ -1,7 +1,6 @@
 /**
  * Created by mhinz on 5/22/2016.
  */
-import { ShapeData } from './shapedata';
 
 
 export class ShapeDetector {
@@ -39,31 +38,7 @@ export class ShapeDetector {
         //prepare
         let canvasContext = canvas.getContext('2d');
         canvasContext.drawImage(image, 0, 0, width, height);
-        //read lines
-        let shapeData = new ShapeData(width, height);
-        let i;
-        let j;
-        for (i = 0; i < height; i++) {
-            let imageData = canvasContext.getImageData(0, i, width, 1);
-            let lineData = this.scanLine(imageData.data);
-
-            for(j = 0; j < lineData.length; j++){
-                if(lineData[j] >= this.threshold){
-                    shapeData.addDot(j, i);
-                }
-            }
-        }
-        return {image, key, shapeData, canvas};
+        return {image, key, canvas};
     }
 
-    scanLine(data: any): any[] {
-        let returned = [];
-        let i;
-        let count = 0;
-        for (i = 0; i < data.length; i += 4) {
-            returned[count] = data[i + 3];
-            count++;
-        }
-        return returned;
-    };
 }

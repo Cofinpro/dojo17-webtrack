@@ -4,15 +4,14 @@ export class GEPicture extends AbstractGameElement {
     id;
     context;
     gameImage;
-    height;
-    width;
-    top;
-    left;
-    right;
-    bottom;
-    shapeData;
+    height : number;
+    width : number;
+    top : number;
+    left : number;
+    right : number;
+    bottom : number;
 
-    constructor(id, elmTop, elmLeft, gameImage, context) {
+    constructor(id, elmTop : number, elmLeft : number, gameImage, context) {
         super();
 
         this.id = id;
@@ -27,7 +26,6 @@ export class GEPicture extends AbstractGameElement {
         this.right = this.left + this.width;
         this.bottom = this.top + this.height;
 
-        this.shapeData = gameImage.getShape();
         this.placeTag();
     }
 
@@ -39,22 +37,21 @@ export class GEPicture extends AbstractGameElement {
 
     setImage(image) {
         this.gameImage = image;
-        this.shapeData = this.gameImage.getShape();
     };
 
-    getLeft(row) {
-        return this.left + this.shapeData.getLeftLineResidual(row);
+    getLeft() : number {
+        return this.left;
     };
 
-    getRight(row) {
-        return this.right - this.shapeData.getRightLineResidual(row);
+    getRight() : number {
+        return this.right;
     };
 
-    getTop(col) {
-        return this.top + this.shapeData.getTopColumnResidual(col);
+    getTop() : number {
+        return this.top;
     };
 
-    getBottom(col) {
-        return this.bottom - this.shapeData.getBottomColumnResidual(col);
+    getBottom() : number {
+        return this.bottom;
     };
 }

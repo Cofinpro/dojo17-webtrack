@@ -11,7 +11,7 @@ export class GameResources {
 
     imagesLoading;
     audioLoading;
-    shapeDetector;
+    shapeDetector : ShapeDetector;
     setupFinished;
 
     constructor() {

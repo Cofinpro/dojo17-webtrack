@@ -2,7 +2,6 @@ import { GameService } from '../../../services/game.service';
 import { WebsocketService } from '../../../services/websocket.service';
 import { PlayGround } from '../playground';
 import { Direction } from '../move/direction';
-import { HeroAnimator } from '../move/heroanimator';
 import { Bomb, NewPlayer, Player, State, Movement, NewBomb } from "../../../models";
 import { Subscription, Observer, Subject } from 'rxjs/Rx';
 import { GameResources } from './gameresources';
@@ -15,7 +14,7 @@ export class Game {
     public socketSubscription: Subscription;
     public timerSubscription: Subscription;
     public playGround: PlayGround = null;
-    public resources;
+    public resources : GameResources;
     public sprites = [];
     public gameLoaded = false;
 
@@ -27,12 +26,7 @@ export class Game {
     images = {};
     audios = {};
 
-    liveCount = 3;
-    end = false;
-    startedAt = null;
-    hero = null;
-    animator: HeroAnimator = null;
-
+    
     counterTag;
     livesTag;
 
@@ -106,9 +100,6 @@ export class Game {
 
         this.checkResources(this.resources);
 
-        // key event init
-        document.body.onkeydown = this.checkReturn;
-
         this.images = this.resources.images;
         this.audios = this.resources.audios;
 
@@ -122,10 +113,8 @@ export class Game {
     }
 
     checkResources(resources: GameResources) {
-        console.log('called');
         resources.resourcesLoaded().then( () => {
 
-            console.log('Game has successfully loaded!');
 
             const playGroundElement = document.getElementById('playground');
             playGroundElement.innerHTML = '';
@@ -143,21 +132,6 @@ export class Game {
         return this.gameLoaded;
     }
 
-    checkReturn(e) {
-        let event = window.event ? window.event : e;
-        let keyCode = event.keyCode;
-        if (keyCode === 80) {
-            if (this.isPaused()) {
-                this.resumeGame();
-            } else {
-                this.pauseGame(1000);
-            }
-        }
-        if (event.altKey & event.ctrlKey && keyCode === 71) {
-            this.playGround.shieldTarget(this.hero, -1);
-        }
-    }
-
     startTimer(): void {
       const timer = TimerObservable.create(0, 10);
       this.timerSubscription = timer.subscribe(t => {
@@ -170,16 +144,6 @@ export class Game {
     }
 
     placeHero(playerName: string) {
-        this.playGround.removeGameElement(this.hero);
-/*
-        let heroImages = {};
-        heroImages['up'] = this.images['hero-1-u'];
-        heroImages['down'] = this.images['hero-1-d'];
-        heroImages['left'] = this.images['hero-1-l'];
-        heroImages['right'] = this.images['hero-1-r'];
-
-        this.hero = this.playGround.createPicture(null, 32, 32, heroImages['right']);
-*/
         this.player  = new NewPlayer({ id: null, nickName: playerName });
         this.playGround.setPlayer(this.player);
 
@@ -257,31 +221,14 @@ export class Game {
             }
         };
 
-        this.startedAt = null;
-        this.end = false;
     }
 
     shutDownGame() {
-        this.end = true;
         document.onkeydown = null;
         document.onkeyup = null;
     }
 
-    resumeGame() {
-        this.playGround.endPause();
-    }
-
-    pauseGame(millis) {
-        this.playGround.pause();
-        if (millis) {
-            return setTimeout(this.resumeGame, millis);
-        }
-    }
-
-    isPaused() {
-        return this.playGround.isPaused();
-    }
-
+ 
     getPlayGround() {
         return this.playGround;
     }
