@@ -4,7 +4,7 @@
 
 * `cd backend/bomber`
 * `./gradlew init`
-* `./gradlew bootPackage`
+* `./gradlew bootRepackage`
 * `cd build/libs`
 * `java -jar bomberXX.jar`
 

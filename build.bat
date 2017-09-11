@@ -1,8 +1,8 @@
 
 echo BUILD BACKEND
 cd backend
-START CMD /C CALL docker build -t rabbit rabbit
-cd bomberscale
+REM START CMD /C CALL docker build -t rabbit rabbit
+cd bomber
 START CMD /C CALL gradlew buildDocker
 
 echo BUILD FRONTEND
