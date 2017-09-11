@@ -1,65 +1,36 @@
-import { GEPicture } from "./gameelements/gepicture";
-import { State, Bomb, Player, Stone, Bush, Position, NewPlayer, BombCountPowerup, BlastRadiusPowerup } from "../../models";
-import {PlayerDataService} from "../../services/player-data.service";
+import { GameResources } from "../game/gameresources";
+import { PaintableField } from "../paintable/paintable-field";
+import { PaintedCanvas } from "../paintable/painted-canvas";
+import { State, Bomb, Player, Stone, Bush, Position, NewPlayer, BombCountPowerup, BlastRadiusPowerup } from "../models";
+import {PlayerDataService} from "../services/player-data.service";
 
 export class PlayGround {
-    image: any;
-    obstaclesContext: any;
-    context: any;
-    obstacles: any;
 
-    width: any;
-    height: any;
-    tag: any;
-    canvas: any;
-    obstaclesCanvas: any;
+    public players: Player[] = [];
+    
+    private paintableField : PaintableField;
+    private bombs: Bomb[] = [];
+    private ownPlayerDied: boolean;
+    private ownPlayer: NewPlayer;
+    private playersLastRound: Player[] = [];
+    private playersLastDirection: any[] = [];
+    private sprites: PaintedCanvas[] = [];
 
-    bombs: Bomb[] = [];
-    ownPlayerDied: boolean;
-    players: Player[] = [];
-    ownPlayer: NewPlayer;
-    playersLastRound: Player[] = [];
-    playersLastDirection: any[] = [];
-    sprites: GEPicture[] = [];
+    private resources : GameResources;
+    private battleFieldSizeX: number;
+    private battleFieldSizeY: number;
 
-    resources;
-    battleFieldSizeX: number;
-    battleFieldSizeY: number;
-
-    constructor(tag, height, width, private playerDataService: PlayerDataService) {
+    constructor(private tag: any, private height: number, private width: number, private playerDataService: PlayerDataService) {
+        this.paintableField = new PaintableField(tag,height,width);
         this.ownPlayerDied = false;
-
-
-        this.width = width;
-        this.height = height;
-        this.tag = tag;
-
-        this.canvas = document.createElement('canvas');
-        this.obstaclesCanvas = document.createElement('canvas');
-        this.context = this.canvas.getContext('2d');
-        this.obstaclesContext = this.obstaclesCanvas.getContext('2d');
-
-        this.canvas.width = width;
-        this.canvas.height = height;
-
-        this.obstaclesCanvas.width = width;
-        this.obstaclesCanvas.height = height;
-
-        this.canvas.style.position = 'absolute';
-        this.obstaclesCanvas.style.position = 'absolute';
-
-        this.tag.appendChild(this.obstaclesCanvas);
-        this.tag.appendChild(this.canvas);
-
-        this.tag.style.width = width + 'px';
-        this.tag.style.height = height + 'px';
-
     }
 
     public setPlayer(player: NewPlayer) {
         this.ownPlayer = player;
     }
-
+    public setResources(gameResources: GameResources){
+        this.resources = gameResources;
+    }
     public updateState(state: State) {
 
         if (!this.resources) {
@@ -191,6 +162,9 @@ export class PlayGround {
     public isGameOver(): boolean {
         return this.ownPlayerDied;
     }
+    public isReady(): boolean{
+        return this.paintableField && this.resources != null;
+    }
 
     private getOpponentImageId(id, ownAvatarId) {
         let opponent: number = (id.charCodeAt(0) + id.charCodeAt(1)) % 7 + 2;
@@ -216,62 +190,17 @@ export class PlayGround {
         this.bombs = bombs;
     }
 
-    public setPositionStyle(positionStyle): void {
-        this.tag.style.position = positionStyle;
-    }
 
-    public getPositionStyle() {
-        return this.tag.style.position;
-    }
 
-    public getPosition() {
-        let top = parseInt(this.tag.style.top);
-        let left = parseInt(this.tag.style.left);
-        return {top: top, left: left};
-    }
 
-    public setBorder(width, style, color): void {
-        this.tag.style.borderWidth = width + 'px';
-        this.tag.style.borderStyle = style;
-        this.tag.style.borderColor = color;
-    }
-
-    public getBorder() {
-        let borderWidth = parseInt(this.tag.style.borderWidth);
-        let borderStyle = this.tag.style.borderStyle;
-        let borderColor = this.tag.style.borderColor;
-
-        return {width: borderWidth, style: borderStyle, color: borderColor};
-    }
-
-    public setBackgroundColor(color): void {
-        this.tag.style.backgroundColor = color;
-    }
-
-    public getBackgroundColor() {
-        return this.tag.style.backgroundColor;
-    }
 
     public createPicture(id, elmTop, elmLeft, image, isObstacle?) {
-        let ctx = isObstacle ? this.obstaclesContext : this.context;
-        let pic = new GEPicture(id, elmTop, elmLeft, image, ctx);
+        const pic: PaintedCanvas = this.paintableField.createPicture(id,elmTop,elmLeft,image,isObstacle);
         this.sprites.push(pic);
-        return pic;
     }
 
-    public addBomb(bomb): void {
-        this.bombs[this.bombs.length] = bomb;
-    }
-
-    public removeBomb(bomb): void {
-        const index = this.bombs.indexOf(bomb);
-        if (index > -1) {
-            this.bombs.splice(index, 1);
-        }
-    }
-
-    public paintBackGround() {
-        this.context.drawImage(this.image, 0, 0);
+    public paintBackGround(image: any) {
+        this.paintableField.paintBackGround(image);
     }
 
 

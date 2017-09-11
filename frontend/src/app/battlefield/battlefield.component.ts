@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, HostListener } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { GameService } from "../services/game.service";
-import { Game } from './scripts/game/game';
+import { Game } from '../game/game';
 import { Player } from '../models';
 
 @Component({

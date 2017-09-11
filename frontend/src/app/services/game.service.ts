@@ -3,7 +3,7 @@ import { Subject, Subscription } from 'rxjs/Rx';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import { Game } from '../battlefield/scripts/game/game';
+import { Game } from '../game/game';
 import { WebsocketService } from '../services/websocket.service';
 import { PlayerDataService } from '../services/player-data.service';
 import { Player } from '../models';

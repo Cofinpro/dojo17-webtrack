@@ -1,12 +1,11 @@
-import { GameService } from '../../../services/game.service';
-import { WebsocketService } from '../../../services/websocket.service';
-import { PlayGround } from '../playground';
-import { Direction } from '../move/direction';
-import { Bomb, NewPlayer, Player, State, Movement, NewBomb } from "../../../models";
+import { GameService } from '../services/game.service';
+import { WebsocketService } from '../services/websocket.service';
+import { PlayGround } from '../battlefield/playground';
+import { Bomb, NewPlayer, Player, State, Movement, NewBomb } from "../models";
 import { Subscription, Observer, Subject } from 'rxjs/Rx';
 import { GameResources } from './gameresources';
 import {TimerObservable} from "rxjs/observable/TimerObservable";
-import {PlayerDataService} from "../../../services/player-data.service";
+import {PlayerDataService} from "../services/player-data.service";
 
 export class Game {
 
@@ -18,7 +17,6 @@ export class Game {
     public sprites = [];
     public gameLoaded = false;
 
-    direction: Direction = new Direction();
 
     socket: Subject<State>;
     counterSubscription: Subscription;
@@ -95,18 +93,13 @@ export class Game {
         // misc
         this.resources.addImage('bush', '../../assets/images/misc/bush.png', 32, 32);
 
-        this.resources.startLoading();
-
-
         this.checkResources(this.resources);
 
         this.images = this.resources.images;
         this.audios = this.resources.audios;
 
-        // this.counterTag = document.getElementById('picks');
-        // this.livesTag = document.getElementById('lives');
         this.socketSubscription = this.websocketService.getState().subscribe((state: State) => {
-            if (this.playGround && this.playGround.resources) {
+            if (this.playGround && this.playGround.isReady()) {
                 this.playGround.updateState(state);
             }
         });
@@ -120,7 +113,7 @@ export class Game {
             playGroundElement.innerHTML = '';
 
             this.playGround = new PlayGround(playGroundElement, 480, 928, this.playerDataService);
-            this.playGround.resources = this.resources;
+            this.playGround.setResources(resources);
 
             this.placeHero(this.playerDataService.getPlayerName());
 
@@ -173,32 +166,8 @@ export class Game {
             let event: any = window.event ? window.event : e;
             let keyCode = event.keyCode;
             let dir;
-
-            switch(keyCode){
-                case 37:
-                    dir = this.direction.left;
-                    break;
-                case 39:
-                    dir = this.direction.right;
-                    break;
-                case 38:
-                    dir = this.direction.up;
-                    break;
-                case 40:
-                    dir = this.direction.down;
-                    break;
-                case 32:
-                    break;
-            }
-            //this.animator.addToActiveDirections(dir);
-        };
-
-        document.onkeyup = (e) => {
-            let event: any = window.event ? window.event : e;
-            let keyCode = event.keyCode;
-            let dir;
-            let posUpdated = false;
             const movement: Movement = new Movement({ playerId: this.player.id });
+            
             switch(keyCode){
                 case 37:
                     movement.direction = 'L';
@@ -220,7 +189,6 @@ export class Game {
                 this.websocketService.sendMovement(movement);
             }
         };
-
     }
 
     shutDownGame() {
