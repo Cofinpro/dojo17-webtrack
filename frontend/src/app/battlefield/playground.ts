@@ -1,6 +1,6 @@
 import { GameResources } from "../game/gameresources";
-import { PaintableField } from "../paintable/paintable-field";
-import { PaintedCanvas } from "../paintable/painted-canvas";
+import { Screen } from "../paint/screen";
+import { PaintedCanvas } from "../paint/painted-canvas";
 import { State, Bomb, Player, Stone, Bush, Position, NewPlayer, BombCountPowerup, BlastRadiusPowerup } from "../models";
 import {PlayerDataService} from "../services/player-data.service";
 
@@ -8,8 +8,7 @@ export class PlayGround {
 
     public players: Player[] = [];
     
-    private paintableField : PaintableField;
-    private bombs: Bomb[] = [];
+    private screen : Screen;
     private ownPlayerDied: boolean;
     private ownPlayer: NewPlayer;
     private playersLastRound: Player[] = [];
@@ -21,7 +20,7 @@ export class PlayGround {
     private battleFieldSizeY: number;
 
     constructor(private tag: any, private height: number, private width: number, private playerDataService: PlayerDataService) {
-        this.paintableField = new PaintableField(tag,height,width);
+        this.screen = new Screen(tag,height,width);
         this.ownPlayerDied = false;
     }
 
@@ -163,7 +162,7 @@ export class PlayGround {
         return this.ownPlayerDied;
     }
     public isReady(): boolean{
-        return this.paintableField && this.resources != null;
+        return this.screen && this.resources != null;
     }
 
     private getOpponentImageId(id, ownAvatarId) {
@@ -187,7 +186,6 @@ export class PlayGround {
             }
             this.createPicture(bomb.id, bomb.y * 32, bomb.x * 32, this.resources.images[bombSpriteIndex]);
         }
-        this.bombs = bombs;
     }
 
 
@@ -195,12 +193,12 @@ export class PlayGround {
 
 
     public createPicture(id, elmTop, elmLeft, image, isObstacle?) {
-        const pic: PaintedCanvas = this.paintableField.createPicture(id,elmTop,elmLeft,image,isObstacle);
+        const pic: PaintedCanvas = this.screen.createPicture(id,elmTop,elmLeft,image,isObstacle);
         this.sprites.push(pic);
     }
 
     public paintBackGround(image: any) {
-        this.paintableField.paintBackGround(image);
+        this.screen.paintBackGround(image);
     }
 
 

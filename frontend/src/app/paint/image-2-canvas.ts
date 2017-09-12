@@ -8,7 +8,7 @@
 export class Image2Canvas {
 
 
-    detect(src: any, key: any, width: number, height: number): Promise<any> {
+    static detect(src: any, key: any, width: number, height: number): Promise<any> {
         let promise = new Promise((resolve, reject) => {
             const image = new Image();
             image.src = src;
@@ -20,13 +20,13 @@ export class Image2Canvas {
                 if (!height) {
                     height = image.height;
                 }
-                resolve(this.doDetect(image, key, width, height));
+                resolve(Image2Canvas.doDetect(image, key, width, height));
             };
         });
         return promise;
     };
 
-    doDetect(image: any, key: string, width: number, height: number) {
+    static doDetect(image: any, key: string, width: number, height: number) {
         const canvas = document.createElement('canvas');
 
         canvas.width = width;

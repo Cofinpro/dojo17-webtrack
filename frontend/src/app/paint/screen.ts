@@ -1,6 +1,6 @@
 import { PaintableCanvas } from "./paintable-canvas";
 import { PaintedCanvas } from "./painted-canvas";
-export class PaintableField {
+export class Screen {
 
     private canvas: any;
     private obstaclesCanvas: any;
