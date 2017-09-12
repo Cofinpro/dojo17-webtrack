@@ -2,11 +2,20 @@
 
 ## Server lokal bauen
 
+## Einmalig durchführen:
 * `cd backend/bomber`
 * `./gradlew init`
+
+## Bei jedem Build zu tun:
+* `cd backend/bomber`
 * `./gradlew bootRepackage`
 * `cd build/libs`
 * `java -jar bomberXX.jar`
+
+#Im Ordner backend liegt das Skript 'build-and-run-localy.cmd', das das Buil lokal durchführt und anschließen den Server startet.
+#Usage: Skript audführen, den Server nach Test mit <strg>C beenden, das Skript erneut ausführen.
+#CAVEAT: Der Name der Jar- datei ist im Skript hinterlegt und muss bei Versionswechsel angepasst werden. 
+
 
 ## Anpassung des Frontends, damit es sich mit dem Server verbindet
 
