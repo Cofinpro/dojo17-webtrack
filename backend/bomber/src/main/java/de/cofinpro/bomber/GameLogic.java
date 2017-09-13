@@ -45,6 +45,7 @@ public class GameLogic {
     private static final float POWERUP_SPAWN_PROB_BLAST = 0.15F;
 
     private State currentState;
+    private BattleField currentBattleField;
 
     private final CopyOnWriteArrayList<MapDefinition> mapDefinitions = new CopyOnWriteArrayList<>();
 
@@ -213,6 +214,7 @@ public class GameLogic {
         // TODO Start a timer to kill player for inactivity
 
         this.currentState.setServerTime(System.currentTimeMillis());
+        this.template.convertAndSend("/topic/state", this.currentState);
         return this.currentState;
     }
 

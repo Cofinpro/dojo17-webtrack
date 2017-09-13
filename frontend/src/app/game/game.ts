@@ -11,6 +11,7 @@ export class Game {
 
     public game;
     public socketSubscription: Subscription;
+    public initialSubscription: Subscription;
     public timerSubscription: Subscription;
     public playGround: PlayGround = null;
     public resources : GameResources;
@@ -99,6 +100,11 @@ export class Game {
         this.audios = this.resources.audios;
 
         this.socketSubscription = this.websocketService.getState().subscribe((state: State) => {
+            if (this.playGround && this.playGround.isReady()) {
+                this.playGround.updateState(state);
+            }
+        });
+        this.initialSubscription = this.websocketService.getBattleField().subscribe((state: State) => {
             if (this.playGround && this.playGround.isReady()) {
                 this.playGround.updateState(state);
             }

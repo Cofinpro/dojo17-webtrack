@@ -177,7 +177,7 @@ export class PlayGround {
         for (const bomb of bombs) {
             // display correct sprite for bomb according to detonation time
             const timeUntilExplosion = bomb.detonateAt.getTime() - serverTime;
-            console.log('time until explosion: ', timeUntilExplosion);
+            // console.log('time until explosion: ', timeUntilExplosion);
             let bombSpriteIndex = '';
             if (timeUntilExplosion > 0) {
                 bombSpriteIndex = 'bomb' + Math.min(Math.max(0, Math.round(timeUntilExplosion / 1000) * 2), 5);

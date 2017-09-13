@@ -10,12 +10,15 @@ export class WebsocketService implements OnDestroy{
 
     // This is for stomp
     private subject: Subject<State>;
+    private battleFieldSubject: Subject<State>;
     private subscription: any;
-    connected: boolean = false;
+    private battleFieldSubscription : any;
+    private connected: boolean = false;
 
     constructor(private stomp: StompService) {
 
         this.subject = new Subject<State>();
+        this.battleFieldSubject = new Subject<State>();
         //configuration
         this.stomp.configure({
             host: 'http://localhost:8080',
@@ -30,6 +33,7 @@ export class WebsocketService implements OnDestroy{
 
             //subscribe
             this.subscription = this.stomp.subscribe('/topic/state', this.response);
+            this.battleFieldSubscription = this.stomp.subscribe('/topic/initialstate', this.battleFieldResponse);
             this.connected = true;
         });
     }
@@ -70,9 +74,16 @@ export class WebsocketService implements OnDestroy{
         this.subject.next(state);
         return state;
     }
+    public battleFieldResponse = (state: State): State => {
+        this.battleFieldSubject.next(state);
+        return state;
+    }
 
     public getState(): Observable<State> {
         return this.subject.asObservable().map((state) => new State(state));
+    }
+    public getBattleField(): Observable<State> {
+        return this.battleFieldSubject.asObservable().map((state) => new State(state));
     }
 
     public disconnect() {
