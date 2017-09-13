@@ -228,7 +228,7 @@ public class GameLogic {
                 .orElse(null);
 
         if (player == null) {
-            System.out.println("Tried to move unexisting player");
+            System.out.println("Tried to move not existing player");
             return null;
         }
 
