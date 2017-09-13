@@ -88,6 +88,7 @@ export class WebsocketService implements OnDestroy{
 
     public disconnect() {
         this.subscription.unsubscribe();
+        this.battleFieldSubscription.unsubscribe();
         this.stomp.disconnect().then(() => {
             console.log('Connection closed');
         });
