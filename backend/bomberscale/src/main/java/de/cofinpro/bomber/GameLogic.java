@@ -97,7 +97,7 @@ public class GameLogic {
         System.out.println("State reset: " + currentState.toString());
     }
 
-    synchronized State addOrMovePlayer(Player player) {
+    private synchronized State addOrMovePlayer(Player player) {
         this.currentState.setExploded(null);
 
         Player existing;
