@@ -30,9 +30,8 @@ export class Screen {
 
     }
 
-    createPicture(id: string, elmTop: number, elmLeft: number, image: PaintableCanvas, isObstacle: boolean): PaintedCanvas{
-        let ctx = isObstacle ? this.obstaclesContext : this.context;
-        let pic = new PaintedCanvas(id, elmTop, elmLeft, image, ctx);
+    createPicture(id: string, elmTop: number, elmLeft: number, image: PaintableCanvas): PaintedCanvas{
+        let pic = new PaintedCanvas(id, elmTop, elmLeft, image, this.context);
         return pic;
     }
     paintBackGround(image){

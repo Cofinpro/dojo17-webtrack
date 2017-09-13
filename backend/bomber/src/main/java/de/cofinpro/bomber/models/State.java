@@ -57,17 +57,6 @@ public class State {
         }
     }
 
-    public List<Stone> getFixStones() {
-        return fixStones;
-    }
-
-    public void setFixStones(List<Stone> fixStones) {
-        this.fixStones.clear();
-        if (fixStones != null) {
-            this.fixStones.addAll(fixStones);
-        }
-    }
-
     public List<Stone> getWeakStones() {
         return weakStones;
     }
@@ -148,14 +137,6 @@ public class State {
         bombCountPowerups.add(new BombCountPowerup(position.getX(), position.getY()));
     }
 
-    public List<Bush> getFoliage() {
-        return foliage;
-    }
-
-    public void setFoliage(List<Bush> foliage) {
-        this.foliage = foliage;
-    }
-
     public boolean isSuddenDeath() {
         return suddenDeath;
     }
@@ -171,13 +152,11 @@ public class State {
                 ", sizeY=" + sizeY +
                 ", players=" + players +
                 ", bombs=" + bombs +
-                ", fixStones=" + fixStones +
                 ", weakStones=" + weakStones +
                 ", exploded=" + exploded +
                 ", blastRadiusPowerups=" + blastRadiusPowerups +
                 ", bombCountPowerups=" + bombCountPowerups +
                 ", serverTime=" + serverTime +
-                ", foliage=" + foliage +
                 ", suddenDeath=" + suddenDeath +
                 '}';
     }

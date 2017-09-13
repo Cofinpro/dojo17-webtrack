@@ -119,14 +119,19 @@ public class GameLogic {
 
     private synchronized void resetState() {
         this.currentState = new State();
+        this.currentBattleField = new BattleField();
+        
         MapDefinition definition = mapDefinitions.get(ThreadLocalRandom.current().nextInt(0, mapDefinitions.size()));
+
+        this.currentBattleField.setFixStones(definition.getFixStones());
+        this.currentBattleField.setFoliage(definition.getFoliage());
+        
         this.currentState.setSizeX(definition.getSizeX());
         this.currentState.setSizeY(definition.getSizeY());
-        this.currentState.setFixStones(definition.getFixStones());
         this.currentState.setWeakStones(definition.getWeakStones());
         this.currentState.setBlastRadiusPowerups(definition.getBlastRadiusPowerups());
         this.currentState.setBombCountPowerups(definition.getBombCountPowerups());
-        this.currentState.setFoliage(definition.getFoliage());
+
         this.currentRound++;
         System.out.println("State reset: " + currentState.toString());
         System.out.println("Starting round " + currentRound);
@@ -150,7 +155,7 @@ public class GameLogic {
             return;
         }
 
-        this.currentState.getFixStones().add(new Stone(col, row));
+        this.currentBattleField.getFixStones().add(new Stone(col, row));
         Position deathPos = new Position(col, row);
 
         Player killedPlayer = null;
@@ -182,7 +187,7 @@ public class GameLogic {
         }, new Date(System.currentTimeMillis() + (SUDDEN_DEATH_INTERVAL_MILLIS)));
     }
 
-    synchronized State addPlayer(NewPlayer newPlayer) {
+    synchronized void addPlayer(NewPlayer newPlayer) {
         System.out.println("Adding new player: " + newPlayer);
         Player existing;
         if (this.currentState.getPlayers().isEmpty()) {
@@ -197,7 +202,7 @@ public class GameLogic {
 
         if (existing != null) {
             System.out.println("Hacker tried to log again");
-            return null;  // No change
+            return;  // No change
         }
 
         Position newPosition = randomValidPosition();
@@ -215,7 +220,8 @@ public class GameLogic {
 
         this.currentState.setServerTime(System.currentTimeMillis());
         this.template.convertAndSend("/topic/state", this.currentState);
-        return this.currentState;
+        this.template.convertAndSend("/topic/battlefield", this.currentBattleField);
+        // return this.currentState;
     }
 
     synchronized State movePlayer(Movement movement) {
@@ -242,7 +248,7 @@ public class GameLogic {
         } else if (Character.toLowerCase(movement.getDirection()) == 'r') {
             newPosition = new Position(player.getX() + 1, player.getY());
         } else {
-            System.out.println("Wrong direction sent");
+            System.out.println("Unknown direction sent");
             return null;
         }
 
@@ -252,7 +258,7 @@ public class GameLogic {
             return null;
         }
 
-        Stream<Position> fixedStream = this.currentState.getFixStones().stream().map(Stone::getPosition);
+        Stream<Position> fixedStream = this.currentBattleField.getFixStones().stream().map(Stone::getPosition);
         Stream<Position> weakStream = this.currentState.getWeakStones().stream().map(Stone::getPosition);
         Stream<Position> bombStream = this.currentState.getBombs().stream().map(Bomb::getPosition);
         Stream<Position> playerStream = this.currentState.getPlayers().stream().map(Player::getPosition);
@@ -350,7 +356,7 @@ public class GameLogic {
                 .orElse(null);
 
         // Build maps for all objects, to find them easily by position
-        MapObjects objects = new MapObjects(this.currentState);
+        MapObjects objects = new MapObjects(this.currentState, this.currentBattleField);
 
         // Recursively blow bombs, determining all positions exploded
         Set<Position> blownPositions = new HashSet<>();
@@ -515,7 +521,7 @@ public class GameLogic {
     }
 
     private Position randomValidPosition() {
-        MapObjects objects = new MapObjects(this.currentState);
+        MapObjects objects = new MapObjects(this.currentState, this.currentBattleField);
 
         Position result;
         boolean invalid;

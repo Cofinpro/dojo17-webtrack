@@ -8,7 +8,6 @@ import { WebsocketService } from './services/websocket.service';
 import { GamestartComponent } from './gamestart/gamestart.component';
 import { FormsModule } from "@angular/forms";
 import { HighscoreComponent } from './highscore/highscore.component';
-import { AvatarComponent } from './avatar/avatar.component';
 import { TimerComponent } from './timer/timer.component';
 
 
@@ -18,7 +17,6 @@ import { TimerComponent } from './timer/timer.component';
     BattlefieldComponent,
     GamestartComponent,
     HighscoreComponent,
-    AvatarComponent,
     TimerComponent
   ],
   imports: [

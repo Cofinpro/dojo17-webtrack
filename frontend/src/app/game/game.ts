@@ -1,7 +1,7 @@
 import { GameService } from '../services/game.service';
 import { WebsocketService } from '../services/websocket.service';
 import { PlayGround } from '../battlefield/playground';
-import { Bomb, NewPlayer, Player, State, Movement, NewBomb } from "../models";
+import { Bomb, NewPlayer, Player, State,BattleField, Movement, NewBomb } from "../models";
 import { Subscription, Observer, Subject } from 'rxjs/Rx';
 import { GameResources } from './gameresources';
 import {TimerObservable} from "rxjs/observable/TimerObservable";
@@ -104,9 +104,9 @@ export class Game {
                 this.playGround.updateState(state);
             }
         });
-        this.initialSubscription = this.websocketService.getBattleField().subscribe((state: State) => {
+        this.initialSubscription = this.websocketService.getBattleField().subscribe((battlefield: BattleField) => {
             if (this.playGround && this.playGround.isReady()) {
-                this.playGround.updateState(state);
+                this.playGround.paintBattleField(battlefield);
             }
         });
     }

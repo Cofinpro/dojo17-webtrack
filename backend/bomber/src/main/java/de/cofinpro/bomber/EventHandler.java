@@ -20,9 +20,9 @@ public class EventHandler {
     }
 
     @MessageMapping("/register")
-    @SendTo("/topic/battlefield")
-    public State register(NewPlayer newPlayer) throws Exception {
-        return gameLogic.addPlayer(newPlayer);
+    //@SendTo("/topic/battlefield")
+    public void register(NewPlayer newPlayer) throws Exception {
+        gameLogic.addPlayer(newPlayer);
     }
 
     @MessageMapping("/move")

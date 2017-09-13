@@ -14,10 +14,10 @@ public class MapObjects {
     private final Map<Position, Stone> fixStones;
     private final Map<Position, Stone> weakStones;
 
-    public MapObjects(State state) {
+    public MapObjects(State state, BattleField battleField) {
         players = state.getPlayers().stream().collect(Collectors.groupingBy(Player::getPosition));
         bombs = state.getBombs().stream().collect(Collectors.groupingBy(Bomb::getPosition));
-        fixStones = state.getFixStones().stream().collect(Collectors.toMap(Stone::getPosition, Function.identity()));
+        fixStones = battleField.getFixStones().stream().collect(Collectors.toMap(Stone::getPosition, Function.identity()));
         weakStones = state.getWeakStones().stream().collect(Collectors.toMap(Stone::getPosition, Function.identity()));
     }
 

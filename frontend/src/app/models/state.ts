@@ -12,9 +12,7 @@ export class State {
     sizeY : number;
     players: Player[];
     bombs: Bomb[];
-    fixStones: Stone[];
     weakStones: Stone[];
-    foliage: Bush[];
     bombCountPowerups: BombCountPowerup[];
     blastRadiusPowerups: BlastRadiusPowerup[];
     serverTime: number;
@@ -26,9 +24,7 @@ export class State {
     constructor(obj = {} as State) {
         this.players = obj.players;
         this.bombs = obj.bombs.map((bomb => new Bomb(bomb)));
-        this.fixStones = obj.fixStones;
         this.weakStones = obj.weakStones;
-        this.foliage = obj.foliage;
         this.bombCountPowerups = obj.bombCountPowerups;
         this.blastRadiusPowerups = obj.blastRadiusPowerups;
         this.serverTime = obj.serverTime;

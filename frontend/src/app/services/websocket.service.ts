@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable, Observer } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
-import { Message, State, Player, Bomb, Movement, NewPlayer, NewBomb } from '../models';
+import { Message, State, BattleField,Player, Bomb, Movement, NewPlayer, NewBomb } from '../models';
 import { StompService } from 'ng2-stomp-service';
 import { OnDestroy } from '@angular/core';
 
@@ -10,7 +10,7 @@ export class WebsocketService implements OnDestroy{
 
     // This is for stomp
     private subject: Subject<State>;
-    private battleFieldSubject: Subject<State>;
+    private battleFieldSubject: Subject<BattleField>;
     private subscription: any;
     private battleFieldSubscription : any;
     private connected: boolean = false;
@@ -18,7 +18,7 @@ export class WebsocketService implements OnDestroy{
     constructor(private stomp: StompService) {
 
         this.subject = new Subject<State>();
-        this.battleFieldSubject = new Subject<State>();
+        this.battleFieldSubject = new Subject<BattleField>();
         //configuration
         this.stomp.configure({
             host: 'http://localhost:8080',
@@ -33,7 +33,7 @@ export class WebsocketService implements OnDestroy{
 
             //subscribe
             this.subscription = this.stomp.subscribe('/topic/state', this.response);
-            this.battleFieldSubscription = this.stomp.subscribe('/topic/initialstate', this.battleFieldResponse);
+            this.battleFieldSubscription = this.stomp.subscribe('/topic/battlefield', this.battleFieldResponse);
             this.connected = true;
         });
     }
@@ -74,16 +74,16 @@ export class WebsocketService implements OnDestroy{
         this.subject.next(state);
         return state;
     }
-    public battleFieldResponse = (state: State): State => {
-        this.battleFieldSubject.next(state);
-        return state;
+    public battleFieldResponse = (battlefield: BattleField): BattleField => {
+        this.battleFieldSubject.next(battlefield);
+        return battlefield;
     }
 
     public getState(): Observable<State> {
         return this.subject.asObservable().map((state) => new State(state));
     }
-    public getBattleField(): Observable<State> {
-        return this.battleFieldSubject.asObservable().map((state) => new State(state));
+    public getBattleField(): Observable<BattleField> {
+        return this.battleFieldSubject.asObservable().map((battlefield) => new BattleField(battlefield));
     }
 
     public disconnect() {
