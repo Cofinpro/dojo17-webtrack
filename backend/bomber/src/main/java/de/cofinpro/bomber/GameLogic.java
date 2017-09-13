@@ -130,18 +130,18 @@ public class GameLogic {
         System.out.println("State reset: " + currentState.toString());
         System.out.println("Starting round " + currentRound);
 
-        scheduler.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                startSuddenDeath(currentRound);
-            }
-        }, new Date(System.currentTimeMillis() + (ROUND_TIME_SECONDS * 1000)));
+        // scheduler.schedule(new TimerTask() {
+        //     @Override
+        //     public void run() {
+        //         startSuddenDeath(currentRound);
+        //     }
+        // }, new Date(System.currentTimeMillis() + (ROUND_TIME_SECONDS * 1000)));
     }
 
-    private synchronized void startSuddenDeath(int affectedRound) {
-        currentState.setSuddenDeath(true);
-        placeVerticalFixStones(0,0, affectedRound);
-    }
+    // private synchronized void startSuddenDeath(int affectedRound) {
+    //     currentState.setSuddenDeath(true);
+    //     placeVerticalFixStones(0,0, affectedRound);
+    // }
 
     private synchronized void placeVerticalFixStones(int row, int col, int affectedRound) {
         if (currentRound != affectedRound) {
