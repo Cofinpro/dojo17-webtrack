@@ -9,15 +9,12 @@ import { WebsocketService } from "../services/websocket.service";
   styleUrls: ['./gamestart.component.scss']
 })
 
-export class GamestartComponent implements OnInit {
+export class GamestartComponent {
     inputPlayerName: boolean = false;
 
     playerName: string;
 
     constructor(public gameService: GameService, public playerDataService: PlayerDataService) { }
-
-    ngOnInit() {
-    }
 
     public toggleGameStart(): void {
         if (!this.playerDataService.getPlayerName()) {
