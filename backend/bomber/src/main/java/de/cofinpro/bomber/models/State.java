@@ -10,12 +10,10 @@ public class State {
     private int sizeY;
     private List<Player> players = new ArrayList<>();
     private List<Bomb> bombs = new ArrayList<>();
-    private List<Stone> fixStones = new ArrayList<>();
     private List<Stone> weakStones = new ArrayList<>();
     private List<Position> exploded = new ArrayList<>();
     private List<BombCountPowerup> bombCountPowerups = new ArrayList<>();
     private List<BlastRadiusPowerup> blastRadiusPowerups = new ArrayList<>();
-    private List<Bush> foliage = new ArrayList<>();
     private Long serverTime;
     private boolean suddenDeath = false;
 
