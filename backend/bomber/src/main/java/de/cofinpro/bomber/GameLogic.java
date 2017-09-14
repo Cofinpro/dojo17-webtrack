@@ -219,9 +219,8 @@ public class GameLogic {
         // TODO Start a timer to kill player for inactivity
 
         this.currentState.setServerTime(System.currentTimeMillis());
-        this.template.convertAndSend("/topic/state", this.currentState);
         this.template.convertAndSend("/topic/battlefield", this.currentBattleField);
-        // return this.currentState;
+        this.template.convertAndSend("/topic/state", this.currentState);
     }
 
     synchronized State movePlayer(Movement movement) {
