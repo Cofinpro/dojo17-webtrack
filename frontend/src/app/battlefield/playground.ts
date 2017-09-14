@@ -1,37 +1,37 @@
 import { GameResources } from "../game/gameresources";
 import { Screen } from "../paint/screen";
 import { PaintedCanvas } from "../paint/painted-canvas";
-import { State, BattleField,Bomb, Player, Stone, Bush, Position, NewPlayer, BombCountPowerup, BlastRadiusPowerup } from "../models";
-import {PlayerDataService} from "../services/player-data.service";
+import { State, BattleField, Bomb, Player, Stone, Bush, Position, NewPlayer, BombCountPowerup, BlastRadiusPowerup } from "../models";
+import { PlayerDataService } from "../services/player-data.service";
 
 export class PlayGround {
 
     public players: Player[] = [];
-    
-    private screen : Screen;
+    private playersLastRound: Player[] = [];
+
+    private screen: Screen;
     private ownPlayerDied: boolean;
     private ownPlayer: NewPlayer;
-    private playersLastRound: Player[] = [];
     private playersLastDirection: any[] = [];
     private sprites: PaintedCanvas[] = [];
     private battleField: BattleField;
 
-    private resources : GameResources;
+    private resources: GameResources;
     private battleFieldSizeX: number;
     private battleFieldSizeY: number;
 
     constructor(private tag: any, private height: number, private width: number, private playerDataService: PlayerDataService) {
-        this.screen = new Screen(tag,height,width);
+        this.screen = new Screen(tag, height, width);
         this.ownPlayerDied = false;
     }
 
     public setPlayer(player: NewPlayer) {
         this.ownPlayer = player;
     }
-    public setResources(gameResources: GameResources){
+    public setResources(gameResources: GameResources) {
         this.resources = gameResources;
     }
-    public paintBattleField(battleField: BattleField){
+    public paintBattleField(battleField: BattleField) {
 
         if (!this.resources) {
             return;
@@ -40,8 +40,8 @@ export class PlayGround {
         this.battleField = battleField;
         this.updateFixStones(battleField.fixStones);
         this.updateFoliage(battleField.foliage);
-        
-    } 
+
+    }
     public updateState(state: State) {
 
         if (!this.resources) {
@@ -69,8 +69,8 @@ export class PlayGround {
         this.updateExploded(state.exploded);
 
         this.updatePlayers(state.players);
-        
-        if(this.battleField && this.battleField.foliage){
+
+        if (this.battleField && this.battleField.foliage) {
             this.updateFoliage(this.battleField.foliage);
         }
 
@@ -117,14 +117,15 @@ export class PlayGround {
         }
     }
 
-    private updateExploded(positions: Position[]){
-        for (const position of positions){
+    private updateExploded(positions: Position[]) {
+        for (const position of positions) {
             this.createPicture('some', position.y * 32, position.x * 32, this.resources.images['explosionFullCenter'], true);
         }
-      }
+    }
 
 
     private updatePlayers(players: Player[]) {
+
         for (const player of players) {
             let direction = '';
             const playerFromLastRound = this.playersLastRound.find((oldPlayer) => oldPlayer.id === player.id);
@@ -148,16 +149,15 @@ export class PlayGround {
                     // no movement
                     direction = this.playersLastDirection[player.id];
                 }
-                const playerImageId = this.calculatePlayerId(player.id);
-
-                this.createPicture(
-                    player.id,
-                    player.y * 32,
-                    player.x * 32,
-                    this.resources.images['hero-' + playerImageId + '-' + direction],
-                    true
-                );
             }
+            const playerImageId = this.calculatePlayerId(player.id);
+            this.createPicture(
+                player.id,
+                player.y * 32,
+                player.x * 32,
+                this.resources.images['hero-' + playerImageId + '-' + direction],
+                true
+            );
             this.playersLastDirection[player.id] = direction;
         }
         this.playersLastRound = players;
@@ -167,22 +167,22 @@ export class PlayGround {
         }
     }
 
-    private calculatePlayerId(playerId: string){
-      let avatarId = this.playerDataService.getPlayerAvatarId();
-      return (this.ownPlayer.id === playerId ? avatarId : this.getOpponentImageId(playerId, avatarId));
+    private calculatePlayerId(playerId: string) {
+        let avatarId = this.playerDataService.getPlayerAvatarId();
+        return (this.ownPlayer.id === playerId ? avatarId : this.getOpponentImageId(playerId, avatarId));
     }
 
     public isGameOver(): boolean {
         return this.ownPlayerDied;
     }
-    public isReady(): boolean{
+    public isReady(): boolean {
         return this.screen && this.resources != null;
     }
 
     private getOpponentImageId(id, ownAvatarId) {
         let opponent: number = (id.charCodeAt(0) + id.charCodeAt(1)) % 7 + 2;
-        if(opponent == ownAvatarId){
-          return 1;
+        if (opponent == ownAvatarId) {
+            return 1;
         }
         return opponent;
     }
@@ -202,13 +202,9 @@ export class PlayGround {
         }
     }
 
-
-
-
-
     public createPicture(id, elmTop, elmLeft, image, addToSprites) {
-        const pic: PaintedCanvas = this.screen.createPicture(id,elmTop,elmLeft,image);
-        if(addToSprites){
+        const pic: PaintedCanvas = this.screen.createPicture(id, elmTop, elmLeft, image);
+        if (addToSprites) {
             this.sprites.push(pic);
         }
     }
