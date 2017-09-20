@@ -19,14 +19,21 @@ export class GameService {
     constructor(private websocketService: WebsocketService, private playerDataService: PlayerDataService) { }
 
     public startGame(): void {
-        // start game
-        this.game = new Game(this.websocketService, this.playerDataService);
-        this.game.startTimer();
+        //case of a restart --> reuse the old insstance
+        if (!this.game) {
+            this.game = new Game(this.websocketService, this.playerDataService);
+            this.stateSubscription = this.websocketService.getState().subscribe((state) => {
+                this.highScoreSubject.next(state.players);
+                this.suddenDeathSubject.next(state.suddenDeath);
+            });
+        } else {
+            this.game.resetGame();
+        }
 
-        this.stateSubscription = this.websocketService.getState().subscribe( (state) => {
-            this.highScoreSubject.next(state.players);
-            this.suddenDeathSubject.next(state.suddenDeath);
-        });
+        // start game
+        this.game.startTimer();
+        this.game.placeHero(this.playerDataService.getPlayerName());
+
     }
 
     public destroy(): void {
@@ -38,12 +45,15 @@ export class GameService {
     public isGameOver(): boolean {
         return this.game && this.game.isGameOver();
     }
+    public isGameRunning(): boolean {
+        return this.game && this.game.isGameRunning();
+    }
 
     public isGameLoaded(): boolean {
         if (!this.game) {
             return true;
         }
-        return this.game && this.game.isGameLoaded();
+        return this.game.isGameLoaded();
     }
 
     public isSuddenDeath(): Observable<boolean> {

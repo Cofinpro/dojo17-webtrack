@@ -1,11 +1,12 @@
 import { GameService } from '../services/game.service';
 import { WebsocketService } from '../services/websocket.service';
 import { PlayGround } from '../battlefield/playground';
-import { Bomb, NewPlayer, Player, State,BattleField, Movement, NewBomb } from "../models";
+import { Bomb, NewPlayer, Player, State, BattleField, Movement, NewBomb } from "../models";
 import { Subscription, Observer, Subject } from 'rxjs/Rx';
 import { GameResources } from './gameresources';
-import {TimerObservable} from "rxjs/observable/TimerObservable";
-import {PlayerDataService} from "../services/player-data.service";
+import { Observable } from "rxjs";
+import { TimerObservable } from "rxjs/observable/TimerObservable";
+import { PlayerDataService } from "../services/player-data.service";
 
 export class Game {
 
@@ -14,9 +15,10 @@ export class Game {
     public initialSubscription: Subscription;
     public timerSubscription: Subscription;
     public playGround: PlayGround = null;
-    public resources : GameResources;
+    public resources: GameResources;
     public sprites = [];
     public gameLoaded = false;
+    private timer: Observable<number>;
 
 
     socket: Subject<State>;
@@ -25,14 +27,13 @@ export class Game {
     images = {};
     audios = {};
 
-    
+
     counterTag;
     livesTag;
 
     player: NewPlayer;
 
     constructor(private websocketService: WebsocketService, private playerDataService: PlayerDataService) {
-
         this.resources = new GameResources();
 
         // playground
@@ -112,7 +113,7 @@ export class Game {
     }
 
     checkResources(resources: GameResources) {
-        resources.resourcesLoaded().then( () => {
+        resources.resourcesLoaded().then(() => {
 
 
             const playGroundElement = document.getElementById('playground');
@@ -121,8 +122,6 @@ export class Game {
             this.playGround = new PlayGround(playGroundElement, 480, 928, this.playerDataService);
             this.playGround.setResources(resources);
 
-            this.placeHero(this.playerDataService.getPlayerName());
-
             this.gameLoaded = true;
         });
     }
@@ -130,20 +129,32 @@ export class Game {
     isGameLoaded() {
         return this.gameLoaded;
     }
+    resetGame() {
+        if (this.timer) {
+            this.timerSubscription.unsubscribe();
+            this.timer = null;
+        }
+        this.playGround.resetPlayGround();
 
-    startTimer(): void {
-      const timer = TimerObservable.create(0, 10);
-      this.timerSubscription = timer.subscribe(t => {
-        const minutes = Math.floor(t / 6000) % 60;
-        const seconds = Math.floor(t / 100) % 60;
-        const rest = t;
-        const timeElement = document.getElementById('time');
-        timeElement.innerHTML = ('00' + minutes).slice(-2) + ':' + ('00' + seconds).slice(-2) ;
-      });
     }
 
+    startTimer(): void {
+
+        this.timer = TimerObservable.create(0, 10);
+        this.timerSubscription = this.timer.subscribe(t => {
+            const minutes = Math.floor(t / 6000) % 60;
+            const seconds = Math.floor(t / 100) % 60;
+            const rest = t;
+            const timeElement = document.getElementById('time');
+            timeElement.innerHTML = ('00' + minutes).slice(-2) + ':' + ('00' + seconds).slice(-2);
+        });
+    }
+    // stopTimer(): void {
+    //     this.timer.
+    // }
+
     placeHero(playerName: string) {
-        this.player  = new NewPlayer({ id: null, nickName: playerName });
+        this.player = new NewPlayer({ id: null, nickName: playerName });
         this.playGround.setPlayer(this.player);
 
         this.websocketService.registerPlayer(this.player);
@@ -166,6 +177,11 @@ export class Game {
         }
         return false;
     }
+    public isGameRunning(): boolean {
+        if (!this.playGround) return false;
+
+        return this.playGround.isGameRunning();
+    }
 
     startGame() {
         document.onkeydown = (e) => {
@@ -173,8 +189,8 @@ export class Game {
             let keyCode = event.keyCode;
             let dir;
             const movement: Movement = new Movement({ playerId: this.player.id });
-            
-            switch(keyCode){
+
+            switch (keyCode) {
                 case 37:
                     movement.direction = 'L';
                     break;
@@ -199,10 +215,9 @@ export class Game {
 
     shutDownGame() {
         document.onkeydown = null;
-        document.onkeyup = null;
     }
 
- 
+
     getPlayGround() {
         return this.playGround;
     }

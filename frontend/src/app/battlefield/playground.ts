@@ -22,7 +22,6 @@ export class PlayGround {
 
     constructor(private tag: any, private height: number, private width: number, private playerDataService: PlayerDataService) {
         this.screen = new Screen(tag, height, width);
-        this.ownPlayerDied = false;
     }
 
     public setPlayer(player: NewPlayer) {
@@ -170,6 +169,13 @@ export class PlayGround {
     private calculatePlayerId(playerId: string) {
         let avatarId = this.playerDataService.getPlayerAvatarId();
         return (this.ownPlayer.id === playerId ? avatarId : this.getOpponentImageId(playerId, avatarId));
+    }
+    public isGameRunning(): boolean {
+        return this.ownPlayer && !this.ownPlayerDied;
+    }
+    public resetPlayGround(){
+        this.ownPlayer = null;
+        this.ownPlayerDied = false;
     }
 
     public isGameOver(): boolean {
