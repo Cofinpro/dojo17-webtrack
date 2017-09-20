@@ -122,7 +122,9 @@ export class Game {
             this.playGround = new PlayGround(playGroundElement, 480, 928, this.playerDataService);
             this.playGround.setResources(resources);
 
+            this.placeHero(this.playerDataService.getPlayerName());
             this.gameLoaded = true;
+
         });
     }
 
@@ -135,6 +137,7 @@ export class Game {
             this.timer = null;
         }
         this.playGround.resetPlayGround();
+        this.placeHero(this.playerDataService.getPlayerName());
 
     }
 
