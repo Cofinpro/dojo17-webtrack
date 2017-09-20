@@ -11,5 +11,13 @@
     <img src="../assets/images/stayingalive.gif">
 </div>
 </div>
+<div class="is-loading" *ngIf="!this.gameService.isGameLoaded()">
+  <img src="assets/images/loading.png" />
+</div>
+<div class="is-game-over" *ngIf="this.gameService.isGameOver()">
+  <img src="assets/images/gameover.png" />
+</div>
+
+
 
 <!-- put the main components here -->

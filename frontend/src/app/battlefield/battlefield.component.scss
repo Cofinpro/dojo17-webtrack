@@ -1,32 +1,5 @@
 
 
-.is-loading {
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
-.is-loading,
-.is-game-over {
-    position: absolute;
-    top: 130px;
-    left: 0;
-    width: 100vw;
-    height: 80vh;
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    img {
-        margin-top: -100px;
-    }
-}
-
-.is-game-over {
-    background-color: rgba(0, 0, 0, 0.2);
-    justify-content: flex-start;
-    align-items: center;
-}
-
 #playground {
     width: 928px;
     height: 480px;
