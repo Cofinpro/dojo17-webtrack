@@ -1,17 +1,12 @@
-<div id="userName" [hidden]="inputPlayerName">{{playerDataService.getPlayerName()}}</div>
-
-<button id="start" class="btn-default" (click)="toggleGameStart()" [hidden]="playerDataService.getPlayerName()">
-  START GAME
-</button>
-
-<div [hidden]="!inputPlayerName">
+<div id="userName">{{playerDataService.getPlayerName()}}</div>
+<div>
   <input [(ngModel)]="playerName"
          minlength="1"
          maxlength="20"
          placeholder="Nickname"
          class="form-input"
-         required>
-  <button id="bomb" class="btn-default" (click)="beginGame()">Let's bomb!</button>
+         required="true" />
+<button id="bomb" class="btn-default" (click)="manageGame()">Let's bomb!</button>
 </div>
 <div class="avatars">
   <div *ngFor="let avatar of [1,2,3,4,5,6,7,8]">
