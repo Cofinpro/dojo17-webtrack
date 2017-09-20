@@ -21,7 +21,6 @@ export class GameService {
     public startGame(): void {
         //case of a restart --> reuse the old insstance
         if (!this.game) {
-            console.log('lets start')
             this.game = new Game(this.websocketService, this.playerDataService);
             this.stateSubscription = this.websocketService.getState().subscribe((state) => {
                 this.highScoreSubject.next(state.players);
