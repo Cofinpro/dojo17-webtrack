@@ -31,13 +31,6 @@ export class BattlefieldComponent implements OnInit, OnDestroy {
         this.gameService.destroy();
     }
 
-    gameLoaded() {
-        return this.gameService.isGameLoaded();
-    }
-
-    gameOver() {
-        return this.gameService.isGameOver();
-    }
 
     getPlayers(): Observable<Player[]> {
         return this.gameService.getPlayers();
