@@ -30,7 +30,6 @@ export class GameService {
             this.game.resetGame();
         }
 
-        // start game
         this.game.startTimer();
 
     }
