@@ -1,4 +1,3 @@
-<!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
   <img src="./assets/images/Bomberman_Logo.png" alt="BOMBERMAN">
 </div>
@@ -9,15 +8,13 @@
   <div  class="wait-for-server">
     <h2>Backend is away, stay tuned!</h2>
     <img src="../assets/images/stayingalive.gif">
+  </div>
 </div>
-</div>
+
 <div class="is-loading" *ngIf="!this.gameService.isGameLoaded()">
   <img src="assets/images/loading.png" />
 </div>
+
 <div class="is-game-over" *ngIf="this.gameService.isGameOver()">
   <img src="assets/images/gameover.png" />
 </div>
-
-
-
-<!-- put the main components here -->
