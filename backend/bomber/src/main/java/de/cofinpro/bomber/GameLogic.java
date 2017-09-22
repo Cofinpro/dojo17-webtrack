@@ -35,6 +35,8 @@ public class GameLogic {
     private static final int ROUND_TIME_SECONDS = 120;
 
     private static final int SUDDEN_DEATH_INTERVAL_MILLIS = 300;
+    
+    private static final long GRACE_PERIOD_MILLIS = 5000;
 
     private static final int SCORE_PLAYER_KILL = 10000;
     private static final int SCORE_STONE_KILL = 1500;
@@ -208,6 +210,7 @@ public class GameLogic {
         player.setY(newPosition.getY());
         player.setBlastRadius(DEFAULT_BLAST_RADIUS);
         player.setBombCount(DEFAULT_BOMB_COUNT);
+        player.setCreated(System.currentTimeMillis());
         this.currentState.getPlayers().add(player);
 
         // TODO Start a timer to kill player for inactivity
@@ -361,13 +364,17 @@ public class GameLogic {
                 .filter(e -> blownPositions.contains(e.getKey()))
                 .flatMap(e -> e.getValue().stream())
                 .forEach(p -> {
-                    System.out.println("PLAYER KILLED: " + p);
-                    if (bombOwner != null && !p.getId().equals(bombOwner.getId())) {
-                        bombOwner.setScore(bombOwner.getScore() + SCORE_PLAYER_KILL);
+                    //check the grace period --> player will be spared during this period 
+                    if(System.currentTimeMillis() - p.getCreated() < GRACE_PERIOD_MILLIS){
+                        System.out.println("SPARING PLAYER FROM CERTAIN DEATH: " + p);
+                    }else{
+                        System.out.println("PLAYER KILLED: " + p);
+                        if (bombOwner != null && !p.getId().equals(bombOwner.getId())) {
+                            bombOwner.setScore(bombOwner.getScore() + SCORE_PLAYER_KILL);
+                        }
+                        this.currentState.getPlayers().remove(p);
+                        handleKilledPlayerUpgrades(p);
                     }
-                    this.currentState.getPlayers().remove(p);
-
-                    handleKilledPlayerUpgrades(p);
                 });
         objects.getWeakStones().entrySet().stream()
                 .filter(e -> blownPositions.contains(e.getKey()))
@@ -383,10 +390,24 @@ public class GameLogic {
 
         this.currentState.setServerTime(System.currentTimeMillis());
         this.template.convertAndSend("/topic/state", this.currentState);
+        this.currentState.setExploded(new ArrayList<Position>());
         //no more players on the field? --> reset game
         if (this.currentState.getPlayers().isEmpty()) {
             resetState();
         } 
+        if(this.currentState.getWeakStones().isEmpty()){
+            resetState();
+             objects.getPlayers().entrySet().stream()
+                .flatMap(e -> e.getValue().stream())
+                .forEach(p -> {
+                    NewPlayer newPlayer = new NewPlayer();
+                    System.out.println("ADDING PLAYER TO NEW GAME: " + p);
+                    newPlayer.setId(p.getId());
+                    newPlayer.setNickName(p.getNickName());
+                    addPlayer(newPlayer);
+                });
+
+        }
 
 
     }

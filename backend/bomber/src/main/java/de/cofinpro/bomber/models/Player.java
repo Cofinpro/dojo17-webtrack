@@ -11,6 +11,7 @@ public class Player implements Positionable {
     private int blastRadius;
     private int bombCount;
     private long score;
+    private long created;
 
     public String getId() {
         return id;
@@ -74,6 +75,13 @@ public class Player implements Positionable {
 
     public void setScore(long score) {
         this.score = score;
+    }
+    public void setCreated(long created) {
+        this.created = created;
+    }
+
+    public long getCreated(){
+        return created;
     }
 
     public void increaseBlastRadius() {
