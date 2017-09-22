@@ -189,16 +189,10 @@ public class GameLogic {
 
     synchronized void addPlayer(NewPlayer newPlayer) {
         System.out.println("Adding new player: " + newPlayer);
-        Player existing;
-        if (this.currentState.getPlayers().isEmpty()) {
-            resetState();
-            existing = null;
-        } else {
-            existing = this.currentState.getPlayers().stream()
-                    .filter(p -> p.getId().equals(newPlayer.getId()))
-                    .findFirst()
-                    .orElse(null);
-        }
+        Player existing = this.currentState.getPlayers().stream()
+            .filter(p -> p.getId().equals(newPlayer.getId()))
+            .findFirst()
+            .orElse(null);
 
         if (existing != null) {
             System.out.println("Hacker tried to log again");
@@ -388,8 +382,13 @@ public class GameLogic {
                 });
 
         this.currentState.setServerTime(System.currentTimeMillis());
-
         this.template.convertAndSend("/topic/state", this.currentState);
+        //no more players on the field? --> reset game
+        if (this.currentState.getPlayers().isEmpty()) {
+            resetState();
+        } 
+
+
     }
 
     private void handlePowerupSpawn(Position position) {
