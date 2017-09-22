@@ -393,23 +393,24 @@ public class GameLogic {
         this.currentState.setExploded(new ArrayList<Position>());
         //no more players on the field? --> reset game
         if (this.currentState.getPlayers().isEmpty()) {
+            System.out.println("LAST PLAYER DIED! RESETTING GAME!");
             resetState();
+            return;
         } 
+        //no more weak stones --> send new map
         if(this.currentState.getWeakStones().isEmpty()){
+            System.out.println("NOTHING MORE TO BLOW UP! GEBERATING NEW MAP!");
             resetState();
              objects.getPlayers().entrySet().stream()
                 .flatMap(e -> e.getValue().stream())
                 .forEach(p -> {
                     NewPlayer newPlayer = new NewPlayer();
-                    System.out.println("ADDING PLAYER TO NEW GAME: " + p);
+                    System.out.println("ADDING PLAYER TO NEW MAP: " + p);
                     newPlayer.setId(p.getId());
                     newPlayer.setNickName(p.getNickName());
                     addPlayer(newPlayer);
                 });
-
         }
-
-
     }
 
     private void handlePowerupSpawn(Position position) {
