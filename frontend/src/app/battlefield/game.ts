@@ -1,6 +1,6 @@
 import { GameService } from '../services/game.service';
 import { WebsocketService } from '../services/websocket.service';
-import { PlayGround } from '../battlefield/playground';
+import { PlayGround } from './playground';
 import { Bomb, NewPlayer, Player, State, BattleField, Movement, NewBomb } from "../models";
 import { Subscription, Observer, Subject } from 'rxjs/Rx';
 import { GameResources } from './gameresources';
@@ -9,15 +9,14 @@ import { TimerObservable } from "rxjs/observable/TimerObservable";
 import { PlayerDataService } from "../services/player-data.service";
 
 export class Game {
-
-    public game;
-    public socketSubscription: Subscription;
-    public initialSubscription: Subscription;
-    public timerSubscription: Subscription;
-    public playGround: PlayGround = null;
-    public resources: GameResources;
-    public sprites = [];
-    public gameLoaded = false;
+    
+    private socketSubscription: Subscription;
+    private battleFieldSubscription: Subscription;
+    private timerSubscription: Subscription;
+    private playGround: PlayGround = null;
+    private resources: GameResources;
+    private sprites = [];
+    private gameLoaded = false;
     private timer: Observable<number>;
 
 
@@ -105,7 +104,7 @@ export class Game {
                 this.playGround.updateState(state);
             }
         });
-        this.initialSubscription = this.websocketService.getBattleField().subscribe((battlefield: BattleField) => {
+        this.battleFieldSubscription = this.websocketService.getBattleField().subscribe((battlefield: BattleField) => {
             if (this.playGround && this.playGround.isReady()) {
                 this.playGround.paintBattleField(battlefield);
             }
@@ -152,9 +151,6 @@ export class Game {
             timeElement.innerHTML = ('00' + minutes).slice(-2) + ':' + ('00' + seconds).slice(-2);
         });
     }
-    // stopTimer(): void {
-    //     this.timer.
-    // }
 
     placeHero(playerName: string) {
         this.player = new NewPlayer({ id: null, nickName: playerName });
@@ -171,7 +167,7 @@ export class Game {
         return [];
     }
 
-    isGameOver(): boolean {
+    public isGameOver(): boolean {
         if (this.playGround) {
             if (this.playGround.isGameOver()) {
                 this.shutDownGame();
@@ -186,7 +182,7 @@ export class Game {
         return this.playGround.isGameRunning();
     }
 
-    startGame() {
+    public startGame() {
         document.onkeydown = (e) => {
             let event: any = window.event ? window.event : e;
             let keyCode = event.keyCode;
@@ -216,13 +212,13 @@ export class Game {
         };
     }
 
-    shutDownGame() {
+    public destroyGame() {
+        this.socketSubscription.unsubscribe();
         document.onkeydown = null;
     }
 
-
-    getPlayGround() {
-        return this.playGround;
+    private shutDownGame() {
+        document.onkeydown = null;
     }
 
 }

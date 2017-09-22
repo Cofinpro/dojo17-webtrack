@@ -6,7 +6,7 @@ import { PaintableCanvas } from '../paint/paintable-canvas';
  */
 export class GameResources {
 
-    images = [];
+    images : PaintableCanvas[] = [];
     audios = [];
 
 
@@ -15,8 +15,8 @@ export class GameResources {
             return;
         }
 
-        const image = Image2Canvas.detect(src, key, width, height).then( (result) => {
-            this.images[result.key] = new PaintableCanvas(result.canvas, width, height);
+        const image = Image2Canvas.detect(src, key, width, height).then( (result : HTMLCanvasElement) => {
+            this.images[key] = new PaintableCanvas(result, width, height);
         });
 
     };
