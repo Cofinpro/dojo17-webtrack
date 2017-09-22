@@ -1,18 +1,13 @@
-<div id="userName">{{playerDataService.getPlayerName()}}</div>
-<div>
-  <input [(ngModel)]="playerName"
-         minlength="1"
-         maxlength="20"
-         placeholder="Nickname"
-         class="form-input"
-         required="true" />
-<button id="bomb" class="btn-default" (click)="manageGame()">Let's bomb!</button>
-</div>
-<div class="avatars">
-  <div *ngFor="let avatar of [1,2,3,4,5,6,7,8]">
-    <label>
+<div id="userName" [hidden]="!this.gameService.isGameRunning()">{{playerDataService.getPlayerName()}}</div>
+<div [hidden]="this.gameService.isGameRunning()">
+  <input [(ngModel)]="playerName" minlength="1" maxlength="20" placeholder="Nickname" class="form-input" required="true" />
+  <button id="bomb" class="btn-default" (click)="manageGame()">Let's bomb!</button>
+  <div class="avatars">
+    <div *ngFor="let avatar of [1,2,3,4,5,6,7,8]">
+      <label>
       <input type="radio" name="avatarId" [(ngModel)]="playerDataService.playerAvatarId" value="{{avatar}}" />
       <img src="../assets/images/hero/{{avatar}}/d-1.png">
     </label>
+    </div>
   </div>
 </div>
