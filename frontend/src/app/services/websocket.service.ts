@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Subject, Observable, Observer } from 'rxjs/Rx';
+import { Subscription, Subject, Observable, Observer } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
-import { Message, State, BattleField,Player, Bomb, Movement, NewPlayer, NewBomb } from '../models';
+import { State, BattleField,Player, Bomb, Movement, NewPlayer, NewBomb } from '../models';
 import { StompService } from 'ng2-stomp-service';
 import { OnDestroy } from '@angular/core';
 
@@ -11,8 +11,8 @@ export class WebsocketService implements OnDestroy{
     // This is for stomp
     private subject: Subject<State>;
     private battleFieldSubject: Subject<BattleField>;
-    private subscription: any;
-    private battleFieldSubscription : any;
+    private subscription: Subscription;
+    private battleFieldSubscription : Subscription;
     private connected: boolean = false;
 
     constructor(private stomp: StompService) {
@@ -21,6 +21,7 @@ export class WebsocketService implements OnDestroy{
         this.battleFieldSubject = new Subject<BattleField>();
         //configuration
         this.stomp.configure({
+            // host: 'http://192.168.178.31:8080',
             host: 'http://localhost:8080',
             debug: false,
             queue: { 'init': false }

@@ -1,4 +1,4 @@
-import { Position } from './position';
+import { Position } from '../shared';
 import { Bomb } from "./bomb";
 import { Player } from "./player";
 import { Stone } from "./stone";

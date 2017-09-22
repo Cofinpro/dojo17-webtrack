@@ -1,47 +1,48 @@
-import { PaintableCanvas } from "./paintable-canvas";
-import { PaintedCanvas } from "./painted-canvas";
+import { PaintableCanvas, PositionedPaintableCanvas, PaintedCanvas } from ".";
+import { FadingCanvases } from "./fading-canvases";
 export class Screen {
 
-    private canvas: any;
-    private obstaclesCanvas: any;
-    private context: any;
-    private obstaclesContext: any;
+    private canvas: HTMLCanvasElement;
+    private context: CanvasRenderingContext2D;
 
-    constructor(private tag: any, private height: number, private width: number){
+    private dynamicCanvas: HTMLCanvasElement;
+    private dynamicContext: CanvasRenderingContext2D;
+
+    constructor(private tag: HTMLElement, private height: number, private width: number){
         this.canvas = document.createElement('canvas');
-        this.obstaclesCanvas = document.createElement('canvas');
         this.context = this.canvas.getContext('2d');
-        this.obstaclesContext = this.obstaclesCanvas.getContext('2d');
+
+        this.dynamicCanvas = document.createElement('canvas');
+        this.dynamicContext = this.dynamicCanvas.getContext('2d');
 
         this.canvas.width = width;
         this.canvas.height = height;
-
-        this.obstaclesCanvas.width = width;
-        this.obstaclesCanvas.height = height;
+ 
+        this.dynamicCanvas.width = width;
+        this.dynamicCanvas.height = height;
 
         this.canvas.style.position = 'absolute';
-        this.obstaclesCanvas.style.position = 'absolute';
-
-        this.tag.appendChild(this.obstaclesCanvas);
+        this.dynamicCanvas.style.position = 'absolute';
+        
         this.tag.appendChild(this.canvas);
+        this.tag.appendChild(this.dynamicCanvas);
 
         this.tag.style.width = width + 'px';
         this.tag.style.height = height + 'px';
 
     }
 
-    createPicture(id: string, elmTop: number, elmLeft: number, image: PaintableCanvas): PaintedCanvas{
-        let pic = new PaintedCanvas(id, elmTop, elmLeft, image, this.context);
+    public createPicture(id: string, elmLeft: number, elmTop: number,  image: PaintableCanvas): PaintedCanvas{
+        let pic = new PaintedCanvas(id, elmLeft, elmTop,  image, this.context);
         return pic;
     }
-    paintBackGround(image){
-        this.context.drawImage(image, 0, 0);
+
+    public createFadeInFadeOut(images : PositionedPaintableCanvas[], fadeInTimeMillis : number, fadeOutTimeMillis : number) : void{
+        let f = new FadingCanvases(images,fadeInTimeMillis,fadeOutTimeMillis,this.dynamicContext);
+        f.start(f);
     }
 
-
-
-
-
-
-
+    public paintBackGround(image){
+        this.context.drawImage(image, 0, 0);
+    }
 }

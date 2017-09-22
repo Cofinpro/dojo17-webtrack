@@ -1,7 +1,8 @@
-import { GameResources } from "../game/gameresources";
+import { GameResources } from "./gameresources";
 import { Screen } from "../paint/screen";
-import { PaintedCanvas } from "../paint/painted-canvas";
-import { State, BattleField, Bomb, Player, Stone, Bush, Position, NewPlayer, BombCountPowerup, BlastRadiusPowerup } from "../models";
+import { Position } from "../shared";
+import { PaintedCanvas, PositionedPaintableCanvas } from "../paint";
+import { State, BattleField, Bomb, Player, Stone, Bush, NewPlayer, BombCountPowerup, BlastRadiusPowerup } from "../models";
 import { PlayerDataService } from "../services/player-data.service";
 
 export class PlayGround {
@@ -12,15 +13,19 @@ export class PlayGround {
     private screen: Screen;
     private ownPlayerDied: boolean;
     private ownPlayer: NewPlayer;
-    private playersLastDirection: any[] = [];
+    private playersLastDirection: string[] = [];
     private sprites: PaintedCanvas[] = [];
+    private fixeds: PaintedCanvas[] = [];
+
     private battleField: BattleField;
 
     private resources: GameResources;
     private battleFieldSizeX: number;
     private battleFieldSizeY: number;
 
-    constructor(private tag: any, private height: number, private width: number, private playerDataService: PlayerDataService) {
+    private readonly squareSize : number = 32;
+
+    constructor(private tag: HTMLElement, private height: number, private width: number, private playerDataService: PlayerDataService) {
         this.screen = new Screen(tag, height, width);
     }
 
@@ -35,10 +40,10 @@ export class PlayGround {
         if (!this.resources) {
             return;
         }
-
+        this.clearFixed();
         this.battleField = battleField;
-        this.updateFixStones(battleField.fixStones);
-        this.updateFoliage(battleField.foliage);
+        this.updateFixStones(this.battleField.fixStones);
+        this.updateFoliage(this.battleField.foliage);
 
     }
     public updateState(state: State) {
@@ -81,6 +86,12 @@ export class PlayGround {
         }
         this.sprites = [];
     }
+    private clearFixed() : void{
+        for (const fixed of this.fixeds) {
+            fixed.clear();
+        }
+        this.fixeds = [];
+    }
 
     private updateFixStones(stones: Stone[]) {
         for (const stone of stones) {
@@ -88,38 +99,49 @@ export class PlayGround {
             if (stone.x !== 0 && (stone.y === 0 || stone.y === this.battleFieldSizeY)) {
                 imageId = 'wall-dark';
             }
-            this.createPicture('fixStone-id', stone.y * 32, stone.x * 32, this.resources.images[imageId], false);
+            this.createPicture('fixStone-id', stone.x, stone.y, this.resources.images[imageId], false);
         }
     }
 
     private updateWeakStones(stones: Stone[]) {
         for (const stone of stones) {
-            this.createPicture('weakStone-id', stone.y * 32, stone.x * 32, this.resources.images['box'], true);
+            this.createPicture('weakStone-id',  stone.x, stone.y, this.resources.images['box'], true);
         }
     }
 
     private updateFoliage(foliage: Bush[]) {
         for (const bush of foliage) {
-            this.createPicture('bush-id', bush.y * 32, bush.x * 32, this.resources.images['bush'], true);
+            this.createPicture('bush-id', bush.x, bush.y, this.resources.images['bush'], true);
         }
     }
 
     private updateBombCountPowerups(powerups: BombCountPowerup[]) {
         for (const powerup of powerups) {
-            this.createPicture('bombCoundPowerup-id', powerup.y * 32, powerup.x * 32, this.resources.images['powerupBlue'], true);
+            this.createPicture('bombCoundPowerup-id',  powerup.x, powerup.y, this.resources.images['powerupBlue'], true);
         }
     }
 
     private updateBlastRadiusPowerups(powerups: BlastRadiusPowerup[]) {
         for (const powerup of powerups) {
-            this.createPicture('blastRadiusPowerup-id', powerup.y * 32, powerup.x * 32, this.resources.images['powerupRed'], true), true;
+            this.createPicture('blastRadiusPowerup-id',  powerup.x, powerup.y, this.resources.images['powerupRed'], true), true;
         }
     }
 
     private updateExploded(positions: Position[]) {
+        console.log(positions);
+        if(positions.length === 0){
+            //nothing to do
+            console.log('go away');
+            return;
+        }    
+
+        let explosions = [];
+        let image = this.resources.images['explosionFullCenter']; 
         for (const position of positions) {
-            this.createPicture('some', position.y * 32, position.x * 32, this.resources.images['explosionFullCenter'], true);
+            let newPosition = {x : position.x * this.squareSize, y : position.y * this.squareSize};
+            explosions.push(new PositionedPaintableCanvas(image, new Position(newPosition)));    
         }
+        this.screen.createFadeInFadeOut(explosions,1500,1500);
     }
 
 
@@ -152,8 +174,8 @@ export class PlayGround {
             const playerImageId = this.calculatePlayerId(player.id);
             this.createPicture(
                 player.id,
-                player.y * 32,
-                player.x * 32,
+                player.x,
+                player.y,
                 this.resources.images['hero-' + playerImageId + '-' + direction],
                 true
             );
@@ -166,16 +188,15 @@ export class PlayGround {
         }
     }
 
-    private calculatePlayerId(playerId: string) {
-        let avatarId = this.playerDataService.getPlayerAvatarId();
-        return (this.ownPlayer.id === playerId ? avatarId : this.getOpponentImageId(playerId, avatarId));
-    }
     public isGameRunning(): boolean {
         return this.ownPlayer && !this.ownPlayerDied;
     }
-    public resetPlayGround(){
+    public resetPlayGround() : void{
         this.ownPlayer = null;
         this.ownPlayerDied = false;
+        this.battleField = null;
+        this.clearFixed();
+        this.clearSprites();
     }
 
     public isGameOver(): boolean {
@@ -183,6 +204,11 @@ export class PlayGround {
     }
     public isReady(): boolean {
         return this.screen && this.resources != null;
+    }
+
+    private calculatePlayerId(playerId: string) {
+        let avatarId = this.playerDataService.getPlayerAvatarId();
+        return (this.ownPlayer.id === playerId ? avatarId : this.getOpponentImageId(playerId, avatarId));
     }
 
     private getOpponentImageId(id, ownAvatarId) {
@@ -193,7 +219,7 @@ export class PlayGround {
         return opponent;
     }
 
-    private updateBombs(bombs: Bomb[], serverTime) {
+    private updateBombs(bombs: Bomb[], serverTime) : void{
         for (const bomb of bombs) {
             // display correct sprite for bomb according to detonation time
             const timeUntilExplosion = bomb.detonateAt.getTime() - serverTime;
@@ -204,20 +230,16 @@ export class PlayGround {
             } else {
                 bombSpriteIndex = 'explosionFullCenter';
             }
-            this.createPicture(bomb.id, bomb.y * 32, bomb.x * 32, this.resources.images[bombSpriteIndex], true);
+            this.createPicture(bomb.id, bomb.x, bomb.y, this.resources.images[bombSpriteIndex], true);
         }
     }
 
-    public createPicture(id, elmTop, elmLeft, image, addToSprites) {
-        const pic: PaintedCanvas = this.screen.createPicture(id, elmTop, elmLeft, image);
+    private createPicture(id, elmLeft, elmTop, image, addToSprites) : void {
+        const pic: PaintedCanvas = this.screen.createPicture(id, elmLeft * this.squareSize, elmTop * this.squareSize, image);
         if (addToSprites) {
             this.sprites.push(pic);
+        }else{
+            this.fixeds.push(pic);
         }
     }
-
-    public paintBackGround(image: any) {
-        this.screen.paintBackGround(image);
-    }
-
-
 }

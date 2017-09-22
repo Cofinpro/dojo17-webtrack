@@ -8,8 +8,8 @@
 export class Image2Canvas {
 
 
-    static detect(src: any, key: any, width: number, height: number): Promise<any> {
-        let promise = new Promise((resolve, reject) => {
+    static detect(src: string, key: string, width: number, height: number): Promise<HTMLCanvasElement> {
+        let promise = new Promise<HTMLCanvasElement>((resolve, reject) => {
             const image = new Image();
             image.src = src;
 
@@ -26,15 +26,16 @@ export class Image2Canvas {
         return promise;
     };
 
-    static doDetect(image: any, key: string, width: number, height: number) {
+    static doDetect(image: HTMLImageElement, key: string, width: number, height: number) {
         const canvas = document.createElement('canvas');
 
         canvas.width = width;
         canvas.height = height;
 
         let canvasContext = canvas.getContext('2d');
+        
         canvasContext.drawImage(image, 0, 0, width, height);
-        return {key, canvas};
+        return canvas;
     }
 
 }

@@ -10,7 +10,6 @@ import { WebsocketService } from "../services/websocket.service";
 })
 
 export class GamestartComponent {
-    private running : boolean  = false;
     playerName: string;
     
     constructor(public gameService: GameService, public playerDataService: PlayerDataService) {}
