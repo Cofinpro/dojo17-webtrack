@@ -170,15 +170,16 @@ export class PlayGround {
                 }
             }
             const playerImageId = this.calculatePlayerId(player.id);
-            let imageToPaint = this.resources.images['hero-' + playerImageId + '-' + direction];
+            const imageToPaint = this.resources.images['hero-' + playerImageId + '-' + direction];
             if(player.id === this.ownPlayer.id){
                 imageToPaint.addOverlay(this.resources.images['thats-me'], 0,0);
             }
+
             this.createPicture(
                 player.id,
                 player.x,
                 player.y,
-                this.resources.images['hero-' + playerImageId + '-' + direction],
+                imageToPaint,
                 true
             );
             this.playersLastDirection[player.id] = direction;

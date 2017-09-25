@@ -76,6 +76,8 @@ export class Game {
         this.resources.addImage('hero-8-l', '../../assets/images/hero/8/l-2.png', 32, 32);
         this.resources.addImage('hero-8-u', '../../assets/images/hero/8/u-2.png', 32, 32);
 
+        this.resources.addImage('thats-me', '../../assets/images/hero/thats-me.png', 32, 32);
+        
         // bombs
         this.resources.addImage('bomb5', '../../assets/images/bombs/5.png', 32, 32);
         this.resources.addImage('bomb4', '../../assets/images/bombs/4.png', 32, 32);
