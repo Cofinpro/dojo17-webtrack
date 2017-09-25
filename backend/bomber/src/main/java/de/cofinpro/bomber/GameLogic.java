@@ -188,7 +188,15 @@ public class GameLogic {
             }
         }, new Date(System.currentTimeMillis() + (SUDDEN_DEATH_INTERVAL_MILLIS)));
     }
-
+   synchronized void reenterPlayer(Player player) {
+        Position newPosition = randomValidPosition();
+        System.out.println("Sending reentering player to position: " + newPosition);
+        player.setX(newPosition.getX());
+        player.setY(newPosition.getY());
+        player.setBombCount(DEFAULT_BOMB_COUNT);
+        player.setBlastRadius(DEFAULT_BLAST_RADIUS);
+        this.currentState.getPlayers().add(player);
+   }
     synchronized void addPlayer(NewPlayer newPlayer) {
         System.out.println("Adding new player: " + newPlayer);
         Player existing = this.currentState.getPlayers().stream()
@@ -399,18 +407,17 @@ public class GameLogic {
         } 
         //no more weak stones --> send new map
         if(this.currentState.getWeakStones().isEmpty()){
-            System.out.println("NOTHING MORE TO BLOW UP! GEBERATING NEW MAP!");
+            System.out.println("NOTHING MORE TO BLOW UP! GENERATING NEW MAP!");
             resetState();
              objects.getPlayers().entrySet().stream()
                 .flatMap(e -> e.getValue().stream())
                 .forEach(p -> {
-                    NewPlayer newPlayer = new NewPlayer();
                     System.out.println("ADDING PLAYER TO NEW MAP: " + p);
-                    newPlayer.setId(p.getId());
-                    newPlayer.setNickName(p.getNickName());
-                    addPlayer(newPlayer);
+                    reenterPlayer(p);
                 });
+            this.template.convertAndSend("/topic/battlefield", this.currentBattleField);
         }
+        this.template.convertAndSend("/topic/state", this.currentState);
     }
 
     private void handlePowerupSpawn(Position position) {
