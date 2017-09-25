@@ -38,8 +38,7 @@ export class Screen {
     }
 
     public createFadeInFadeOut(images : PositionedPaintableCanvas[], fadeInTimeMillis : number, fadeOutTimeMillis : number) : void{
-        let f = new FadingCanvases(images,fadeInTimeMillis,fadeOutTimeMillis,this.dynamicContext);
-        f.start(f);
+        new FadingCanvases(images,fadeInTimeMillis,fadeOutTimeMillis,this.dynamicContext).start();
     }
 
     public paintBackGround(image){
