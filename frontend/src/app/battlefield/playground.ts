@@ -128,20 +128,18 @@ export class PlayGround {
     }
 
     private updateExploded(positions: Position[]) {
-        console.log(positions);
+        //nothing to do
         if(positions.length === 0){
-            //nothing to do
-            console.log('go away');
             return;
         }    
 
-        let explosions = [];
-        let image = this.resources.images['explosionFullCenter']; 
+        const explosions = [];
+        const image = this.resources.images['explosionFullCenter']; 
         for (const position of positions) {
-            let newPosition = {x : position.x * this.squareSize, y : position.y * this.squareSize};
+            const newPosition = {x : position.x * this.squareSize, y : position.y * this.squareSize};
             explosions.push(new PositionedPaintableCanvas(image, new Position(newPosition)));    
         }
-        this.screen.createFadeInFadeOut(explosions,1500,1500);
+        this.screen.createFadeInFadeOut(explosions,400,2000);
     }
 
 
@@ -172,6 +170,10 @@ export class PlayGround {
                 }
             }
             const playerImageId = this.calculatePlayerId(player.id);
+            let imageToPaint = this.resources.images['hero-' + playerImageId + '-' + direction];
+            if(player.id === this.ownPlayer.id){
+                imageToPaint.addOverlay(this.resources.images['thats-me'], 0,0);
+            }
             this.createPicture(
                 player.id,
                 player.x,
