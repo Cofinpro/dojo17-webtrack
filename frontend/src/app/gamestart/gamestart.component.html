@@ -1,7 +1,10 @@
-<div id="userName" [hidden]="!this.gameService.isGameRunning()">{{playerDataService.getPlayerName()}}</div>
+<div [hidden]="!this.gameService.isGameRunning()">
+  <div id="userName" >{{playerDataService.getPlayerName()}}</div>
+  <timer></timer>
+  <highscore></highscore>
+</div>
 <div [hidden]="this.gameService.isGameRunning()">
   <input [(ngModel)]="playerName" minlength="1" maxlength="20" placeholder="Nickname" class="form-input" required="true" />
-  <button id="bomb" class="btn-default" (click)="manageGame()">Let's bomb!</button>
   <div class="avatars">
     <div *ngFor="let avatar of [1,2,3,4,5,6,7,8]">
       <label>
@@ -10,4 +13,5 @@
     </label>
     </div>
   </div>
+  <button id="bomb" class="btn-default" (click)="manageGame()">Let's bomb!</button>
 </div>
