@@ -46,7 +46,7 @@ export class GamestartComponent implements AfterViewInit, OnInit {
 
                 this.useAudio = eval(this.useAudioFromPrefs);
             }
-        },0);    
+        });    
     }
         
     constructor(private gameService: GameService, 
