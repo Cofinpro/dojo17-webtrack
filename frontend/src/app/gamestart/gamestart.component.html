@@ -1,3 +1,7 @@
+<div class="form-input" >
+  <input type="checkbox" id="use-audio" name="audio"  [(ngModel)]="useAudio"  />
+  <label for="use-audio">audio</label>
+</div>
 <div [hidden]="!this.gameService.isGameRunning()">
   <div id="userName" >{{playerDataService.getPlayerName()}}</div>
   <timer></timer>

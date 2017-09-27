@@ -12,12 +12,15 @@ import { WebsocketService } from "../services/websocket.service";
 
 export class GamestartComponent implements AfterViewInit, OnInit {
     private playerName: string;
+    private useAudio: boolean;
 
     private readonly PLAYER_NAME : string = 'player-name';
     private readonly AVATAR_ID : string = 'avatar-id';
+    private readonly USE_AUDIO : string = 'use-audio';
     private playerNameFromPrefs: string = this.preferenceService.getValue(this.PLAYER_NAME);
     private avatarIdFromPrefs: string = this.preferenceService.getValue(this.AVATAR_ID);
-
+    private useAudioFromPrefs: string = this.preferenceService.getValue(this.USE_AUDIO);
+    
     
     ngOnInit(): void {
         if(this.playerNameFromPrefs){
@@ -38,6 +41,10 @@ export class GamestartComponent implements AfterViewInit, OnInit {
             if(this.avatarIdFromPrefs){
                 const selected = document.getElementById('avatar-' + this.avatarIdFromPrefs);
                 selected['checked'] = 'checked';
+            }
+            if(this.useAudioFromPrefs){
+
+                this.useAudio = eval(this.useAudioFromPrefs);
             }
         },0);    
     }
@@ -64,6 +71,7 @@ export class GamestartComponent implements AfterViewInit, OnInit {
     private safeToPreferences() : void{
         this.preferenceService.setValue(this.PLAYER_NAME, this.playerName);
         this.preferenceService.setValue(this.AVATAR_ID, this.playerDataService.getPlayerAvatarId().toString());
+        this.preferenceService.setValue(this.USE_AUDIO, String(this.useAudio));
         
 
     }

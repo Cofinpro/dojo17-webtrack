@@ -9,9 +9,6 @@ label > input{ /* HIDE RADIO */
   label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     border:2px solid #f00;
   }
-  .checked{ /* (RADIO CHECKED) IMAGE STYLES */
-    border:2px solid #f00;
-  }
 
   button.inline{
     width: 47%;
