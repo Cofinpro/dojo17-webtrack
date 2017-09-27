@@ -6,6 +6,7 @@ import 'rxjs/add/observable/of';
 import { PlayerDataService } from "./services/player-data.service";
 import { GameService } from "./services/game.service";
 import { WebsocketService } from "./services/websocket.service";
+import { PreferenceService } from "./services/preference.service";
 import { State } from './models/state';
 import { Player } from './models/player';
 
@@ -18,7 +19,11 @@ import { Player } from './models/player';
 export class AppComponent {
     title = 'Cofinpro Bomberman';
 
-    constructor(public websocketService: WebsocketService, public playerDataService: PlayerDataService, private gameService: GameService) {
-
+    constructor(public websocketService: WebsocketService
+        ,public playerDataService: PlayerDataService
+        ,private gameService: GameService
+        ,private preferenceService: PreferenceService
+    ) {
+        preferenceService.setDomainPrefix('com.cofinpro.bomberman');
     }
 }
