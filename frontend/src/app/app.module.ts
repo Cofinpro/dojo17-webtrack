@@ -9,6 +9,8 @@ import { GamestartComponent } from './gamestart/gamestart.component';
 import { FormsModule } from "@angular/forms";
 import { HighscoreComponent } from './highscore/highscore.component';
 import { TimerComponent } from './timer/timer.component';
+import { PreferencesComponent } from './preferences/preferences.component';
+import { PreferenceService } from './services/preference.service';
 
 
 @NgModule({
@@ -17,12 +19,13 @@ import { TimerComponent } from './timer/timer.component';
     BattlefieldComponent,
     GamestartComponent,
     HighscoreComponent,
-    TimerComponent
+    TimerComponent,
+    PreferencesComponent
   ],
   imports: [
     BrowserModule, FormsModule
   ],
-  providers: [StompService],
+  providers: [StompService, PreferenceService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
