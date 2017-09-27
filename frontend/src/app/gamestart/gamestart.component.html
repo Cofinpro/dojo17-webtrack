@@ -8,10 +8,14 @@
   <div class="avatars">
     <div *ngFor="let avatar of [1,2,3,4,5,6,7,8]">
       <label>
-      <input type="radio" name="avatarId" [(ngModel)]="playerDataService.playerAvatarId" value="{{avatar}}" />
-      <img src="../assets/images/hero/{{avatar}}/d-1.png">
+        <input type="radio" id="avatar-{{avatar}}" name="avatarId" [(ngModel)]="playerDataService.playerAvatarId" value="{{avatar}}" />
+        <img src="../assets/images/hero/{{avatar}}/d-1.png"  >
     </label>
     </div>
+  </div>
+  <div>
+    <button id="save-prefs" class="btn-default inline" (click)="safeToPreferences()">S</button>
+    <button id="delete-prefs" class="btn-default inline" (click)="removeFromPreferences()">D</button>
   </div>
   <button id="bomb" class="btn-default" (click)="manageGame()">Let's bomb!</button>
 </div>
