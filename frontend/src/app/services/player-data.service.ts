@@ -3,11 +3,10 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class PlayerDataService {
 
-    playerName: string;
-    playerAvatarId: number = 1;
-
-    constructor() { }
-
+    private playerName: string;
+    private playerAvatarId: number = 1;
+    private useAudio: boolean;
+    
     public getPlayerName(): string {
         return this.playerName;
     }
@@ -22,6 +21,14 @@ export class PlayerDataService {
 
     public setPlayerAvatarId(playerAvatarId: number): void {
         this.playerAvatarId = playerAvatarId;
+    }
+
+    public setUseAudio(use: boolean) : void{
+        this.useAudio = use;
+    }
+
+    public getUseAudio() : boolean{
+       return this.useAudio;
     }
 
 }

@@ -5,30 +5,35 @@ import { GameService } from "../services/game.service";
 import { WebsocketService } from "../services/websocket.service";
 
 @Component({
-  selector: 'gamestart',
-  templateUrl: './gamestart.component.html',
-  styleUrls: ['./gamestart.component.scss']
+    selector: 'gamestart',
+    templateUrl: './gamestart.component.html',
+    styleUrls: ['./gamestart.component.scss']
 })
 
 export class GamestartComponent implements AfterViewInit, OnInit {
     private playerName: string;
     private useAudio: boolean;
+    private avatarId: number = 1;
 
-    private readonly PLAYER_NAME : string = 'player-name';
-    private readonly AVATAR_ID : string = 'avatar-id';
-    private readonly USE_AUDIO : string = 'use-audio';
+    private readonly PLAYER_NAME: string = 'player-name';
+    private readonly AVATAR_ID: string = 'avatar-id';
+    private readonly USE_AUDIO: string = 'use-audio';
+    
     private playerNameFromPrefs: string = this.preferenceService.getValue(this.PLAYER_NAME);
     private avatarIdFromPrefs: string = this.preferenceService.getValue(this.AVATAR_ID);
     private useAudioFromPrefs: string = this.preferenceService.getValue(this.USE_AUDIO);
-    
-    
+
+
     ngOnInit(): void {
-        if(this.playerNameFromPrefs){
+        if (this.playerNameFromPrefs) {
             this.playerName = this.playerNameFromPrefs;
         }
-        if(this.avatarIdFromPrefs){
+        if (this.avatarIdFromPrefs) {
             const id = Number.parseInt(this.avatarIdFromPrefs);
-            this.playerDataService.setPlayerAvatarId(id);
+            this.avatarId = id;
+        }
+        if (this.useAudioFromPrefs) {
+            this.useAudio = eval(this.useAudioFromPrefs);
         }
     }
 
@@ -37,46 +42,47 @@ export class GamestartComponent implements AfterViewInit, OnInit {
         //to wrap the statement in setTimeOut only supresses a exception thrown in dev mode
         //in prod mode the exception is not thrown
         //plain and seriously crazy!!! 
-        window.setTimeout(() =>{
-            if(this.avatarIdFromPrefs){
+        window.setTimeout(() => {
+            if (this.avatarIdFromPrefs) {
                 const selected = document.getElementById('avatar-' + this.avatarIdFromPrefs);
                 selected['checked'] = 'checked';
             }
-            if(this.useAudioFromPrefs){
-
-                this.useAudio = eval(this.useAudioFromPrefs);
-            }
-        });    
+        });
     }
-        
-    constructor(private gameService: GameService, 
-        private playerDataService: PlayerDataService, 
-        private preferenceService: PreferenceService ) {}
+
+    constructor(private gameService: GameService,
+        private playerDataService: PlayerDataService,
+        private preferenceService: PreferenceService) { }
 
 
     private manageGame(): void {
 
-        if(!this.gameService) return;
+        if (!this.gameService) return;
 
-        if(this.gameService.isGameRunning()) return;
+        if (this.gameService.isGameRunning()) return;
 
         this.beginGame();
 
     }
-    private beginGame() : void{
+    private beginGame(): void {
         this.playerDataService.setPlayerName(this.playerName);
+        this.playerDataService.setUseAudio(this.useAudio);
+        this.playerDataService.setPlayerAvatarId(this.avatarId);
         this.gameService.startGame();
     }
 
-    private safeToPreferences() : void{
+    private safeToPreferences(): void {
         this.preferenceService.setValue(this.PLAYER_NAME, this.playerName);
-        this.preferenceService.setValue(this.AVATAR_ID, this.playerDataService.getPlayerAvatarId().toString());
+        console.log('setting :: ' + this.avatarId.toString());
+        this.preferenceService.setValue(this.AVATAR_ID, String(this.avatarId));
         this.preferenceService.setValue(this.USE_AUDIO, String(this.useAudio));
-        
+
 
     }
-    private removeFromPreferences() :void{
-
+    private removeFromPreferences(): void {
+        this.preferenceService.removeValue(this.PLAYER_NAME);
+        this.preferenceService.removeValue(this.AVATAR_ID);
+        this.preferenceService.removeValue(this.USE_AUDIO);
     }
 
 }
