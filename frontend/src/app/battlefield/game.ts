@@ -18,19 +18,22 @@ export class Game {
     private sprites = [];
     private gameLoaded = false;
     private timer: Observable<number>;
+    private gameIsDown: boolean = false;
 
 
-    socket: Subject<State>;
-    counterSubscription: Subscription;
+    private socket: Subject<State>;
+    private counterSubscription: Subscription;
 
-    images = {};
-    audios = {};
+    private images = {};
+    private audios = {};
+
+    private audioLoop: HTMLAudioElement;
 
 
-    counterTag;
-    livesTag;
+    private counterTag;
+    private livesTag;
 
-    player: NewPlayer;
+    private player: NewPlayer;
 
     constructor(private websocketService: WebsocketService, private playerDataService: PlayerDataService) {
         this.resources = new GameResources();
@@ -96,6 +99,10 @@ export class Game {
         // misc
         this.resources.addImage('bush', '../../assets/images/misc/bush.png', 32, 32);
 
+        //audio
+        this.resources.addAudio('loop', '../../assets/audio/loop.mp3');
+        this.resources.addAudio('lost', '../../assets/audio/lost.mp3');
+
         this.checkResources(this.resources);
 
         this.images = this.resources.images;
@@ -137,6 +144,10 @@ export class Game {
             this.timerSubscription.unsubscribe();
             this.timer = null;
         }
+        if(this.audioLoop){
+            this.audioLoop.pause();
+            this.audioLoop = null;
+        }
         this.playGround.resetPlayGround();
         this.placeHero(this.playerDataService.getPlayerName());
 
@@ -170,13 +181,18 @@ export class Game {
     }
 
     public isGameOver(): boolean {
-        if (this.playGround) {
-            if (this.playGround.isGameOver()) {
-                this.shutDownGame();
-            }
-            return this.playGround.isGameOver();
+
+        if(!this.playGround) return false;
+        
+        const gameOver = this.playGround.isGameOver();
+        if(!gameOver) return false;
+        
+        if(!this.gameIsDown){
+            this.gameIsDown = true;
+            this.shutDownGame();
         }
-        return false;
+        return true;
+
     }
     public isGameRunning(): boolean {
         if (!this.playGround) return false;
@@ -185,6 +201,14 @@ export class Game {
     }
 
     public startGame() {
+
+        this.gameIsDown = false;
+
+        if(this.playerDataService.getUseAudio()){
+            this.audioLoop = this.resources.audios['loop'];
+            this.audioLoop.loop = true;
+            this.audioLoop.play();
+        }
         document.onkeydown = (e) => {
             let event: any = window.event ? window.event : e;
             let keyCode = event.keyCode;
@@ -220,6 +244,13 @@ export class Game {
     }
 
     private shutDownGame() {
+        if(this.playerDataService.getUseAudio()){
+            this.audios['lost'].play();
+        }
+        if(this.audioLoop){
+            this.audioLoop.pause();
+            this.audioLoop = null;
+        }
         document.onkeydown = null;
     }
 
