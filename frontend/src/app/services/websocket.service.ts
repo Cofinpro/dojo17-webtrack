@@ -18,7 +18,7 @@ export class WebsocketService implements OnDestroy{
         this.subject = new Subject<State>();
         //configuration
         this.stomp.configure({
-            host: 'http://10.59.1.57:3000',
+            host: 'https://scholtzweb.de/bomberback/',
             debug: false,
             queue: { 'init': false }
         });
