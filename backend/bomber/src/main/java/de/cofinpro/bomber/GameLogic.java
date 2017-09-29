@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -30,7 +31,7 @@ public class GameLogic {
 
     private static final int DEFAULT_BOMB_COUNT = 2;
 
-    private static final int INACTIVITY_TIMEOUT_SECONDS = 20;
+    private static final int EXPLOSION_TIME_SECONDS = 1;
 
     private static final int ROUND_TIME_SECONDS = 120;
 
@@ -52,7 +53,9 @@ public class GameLogic {
 
     private SimpMessagingTemplate template;
 
-    private int currentRound = 0;
+    private Future<?> roundTimer;
+    private Future<?> stoneTimer;
+    private Future<?> explosionTimer;
 
     @Autowired
     public GameLogic(SimpMessagingTemplate template) {
@@ -126,59 +129,80 @@ public class GameLogic {
         this.currentState.setBlastRadiusPowerups(definition.getBlastRadiusPowerups());
         this.currentState.setBombCountPowerups(definition.getBombCountPowerups());
         this.currentState.setFoliage(definition.getFoliage());
-        this.currentRound++;
         System.out.println("State reset: " + currentState.toString());
-        System.out.println("Starting round " + currentRound);
 
-        scheduler.schedule(new TimerTask() {
+        if (roundTimer != null && !roundTimer.isCancelled() && !roundTimer.isDone()) {
+            roundTimer.cancel(true);
+        }
+        if (stoneTimer != null && !stoneTimer.isCancelled() && !stoneTimer.isDone()) {
+            stoneTimer.cancel(true);
+        }
+        if (explosionTimer != null && !explosionTimer.isCancelled() && !explosionTimer.isDone()) {
+            explosionTimer.cancel(true);
+        }
+        roundTimer = scheduler.schedule(new TimerTask() {
             @Override
             public void run() {
-                startSuddenDeath(currentRound);
+                startSuddenDeath();
             }
         }, new Date(System.currentTimeMillis() + (ROUND_TIME_SECONDS * 1000)));
     }
 
-    private synchronized void startSuddenDeath(int affectedRound) {
+     private synchronized void startSuddenDeath() {
+        System.out.println("STARTING SUDDEN DEATH");
         currentState.setSuddenDeath(true);
-        placeVerticalFixStones(0,0, affectedRound);
+        placeVerticalFixStones(0,0);
     }
 
-    private synchronized void placeVerticalFixStones(int row, int col, int affectedRound) {
-        if (currentRound != affectedRound) {
-            // only handle sudden death if no new round has been started
-            return;
-        }
+    private synchronized void placeVerticalFixStones(int row, int col) {
+        Position newPos = new Position(col, row);
+        if (this.currentState.getFixStones().stream().noneMatch(s -> s.getPosition().equals(newPos))) {
+            System.out.println("Placing fix stone at: " + newPos);
+            this.currentState.getFixStones().add(new Stone(col, row));
 
-        this.currentState.getFixStones().add(new Stone(col, row));
-        Position deathPos = new Position(col, row);
+            MapObjects mapObjects = new MapObjects(this.currentState);
 
-        Player killedPlayer = null;
-        for (Player p: this.currentState.getPlayers()) {
-            if (deathPos.equals(p.getPosition())) {
-                killedPlayer = p;
-                break;
+            Stone weakStone = mapObjects.getWeakStones().get(newPos);
+            if (weakStone != null) {
+                this.currentState.getWeakStones().remove(weakStone);
             }
+
+            List<Bomb> bombs = mapObjects.getBombs().get(newPos);
+            if (bombs != null && !bombs.isEmpty()) {
+                this.currentState.getBombs().removeAll(bombs);
+            }
+
+            List<Player> players = mapObjects.getPlayers().get(newPos);
+            if (players != null && !players.isEmpty()) {
+                players.forEach(p -> {
+                    System.out.println("Player killed by sudden death: " + p);
+                    this.currentState.getPlayers().remove(p);
+                    handleKilledPlayerUpgrades(p);
+                    handleGameOver();
+                });
+            }
+
+            this.currentState.setServerTime(System.currentTimeMillis());
+            this.template.convertAndSend("/topic/state", this.currentState);
         }
-        if (killedPlayer != null) {
-            System.out.println("Player killed by sudden death: " + killedPlayer);
-            this.currentState.getPlayers().remove(killedPlayer);
-            handleKilledPlayerUpgrades(killedPlayer);
-        }
+
         final int mapSizeX = this.currentState.getSizeX();
         final int mapSizeY = this.currentState.getSizeY();
+        if ((col >= mapSizeX && row >= mapSizeY) || this.currentState.getPlayers().isEmpty()) {
+            return;
+        }
         
-
-        scheduler.schedule(new TimerTask() {
+        stoneTimer = scheduler.schedule(new TimerTask() {
             @Override
             public void run() {
                 if (col + 1 < mapSizeX) {
-                    placeVerticalFixStones(row, col + 1, affectedRound);
+                    placeVerticalFixStones(row, col + 1);
                 }
                 else if (row + 1 < mapSizeY) {
-                    placeVerticalFixStones(row +1, 0, affectedRound);
+                    placeVerticalFixStones(row +1, 0);
                 }
             }
-        }, new Date(System.currentTimeMillis() + (SUDDEN_DEATH_INTERVAL_MILLIS)));
+        }, new Date(System.currentTimeMillis() + SUDDEN_DEATH_INTERVAL_MILLIS));
     }
 
     synchronized State addPlayer(NewPlayer newPlayer) {
@@ -210,15 +234,11 @@ public class GameLogic {
         player.setBombCount(DEFAULT_BOMB_COUNT);
         this.currentState.getPlayers().add(player);
 
-        // TODO Start a timer to kill player for inactivity
-
         this.currentState.setServerTime(System.currentTimeMillis());
         return this.currentState;
     }
 
     synchronized State movePlayer(Movement movement) {
-        // TODO Reset player timer
-
         System.out.println("Moving player: " + movement);
         Player player = this.currentState.getPlayers().stream()
                 .filter(p -> p.getId().equals(movement.getPlayerId()))
@@ -284,10 +304,7 @@ public class GameLogic {
     }
 
     synchronized State addBomb(NewBomb newBomb) {
-        // TODO Reset timer for player
-
         System.out.println("Adding a bomb: " + newBomb);
-        this.currentState.setExploded(null);
 
         Player player = this.currentState.getPlayers().stream()
                 .filter(p -> p.getId().equals(newBomb.getPlayerId()))
@@ -333,6 +350,9 @@ public class GameLogic {
     }
 
     private synchronized void explodeBomb(String bombId) {
+        if (explosionTimer != null && !explosionTimer.isCancelled() && !explosionTimer.isDone()) {
+            explosionTimer.cancel(true);
+        }
         this.currentState.setExploded(null);
 
         Bomb explodedBomb = getExplodedBomb(bombId);
@@ -367,6 +387,7 @@ public class GameLogic {
                     this.currentState.getPlayers().remove(p);
 
                     handleKilledPlayerUpgrades(p);
+                    handleGameOver();
                 });
         objects.getWeakStones().entrySet().stream()
                 .filter(e -> blownPositions.contains(e.getKey()))
@@ -379,6 +400,23 @@ public class GameLogic {
 
                     handlePowerupSpawn(e.getValue().getPosition());
                 });
+
+        this.currentState.setServerTime(System.currentTimeMillis());
+
+        this.template.convertAndSend("/topic/state", this.currentState);
+
+        explosionTimer = scheduler.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                resetExplosion();
+            }
+        }, new Date(System.currentTimeMillis() + (EXPLOSION_TIME_SECONDS * 1000)));
+
+    }
+
+    private synchronized void resetExplosion() {
+        System.out.println("Ending explosion");
+        this.currentState.setExploded(null);
 
         this.currentState.setServerTime(System.currentTimeMillis());
 
@@ -402,6 +440,20 @@ public class GameLogic {
         }
         for (int i = DEFAULT_BOMB_COUNT; i < p.getBombCount(); i++) {
             currentState.addBombCountPowerup(randomValidPosition());
+        }
+    }
+
+    private synchronized void handleGameOver() {
+        if (this.currentState.getPlayers().isEmpty()) {
+            if (roundTimer != null && !roundTimer.isCancelled() && !roundTimer.isDone()) {
+                roundTimer.cancel(true);
+            }
+            if (stoneTimer != null && !stoneTimer.isCancelled() && !stoneTimer.isDone()) {
+                stoneTimer.cancel(true);
+            }
+            if (explosionTimer != null && !explosionTimer.isCancelled() && !explosionTimer.isDone()) {
+                explosionTimer.cancel(true);
+            }
         }
     }
 
