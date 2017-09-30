@@ -11,10 +11,10 @@
   </div>
 </div>
 
-<div class="is-loading" *ngIf="!this.gameService.isGameLoaded()">
+<div class="is-loading" *ngIf="this.gameService.getGameState() === gameState.gameLoading">
   <img src="assets/images/loading.png" />
 </div>
 
-<div class="is-game-over" *ngIf="this.gameService.isGameOver()">
+<div class="is-game-over" *ngIf="this.gameService.getGameState() === gameState.gameOver">
   <img src="assets/images/gameover.png" />
 </div>

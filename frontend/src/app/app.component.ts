@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
 import { PlayerDataService } from "./services/player-data.service";
-import { GameService } from "./services/game.service";
+import { GameService, GameState } from "./services/game.service";
 import { WebsocketService } from "./services/websocket.service";
 import { PreferenceService } from "./services/preference.service";
 import { State } from './models/state';
@@ -17,8 +17,10 @@ import { Player } from './models/player';
     providers: [ WebsocketService, PlayerDataService, GameService ]
 })
 export class AppComponent {
-    title = 'Cofinpro Bomberman';
-
+    private title = 'Cofinpro Bomberman';
+    //for use in the view
+    private gameState = GameState;
+    
     constructor(public websocketService: WebsocketService
         ,public playerDataService: PlayerDataService
         ,private gameService: GameService

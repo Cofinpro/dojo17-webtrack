@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy, Output, AfterViewInit } from '@angular/core';
 import { PlayerDataService } from "../services/player-data.service";
 import { PreferenceService } from "../services/preference.service";
-import { GameService } from "../services/game.service";
+import { GameService, GameState } from "../services/game.service";
 import { WebsocketService } from "../services/websocket.service";
 
 @Component({
@@ -11,6 +11,9 @@ import { WebsocketService } from "../services/websocket.service";
 })
 
 export class GamestartComponent implements AfterViewInit, OnInit {
+    //for use in the view
+    private gameState = GameState;
+
     private playerName: string;
     private useAudio: boolean;
     private avatarId: number = 1;
@@ -59,7 +62,7 @@ export class GamestartComponent implements AfterViewInit, OnInit {
 
         if (!this.gameService) return;
 
-        if (this.gameService.isGameRunning()) return;
+        if(this.gameService.getGameState() === GameState.gameRunning) return;
 
         this.beginGame();
 
