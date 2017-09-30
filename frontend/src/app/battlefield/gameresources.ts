@@ -6,11 +6,11 @@ import { PaintableCanvas } from '../paint/paintable-canvas';
  */
 export class GameResources {
 
-    images : PaintableCanvas[] = [];
-    audios = [];
+    public images : PaintableCanvas[] = [];
+    public audios = [];
 
 
-    addImage(key,src, width, height) {
+    public addImage(key,src, width, height) : void {
         if (this.images.indexOf(key) > -1) {
             return;
         }
@@ -19,9 +19,9 @@ export class GameResources {
             this.images[key] = new PaintableCanvas(result, width, height);
         });
 
-    };
+    }
 
-    addAudio(key, src) {
+    public addAudio(key, src) : void {
         if (this.audios.indexOf(key) > -1) {
             return;
         }
@@ -29,13 +29,6 @@ export class GameResources {
         let audio = new Audio();
         this.audios[key] = audio;
         audio.src = src;
-    };
+    }
 
-    resourcesLoaded(): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            window.setTimeout(() => {
-                resolve();
-            }, 3000);
-        });
-    };
 }

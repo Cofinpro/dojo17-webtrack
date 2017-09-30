@@ -19,7 +19,8 @@ export class PlayGround {
 
     private battleField: BattleField;
 
-    private resources: GameResources;
+    private images: {};
+    private audios: {};
     private battleFieldSizeX: number;
     private battleFieldSizeY: number;
 
@@ -32,12 +33,15 @@ export class PlayGround {
     public setPlayer(player: NewPlayer) {
         this.ownPlayer = player;
     }
-    public setResources(gameResources: GameResources) {
-        this.resources = gameResources;
+    public setImages(images: {}) {
+        this.images = images;
+    }
+    public setAudios(audios: {}) {
+        this.audios = audios;
     }
     public paintBattleField(battleField: BattleField) {
 
-        if (!this.resources) {
+        if (!this.images) {
             return;
         }
         this.clearFixed();
@@ -48,7 +52,7 @@ export class PlayGround {
     }
     public updateState(state: State) {
 
-        if (!this.resources) {
+        if (!this.images) {
             return;
         }
 
@@ -99,31 +103,31 @@ export class PlayGround {
             if (stone.x !== 0 && (stone.y === 0 || stone.y === this.battleFieldSizeY)) {
                 imageId = 'wall-dark';
             }
-            this.createPicture('fixStone-id', stone.x, stone.y, this.resources.images[imageId], false);
+            this.createPicture('fixStone-id', stone.x, stone.y, this.images[imageId], false);
         }
     }
 
     private updateWeakStones(stones: Stone[]) {
         for (const stone of stones) {
-            this.createPicture('weakStone-id',  stone.x, stone.y, this.resources.images['box'], true);
+            this.createPicture('weakStone-id',  stone.x, stone.y, this.images['box'], true);
         }
     }
 
     private updateFoliage(foliage: Bush[]) {
         for (const bush of foliage) {
-            this.createPicture('bush-id', bush.x, bush.y, this.resources.images['bush'], true);
+            this.createPicture('bush-id', bush.x, bush.y, this.images['bush'], true);
         }
     }
 
     private updateBombCountPowerups(powerups: BombCountPowerup[]) {
         for (const powerup of powerups) {
-            this.createPicture('bombCoundPowerup-id',  powerup.x, powerup.y, this.resources.images['powerupBlue'], true);
+            this.createPicture('bombCoundPowerup-id',  powerup.x, powerup.y, this.images['powerupBlue'], true);
         }
     }
 
     private updateBlastRadiusPowerups(powerups: BlastRadiusPowerup[]) {
         for (const powerup of powerups) {
-            this.createPicture('blastRadiusPowerup-id',  powerup.x, powerup.y, this.resources.images['powerupRed'], true), true;
+            this.createPicture('blastRadiusPowerup-id',  powerup.x, powerup.y, this.images['powerupRed'], true), true;
         }
     }
 
@@ -134,10 +138,13 @@ export class PlayGround {
         }    
 
         const explosions = [];
-        const image = this.resources.images['explosionFullCenter']; 
+        const image = this.images['explosionFullCenter']; 
         for (const position of positions) {
             const newPosition = {x : position.x * this.squareSize, y : position.y * this.squareSize};
             explosions.push(new PositionedPaintableCanvas(image, new Position(newPosition)));    
+        }
+        if(this.playerDataService.getUseAudio()){
+           this.audios['boom'].play();
         }
         this.screen.createFadeInFadeOut(explosions,400,2000);
     }
@@ -170,9 +177,9 @@ export class PlayGround {
                 }
             }
             const playerImageId = this.calculatePlayerId(player.id);
-            const imageToPaint = this.resources.images['hero-' + playerImageId + '-' + direction];
+            const imageToPaint = this.images['hero-' + playerImageId + '-' + direction];
             if(player.id === this.ownPlayer.id){
-                imageToPaint.addOverlay(this.resources.images['thats-me'], 0,0);
+                imageToPaint.addOverlay(this.images['thats-me'], 0,0);
             }
 
             this.createPicture(
@@ -191,9 +198,6 @@ export class PlayGround {
         }
     }
 
-    public isGameRunning(): boolean {
-        return this.ownPlayer && !this.ownPlayerDied;
-    }
     public resetPlayGround() : void{
         this.ownPlayer = null;
         this.ownPlayerDied = false;
@@ -206,7 +210,7 @@ export class PlayGround {
         return this.ownPlayerDied;
     }
     public isReady(): boolean {
-        return this.screen && this.resources != null;
+        return this.screen && this.images != null;
     }
 
     private calculatePlayerId(playerId: string) {
@@ -233,7 +237,7 @@ export class PlayGround {
             } else {
                 bombSpriteIndex = 'explosionFullCenter';
             }
-            this.createPicture(bomb.id, bomb.x, bomb.y, this.resources.images[bombSpriteIndex], true);
+            this.createPicture(bomb.id, bomb.x, bomb.y, this.images[bombSpriteIndex], true);
         }
     }
 
