@@ -3,14 +3,13 @@ import { Subject, Subscription } from 'rxjs/Rx';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import { Game } from '../battlefield/game';
+import { Game, GameState } from '../battlefield/game';
 import { WebsocketService } from '../services/websocket.service';
 import { PlayerDataService } from '../services/player-data.service';
 import { Player } from '../models';
 
 @Injectable()
 export class GameService {
-
     private game: Game;
     private highScoreSubject: Subject<Player[]> = new Subject<Player[]>();
     private suddenDeathSubject: Subject<boolean> = new Subject<boolean>();
@@ -19,19 +18,17 @@ export class GameService {
     constructor(private websocketService: WebsocketService, private playerDataService: PlayerDataService) { }
 
     public startGame(): void {
-        //case of a restart --> reuse the old insstance
         if (!this.game) {
             this.game = new Game(this.websocketService, this.playerDataService);
+            this.game.start();
             this.stateSubscription = this.websocketService.getState().subscribe((state) => {
                 this.highScoreSubject.next(state.players);
                 this.suddenDeathSubject.next(state.suddenDeath);
             });
         } else {
+            //case of a restart --> reuse the old insstance
             this.game.resetGame();
         }
-
-        this.game.startTimer();
-
     }
 
     public destroy(): void {
@@ -40,18 +37,10 @@ export class GameService {
         this.websocketService.disconnect();
     }
 
-    public isGameOver(): boolean {
-        return this.game && this.game.isGameOver();
-    }
-    public isGameRunning(): boolean {
-        return this.game && this.game.isGameRunning();
-    }
+    public getGameState() : GameState{
+        if(!this.game) return GameState.gameOff;
 
-    public isGameLoaded(): boolean {
-        if (!this.game) {
-            return true;
-        }
-        return this.game.isGameLoaded();
+        return this.game.getGameState();
     }
 
     public isSuddenDeath(): Observable<boolean> {
@@ -63,3 +52,5 @@ export class GameService {
     }
 
 }
+//rexport GameState to avoid circular dependencies
+export { GameState };
