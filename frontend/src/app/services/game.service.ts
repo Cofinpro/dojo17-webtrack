@@ -12,23 +12,25 @@ import { Player } from '../models';
 export class GameService {
     private game: Game;
     private highScoreSubject: Subject<Player[]> = new Subject<Player[]>();
-    private suddenDeathSubject: Subject<boolean> = new Subject<boolean>();
+    private gameStateSubject: Subject<GameState> = new Subject<GameState>();
     private stateSubscription: Subscription;
 
     constructor(private websocketService: WebsocketService, private playerDataService: PlayerDataService) { }
 
     public startGame(): void {
+       
         if (!this.game) {
             this.game = new Game(this.websocketService, this.playerDataService);
             this.game.start();
             this.stateSubscription = this.websocketService.getState().subscribe((state) => {
                 this.highScoreSubject.next(state.players);
-                this.suddenDeathSubject.next(state.suddenDeath);
+                this.gameStateSubject.next(this.getGameStateFoeService());
             });
         } else {
             //case of a restart --> reuse the old insstance
             this.game.resetGame();
         }
+        this.gameStateSubject.next(this.getGameStateFoeService());
     }
 
     public destroy(): void {
@@ -37,18 +39,17 @@ export class GameService {
         this.websocketService.disconnect();
     }
 
-    public getGameState() : GameState{
-        if(!this.game) return GameState.gameOff;
-
-        return this.game.getGameState();
-    }
-
-    public isSuddenDeath(): Observable<boolean> {
-        return this.suddenDeathSubject.asObservable();
+    public getGameState() : Observable<GameState>{
+        return this.gameStateSubject.asObservable()
     }
 
     public getPlayers(): Observable<Player[]> {
         return this.highScoreSubject.asObservable();
+    }
+
+    private getGameStateFoeService(){
+        if(!this.game) return GameState.gameOff;
+        return this.game.getGameState();
     }
 
 }

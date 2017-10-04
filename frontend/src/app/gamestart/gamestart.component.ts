@@ -2,6 +2,7 @@ import { Component, Input, OnInit, OnDestroy, Output, AfterViewInit } from '@ang
 import { PlayerDataService } from "../services/player-data.service";
 import { PreferenceService } from "../services/preference.service";
 import { GameService, GameState } from "../services/game.service";
+import { Subject, Subscription } from 'rxjs/Rx';
 import { WebsocketService } from "../services/websocket.service";
 
 @Component({
@@ -13,6 +14,8 @@ import { WebsocketService } from "../services/websocket.service";
 export class GamestartComponent implements AfterViewInit, OnInit {
     //for use in the view
     private gameState = GameState;
+
+    private currentGameState : GameState = GameState.gameOff;
 
     private playerName: string;
     private useAudio: boolean;
@@ -26,6 +29,8 @@ export class GamestartComponent implements AfterViewInit, OnInit {
     private avatarIdFromPrefs: string = this.preferenceService.getValue(this.AVATAR_ID);
     private useAudioFromPrefs: string = this.preferenceService.getValue(this.USE_AUDIO);
 
+    private gameStateSubscription: Subscription;
+
 
     ngOnInit(): void {
         if (this.playerNameFromPrefs) {
@@ -38,6 +43,10 @@ export class GamestartComponent implements AfterViewInit, OnInit {
         if (this.useAudioFromPrefs) {
             this.useAudio = eval(this.useAudioFromPrefs);
         }
+
+        this.gameStateSubscription = this.gameService.getGameState().subscribe((gameState) =>{
+            this.currentGameState = gameState;
+        });
     }
 
     ngAfterViewInit(): void {
@@ -62,7 +71,7 @@ export class GamestartComponent implements AfterViewInit, OnInit {
 
         if (!this.gameService) return;
 
-        if(this.gameService.getGameState() === GameState.gameRunning) return;
+        // if(this.gameService.getGameState() === GameState.gameRunning) return;
 
         this.beginGame();
 
@@ -76,7 +85,6 @@ export class GamestartComponent implements AfterViewInit, OnInit {
 
     private safeToPreferences(): void {
         this.preferenceService.setValue(this.PLAYER_NAME, this.playerName);
-        console.log('setting :: ' + this.avatarId.toString());
         this.preferenceService.setValue(this.AVATAR_ID, String(this.avatarId));
         this.preferenceService.setValue(this.USE_AUDIO, String(this.useAudio));
 

@@ -20,12 +20,21 @@ export class AppComponent {
     private title = 'Cofinpro Bomberman';
     //for use in the view
     private gameState = GameState;
+    private gameStateSubscription: Subscription;
     
+    private currentGameState : GameState = GameState.gameOff;
+
     constructor(public websocketService: WebsocketService
         ,public playerDataService: PlayerDataService
         ,private gameService: GameService
         ,private preferenceService: PreferenceService
     ) {
         preferenceService.setDomainPrefix('com.cofinpro.bomberman');
+        
+        this.gameStateSubscription = this.gameService.getGameState().subscribe((gameState) =>{
+            this.currentGameState = gameState;
+        });
+     
     }
+
 }
