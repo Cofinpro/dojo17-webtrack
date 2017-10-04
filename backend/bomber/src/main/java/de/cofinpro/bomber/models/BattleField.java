@@ -6,26 +6,8 @@ import java.util.List;
 
 public class BattleField {
 
-    private int sizeX;
-    private int sizeY;
     private List<Stone> fixStones = new ArrayList<>();
     private List<Bush> foliage = new ArrayList<>();
-
-    public int getSizeX() {
-        return sizeX;
-    }
-
-    public void setSizeX(int sizeX) {
-        this.sizeX = sizeX;
-    }
-
-    public int getSizeY() {
-        return sizeY;
-    }
-
-    public void setSizeY(int sizeY) {
-        this.sizeY = sizeY;
-    }
 
     public List<Stone> getFixStones() {
         return fixStones;
@@ -49,8 +31,6 @@ public class BattleField {
     @Override
     public String toString() {
         return "BattleField{" +
-                "sizeX=" + sizeX +
-                ", sizeY=" + sizeY +
                 ", fixStones=" + fixStones +
                 ", foliage=" + foliage +
                 '}';
