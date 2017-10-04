@@ -1,23 +1,19 @@
-import { GameService } from '../services/game.service';
 import { WebsocketService } from '../services/websocket.service';
 import { PlayGround } from './playground';
 import { Bomb, NewPlayer, Player, State, BattleField, Movement, NewBomb } from "../models";
 import { Subscription, Observer, Subject } from 'rxjs/Rx';
 import { ResourceLoader } from './resource-loader';
-import { Observable } from "rxjs";
-import { TimerObservable } from "rxjs/observable/TimerObservable";
 import { PlayerDataService } from "../services/player-data.service";
 
 export class Game {
 
     private socketSubscription: Subscription;
     private battleFieldSubscription: Subscription;
-    private timerSubscription: Subscription;
     private playGround: PlayGround;
     private loader: ResourceLoader = new ResourceLoader();
     private sprites = [];
     private gameLoaded = false;
-    private timer: Observable<number>;
+
     private gameIsDown: boolean = false;
 
 
@@ -56,10 +52,10 @@ export class Game {
         this.checkResourcesAndStart(this.loader);
     }
     public resetGame(): void {
-        if (this.timer) {
-            this.timerSubscription.unsubscribe();
-            this.timer = null;
-        }
+        // if (this.timer) {
+        //     this.timerSubscription.unsubscribe();
+        //     this.timer = null;
+        // }
         if (this.audioLoop) {
             this.audioLoop.pause();
             this.audioLoop = null;
@@ -96,14 +92,6 @@ export class Game {
     
     private startTimer(): void {
 
-        this.timer = TimerObservable.create(0, 10);
-        this.timerSubscription = this.timer.subscribe(t => {
-            const minutes = Math.floor(t / 6000) % 60;
-            const seconds = Math.floor(t / 100) % 60;
-            const rest = t;
-            const timeElement = document.getElementById('time');
-            timeElement.innerHTML = ('00' + minutes).slice(-2) + ':' + ('00' + seconds).slice(-2);
-        });
     }
 
 

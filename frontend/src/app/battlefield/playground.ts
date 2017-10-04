@@ -11,7 +11,7 @@ export class PlayGround {
     private playersLastRound: Player[] = [];
 
     private screen: Screen;
-    private ownPlayerDied: boolean;
+    private gameOver: boolean;
     private ownPlayer: NewPlayer;
     private playersLastDirection: string[] = [];
     private sprites: PaintedCanvas[] = [];
@@ -194,20 +194,20 @@ export class PlayGround {
         this.playersLastRound = players;
         // still alive or died?
         if (this.ownPlayer && !players.find((player) => player.id === this.ownPlayer.id)) {
-            this.ownPlayerDied = true;
+            this.gameOver = true;
         }
     }
 
     public resetPlayGround() : void{
         this.ownPlayer = null;
-        this.ownPlayerDied = false;
+        this.gameOver = false;
         this.battleField = null;
         this.clearFixed();
         this.clearSprites();
     }
 
     public isGameOver(): boolean {
-        return this.ownPlayerDied;
+        return this.gameOver;
     }
     public isReady(): boolean {
         return this.screen && this.images != null;
