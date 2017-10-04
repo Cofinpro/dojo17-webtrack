@@ -3,11 +3,11 @@ import { Stone } from "./stone";
 import { Bush } from "./bush";
 
 
-export class BattleField {
+export class FixedParts {
     fixStones: Stone[];
     foliage: Bush[];
 
-    constructor(obj = {} as BattleField) {
+    constructor(obj = {} as FixedParts) {
         this.fixStones = obj.fixStones;
         this.foliage = obj.foliage;
     }

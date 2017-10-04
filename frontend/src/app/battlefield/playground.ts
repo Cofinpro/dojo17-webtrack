@@ -2,7 +2,7 @@ import { GameResources } from "./gameresources";
 import { Screen } from "../paint/screen";
 import { Position } from "../shared";
 import { PaintedCanvas, PositionedPaintableCanvas } from "../paint";
-import { State, BattleField, Bomb, Player, Stone, Bush, NewPlayer, BombCountPowerup, BlastRadiusPowerup } from "../models";
+import { State, FixedParts, Bomb, Player, Stone, Bush, NewPlayer, BombCountPowerup, BlastRadiusPowerup } from "../models";
 import { PlayerDataService } from "../services/player-data.service";
 
 export class PlayGround {
@@ -17,7 +17,7 @@ export class PlayGround {
     private sprites: PaintedCanvas[] = [];
     private fixeds: PaintedCanvas[] = [];
 
-    private battleField: BattleField;
+    private battleField: FixedParts;
 
     private images: {};
     private audios: {};
@@ -39,7 +39,7 @@ export class PlayGround {
     public setAudios(audios: {}) {
         this.audios = audios;
     }
-    public paintBattleField(battleField: BattleField) {
+    public paintBattleField(battleField: FixedParts) {
 
         if (!this.images) {
             return;

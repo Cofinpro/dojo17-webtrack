@@ -1,6 +1,6 @@
 import { WebsocketService } from '../services/websocket.service';
 import { PlayGround } from './playground';
-import { Bomb, NewPlayer, Player, State, BattleField, Movement, NewBomb } from "../models";
+import { Bomb, NewPlayer, Player, State, FixedParts, Movement, NewBomb } from "../models";
 import { Subscription, Observer, Subject } from 'rxjs/Rx';
 import { ResourceLoader } from './resource-loader';
 import { PlayerDataService } from "../services/player-data.service";
@@ -42,7 +42,7 @@ export class Game {
                 this.playGround.updateState(state);
             }
         });
-        this.battleFieldSubscription = this.websocketService.getBattleField().subscribe((battlefield: BattleField) => {
+        this.battleFieldSubscription = this.websocketService.getBattleField().subscribe((battlefield: FixedParts) => {
             if (this.playGround && this.playGround.isReady()) {
                 this.playGround.paintBattleField(battlefield);
             }

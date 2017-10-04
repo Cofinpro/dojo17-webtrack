@@ -1,5 +1,4 @@
-import { Component, OnDestroy, OnInit, HostListener } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Component, OnDestroy } from '@angular/core';
 
 import { GameService } from "../services/game.service";
 
@@ -12,13 +11,11 @@ import { GameService } from "../services/game.service";
 /**
 * The battlefields holds the 2D game logic
 */
-export class BattlefieldComponent implements OnInit, OnDestroy {
+export class BattlefieldComponent implements OnDestroy {
 
 
     constructor(private gameService: GameService) { }
 
-    ngOnInit(): void {
-    }
 
     ngOnDestroy(): void {
         this.gameService.destroy();
