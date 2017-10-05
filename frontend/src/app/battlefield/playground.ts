@@ -26,8 +26,14 @@ export class PlayGround {
 
     private readonly squareSize : number = 32;
 
-    constructor(private tag: HTMLElement, private height: number, private width: number, private playerDataService: PlayerDataService) {
-        this.screen = new Screen(tag, height, width);
+    constructor(
+        private tag: HTMLElement
+        ,private height: number
+        ,private width: number
+        ,private playerDataService: PlayerDataService
+    ){
+        
+            this.screen = new Screen(tag, height, width);
     }
 
     public setPlayer(player: NewPlayer) {

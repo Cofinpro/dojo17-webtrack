@@ -1,14 +1,14 @@
 import { WebsocketService } from '../services/websocket.service';
-import { PlayGround } from './playground';
-import { Bomb, NewPlayer, Player, State, FixedParts, Movement, NewBomb } from "../models";
-import { Subscription, Observer, Subject } from 'rxjs/Rx';
-import { ResourceLoader } from './resource-loader';
 import { PlayerDataService } from "../services/player-data.service";
+import { Subscription, Observer, Subject } from 'rxjs/Rx';
+import { Bomb, NewPlayer, Player, State, FixedParts, Movement, NewBomb } from "../models";
+import { PlayGround } from './playground';
+import { ResourceLoader } from './resource-loader';
 
 export class Game {
 
     private socketSubscription: Subscription;
-    private battleFieldSubscription: Subscription;
+    private fixedPartsSubscription: Subscription;
     private playGround: PlayGround;
     private loader: ResourceLoader = new ResourceLoader();
     private sprites = [];
@@ -31,8 +31,9 @@ export class Game {
 
     private player: NewPlayer;
 
-    constructor(private websocketService: WebsocketService,
-        private playerDataService: PlayerDataService) {
+    constructor(private websocketService: WebsocketService
+        ,private playerDataService: PlayerDataService
+    ) {
 
         this.images = this.loader.loadImages();
         this.audios = this.loader.loadAudio();
@@ -42,7 +43,7 @@ export class Game {
                 this.playGround.updateState(state);
             }
         });
-        this.battleFieldSubscription = this.websocketService.getBattleField().subscribe((battlefield: FixedParts) => {
+        this.fixedPartsSubscription = this.websocketService.getFixedParts().subscribe((battlefield: FixedParts) => {
             if (this.playGround && this.playGround.isReady()) {
                 this.playGround.paintBattleField(battlefield);
             }
@@ -52,10 +53,7 @@ export class Game {
         this.checkResourcesAndStart(this.loader);
     }
     public resetGame(): void {
-        // if (this.timer) {
-        //     this.timerSubscription.unsubscribe();
-        //     this.timer = null;
-        // }
+        
         if (this.audioLoop) {
             this.audioLoop.pause();
             this.audioLoop = null;
@@ -90,12 +88,6 @@ export class Game {
 
     }
     
-    private startTimer(): void {
-
-    }
-
-
-
     private startGame(playerName: string) {
 
         this.player = new NewPlayer({ id: null, nickName: playerName });
@@ -137,7 +129,6 @@ export class Game {
                 this.websocketService.sendMovement(movement);
             }
         };
-        this.startTimer();
     }
 
     public destroyGame() {
