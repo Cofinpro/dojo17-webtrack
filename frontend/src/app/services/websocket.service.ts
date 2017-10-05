@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subscription, Subject, Observable, Observer } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
-import { State, BattleField,Player, Bomb, Movement, NewPlayer, NewBomb } from '../models';
+import { State, FixedParts, Player, Bomb, Movement, NewPlayer, NewBomb } from '../models';
 import { StompService } from 'ng2-stomp-service';
 import { OnDestroy } from '@angular/core';
 
@@ -10,7 +10,7 @@ export class WebsocketService implements OnDestroy{
 
     // This is for stomp
     private subject: Subject<State>;
-    private battleFieldSubject: Subject<BattleField>;
+    private battleFieldSubject: Subject<FixedParts>;
     private subscription: Subscription;
     private battleFieldSubscription : Subscription;
     private connected: boolean = false;
@@ -18,10 +18,10 @@ export class WebsocketService implements OnDestroy{
     constructor(private stomp: StompService) {
 
         this.subject = new Subject<State>();
-        this.battleFieldSubject = new Subject<BattleField>();
+        this.battleFieldSubject = new Subject<FixedParts>();
         //configuration
         this.stomp.configure({
-            // host: 'http://192.168.178.31:8080',
+            // host: 'http://192.168.178.39:8080',
             host: 'http://localhost:8080',
             debug: false,
             queue: { 'init': false }
@@ -75,7 +75,7 @@ export class WebsocketService implements OnDestroy{
         this.subject.next(state);
         return state;
     }
-    public battleFieldResponse = (battlefield: BattleField): BattleField => {
+    public battleFieldResponse = (battlefield: FixedParts): FixedParts => {
         this.battleFieldSubject.next(battlefield);
         return battlefield;
     }
@@ -83,8 +83,8 @@ export class WebsocketService implements OnDestroy{
     public getState(): Observable<State> {
         return this.subject.asObservable().map((state) => new State(state));
     }
-    public getBattleField(): Observable<BattleField> {
-        return this.battleFieldSubject.asObservable().map((battlefield) => new BattleField(battlefield));
+    public getFixedParts(): Observable<FixedParts> {
+        return this.battleFieldSubject.asObservable().map((battlefield) => new FixedParts(battlefield));
     }
 
     public disconnect() {
