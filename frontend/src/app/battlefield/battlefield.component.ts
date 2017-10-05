@@ -1,6 +1,5 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { GameService } from "../services/game.service";
 
 @Component({
     selector: 'battlefield',
@@ -11,14 +10,8 @@ import { GameService } from "../services/game.service";
 /**
 * The battlefields holds the 2D game logic
 */
-export class BattlefieldComponent implements OnDestroy {
+export class BattlefieldComponent {
 
 
-    constructor(private gameService: GameService) { }
-
-
-    ngOnDestroy(): void {
-        this.gameService.destroy();
-    }
-
+    constructor( ) { }
 }
