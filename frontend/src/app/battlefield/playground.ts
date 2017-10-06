@@ -17,7 +17,7 @@ export class PlayGround {
     private sprites: PaintedCanvas[] = [];
     private fixeds: PaintedCanvas[] = [];
 
-    private battleField: FixedParts;
+    private fixedParts: FixedParts;
 
     private images: {};
     private audios: {};
@@ -45,15 +45,15 @@ export class PlayGround {
     public setAudios(audios: {}) {
         this.audios = audios;
     }
-    public paintBattleField(battleField: FixedParts) {
+    public paintFixedParts(fixedParts: FixedParts) {
 
         if (!this.images) {
             return;
         }
         this.clearFixed();
-        this.battleField = battleField;
-        this.updateFixStones(this.battleField.fixStones);
-        this.updateFoliage(this.battleField.foliage);
+        this.fixedParts = fixedParts;
+        this.updateFixStones(this.fixedParts.fixStones);
+        this.updateFoliage(this.fixedParts.foliage);
 
     }
     public updateState(state: State) {
@@ -84,8 +84,8 @@ export class PlayGround {
 
         this.updatePlayers(state.players);
 
-        if (this.battleField && this.battleField.foliage) {
-            this.updateFoliage(this.battleField.foliage);
+        if (this.fixedParts && this.fixedParts.foliage) {
+            this.updateFoliage(this.fixedParts.foliage);
         }
 
     }
@@ -207,7 +207,7 @@ export class PlayGround {
     public resetPlayGround() : void{
         this.ownPlayer = null;
         this.gameOver = false;
-        this.battleField = null;
+        this.fixedParts = null;
         this.clearFixed();
         this.clearSprites();
     }
