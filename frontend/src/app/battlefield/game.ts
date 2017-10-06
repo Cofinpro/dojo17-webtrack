@@ -43,15 +43,34 @@ export class Game {
                 this.playGround.updateState(state);
             }
         });
-        this.fixedPartsSubscription = this.websocketService.getFixedParts().subscribe((battlefield: FixedParts) => {
+        this.fixedPartsSubscription = this.websocketService.getFixedParts().subscribe((fixedParts: FixedParts) => {
             if (this.playGround && this.playGround.isReady()) {
-                this.playGround.paintBattleField(battlefield);
+                this.playGround.paintFixedParts(fixedParts);
             }
         });
     }
     public start(): void {
         this.checkResourcesAndStart(this.loader);
     }
+    public resetAudio() : void{
+        const useAudio = this.playerDataService.getUseAudio();
+        
+        //consistent: use audio & audio is running
+        if(useAudio && this.audioLoop) return;
+
+        //want audio & not started --> start it
+        if(useAudio){
+            this.audioLoop = this.audios['loop'];
+            this.audioLoop.loop = true;
+            this.audioLoop.play();
+            return;
+        }
+
+        //please!!! not that sily sound
+        this.audioLoop.pause();
+        this.audioLoop = null;
+    }
+
     public resetGame(): void {
         
         if (this.audioLoop) {

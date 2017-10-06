@@ -31,8 +31,12 @@ export class GamestartComponent implements AfterViewInit, OnInit {
 
     private gameStateSubscription: Subscription;
 
+    constructor(private gameService: GameService
+        ,private playerDataService: PlayerDataService
+        ,private preferenceService: PreferenceService
+    ) { }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         if (this.playerNameFromPrefs) {
             this.playerName = this.playerNameFromPrefs;
         }
@@ -49,7 +53,7 @@ export class GamestartComponent implements AfterViewInit, OnInit {
         });
     }
 
-    ngAfterViewInit(): void {
+    public ngAfterViewInit(): void {
         //OMG! a bug known as feature!
         //to wrap the statement in setTimeOut only supresses a exception thrown in dev mode
         //in prod mode the exception is not thrown
@@ -62,10 +66,10 @@ export class GamestartComponent implements AfterViewInit, OnInit {
         });
     }
 
-    constructor(private gameService: GameService,
-        private playerDataService: PlayerDataService,
-        private preferenceService: PreferenceService) { }
-
+    private toggleAudio(use : boolean) : void{
+        this.playerDataService.setUseAudio(use);
+        this.gameService.resetAudio();
+    }
 
     private manageGame(): void {
 

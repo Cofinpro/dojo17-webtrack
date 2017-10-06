@@ -1,5 +1,5 @@
 <div class="form-input" >
-  <input type="checkbox" id="use-audio" name="audio"  [(ngModel)]="useAudio"  />
+  <input type="checkbox" id="use-audio" name="audio"  [(ngModel)]="useAudio" (ngModelChange)="toggleAudio($event)" />
   <label for="use-audio">audio</label>
 </div>
 <div [hidden]="this.currentGameState != gameState.gameRunning">
